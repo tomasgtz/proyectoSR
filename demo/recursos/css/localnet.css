@@ -1,0 +1,162 @@
+/* Contenedor de toda la pantalla */
+.container{
+	min-height: 100%;
+	background-color: #EBEBEB;
+}
+
+/* Ajuste para los iconos de botones */
+.fa.pre{
+	padding-right: 5px;
+}
+
+/* Ajustes al menu superior */
+.nav{
+	min-height: 65px;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.nav .main .image{
+	padding: 10px 15px;
+}
+
+.nav .main .image img{
+	height: 45px;
+}
+
+.nav .lists > li > a{
+	padding: 0 25px;
+	line-height: 65px;
+}
+
+.nav.tabs{
+	min-height: 50px;
+}
+
+/* Menú lateral */
+.sidebar{
+	position: fixed;
+	top: 66px;
+	left: 0;
+	bottom: 0;
+	width: 350px;
+	border-right: 1px solid #CCCCCC;
+	background-color: #FFFFFF;
+	overflow: auto;
+}
+
+/* Espacio de diseño y menú de herramientas */
+.worktable{
+	position: fixed;
+	top: 66px;
+	left: 350px;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+	text-align: center;
+}
+
+.designer{
+	position: relative;
+	width: 105%;
+}
+
+/* Menú de herramientas */
+.tools{
+	position: fixed;
+	height: 60px;
+	top: 66px;
+	left: 350px;
+	right: 0;
+	background-color: #FFFFFF;
+	border-bottom: 1px solid #CCCCCC;
+	z-index: 15;
+}
+
+.tools ul{
+	margin-left: 15px;
+	height: 100%;
+	width: 100%;
+}
+
+.tools ul li{
+	float: left;
+	margin: 13px 10px;
+}
+
+.tools .btn{
+	padding: 7px 17px;
+}
+
+/* Menú lateral */
+.sidebar > ul > li{
+	display: none;
+}
+
+.sidebar .act{
+	display: block;
+}
+
+.sidebar-title{
+	padding: 6px 0;
+	background-color: #EBEBEB;
+	border-bottom: 1px solid #CCCCCC;
+	font-weight: bold;
+}
+
+.sidebar .control{
+	padding: 12px 8px;
+	text-align: left;
+}
+
+.sidebar .control .btn.switch{
+	display: none;
+	width: 100%;
+}
+
+.sidebar .control .btn.switch.act{
+	display: inline-block;
+}
+
+.sidebar .control .noUi-horizontal{
+	margin: 12px 4% 0;
+	width: 92%;
+}
+
+/* Estilos para los seleccionadores de imagenes, figuras */
+.picker-menu .search{
+	padding: 12px 9px 9px;
+}
+
+.picker-menu .search .info{
+	width: 85px;
+}
+
+.picker-menu .search .l-right > div{
+	margin-right: 85px;
+}
+
+.picker-menu .image-wrapper{
+	padding: 6px 3px;
+	height: 135px;
+}
+
+.picker-menu .picker-list img{
+	height: 100%;
+	max-width: 100%;
+	cursor: pointer;
+}
+
+/* Configuraciones para los efectos de fondo */
+#effects-menu .control label{
+	margin-bottom: 6px;
+}
+
+/* Ajustes para el picker de imagenes */
+#images-menu .image-picker li > div{
+	padding: 12px 6px;
+}
+
+/* Ajustes para el picker de figuras */
+#shapes-menu .shape-picker li > div{
+	padding: 18px;
+}

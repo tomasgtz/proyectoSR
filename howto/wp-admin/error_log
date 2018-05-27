@@ -1,0 +1,1 @@
+[24-Apr-2017 15:35:27 UTC] PHP Fatal error:  Call to undefined function apply_filters() in /home/wizadadmin/public_html/howto/wp-includes/load.php on line 316

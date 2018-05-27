@@ -1,0 +1,400 @@
+# Translation of Themes - Baskerville in Spanish (Spain)
+# This file is distributed under the same license as the Themes - Baskerville package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2016-11-07 16:54:39+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.3.0-alpha\n"
+"Language: es\n"
+"Project-Id-Version: Themes - Baskerville\n"
+
+#. Description of the plugin/theme
+msgid "Baskerville is a beautiful, responsive and retina-ready masonry theme for hoarders. It's the perfect way to showcase your posts, videos, images and galleries, and share your favorite quotes and links. Features responsive design, retina-ready assets, full-width header image, support for all post formats, custom logo upload, custom widgets (video, Flickr and Dribbble), four page templates (including a contributors template), editor styling, like functionality via the ZillaLikes plugin and translation-ready code. Included translations: Swedish/svenska."
+msgstr "Baskerville es un tema bonito, adaptable y con diseño de muro preparado para pantallas de retina. Es un escaparate perfecto para tus entradas, videos, imágenes y galerías, y también para compartir tus citas y enlaces. Sus características son diseño adaptable, preparado para pantallas de retina, imagen de cabecera de ancho completo, soporte para todos las formatos de entradas, subida de logo personalizado, widgets personalizados (video, Flickr y Dribbble), cuatro plantillas de páginas (incluyendo un plantilla de los contribuyentes), funcionalidad de editor de estilo a través del plugin ZillaLikes. Incluye traducciones: Sueco/svencka."
+
+#. Theme Name of the plugin/theme
+msgid "Baskerville"
+msgstr "Baskerville"
+
+#: widgets/dribbble-widget.php:11
+msgid "Dribbble Widget"
+msgstr "Widget de Dribbble"
+
+#: widgets/flickr-widget.php:9
+msgid "Flickr Widget"
+msgstr "Widget de Flickr"
+
+#: widgets/video-widget.php:9
+msgid "Video Widget"
+msgstr "Widget de vídeo"
+
+#. Template Name of the plugin/theme
+msgid "No sidebar template"
+msgstr "Plantilla sin barra lateral"
+
+#. Template Name of the plugin/theme
+msgid "Full width template"
+msgstr "Plantilla a pantalla completa"
+
+#. Template Name of the plugin/theme
+msgid "Contributors template"
+msgstr "Plantilla de colaboradores"
+
+#. Template Name of the plugin/theme
+msgid "Archive template"
+msgstr "Plantilla del archivo"
+
+#: widgets/video-widget.php:8
+msgid "Displays a video of your choosing."
+msgstr "Muestra un vídeo elegido por ti."
+
+#: widgets/flickr-widget.php:65
+msgid "Flickr ID (use <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</a>):"
+msgstr "Flickr ID (usa <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</a>):"
+
+#: widgets/flickr-widget.php:37
+msgid "More on Flickr"
+msgstr "Más en Flickr"
+
+#: widgets/flickr-widget.php:8
+msgid "Displays your latest Flickr photos."
+msgstr "Muestra tus últimas fotos en Flickr."
+
+#: widgets/dribbble-widget.php:92 widgets/flickr-widget.php:71
+msgid "Number of images to display:"
+msgstr "Número de imágenes a mostrar:"
+
+#: widgets/dribbble-widget.php:86
+msgid "Dribbble username"
+msgstr "Nombre de usuario de Dribbble"
+
+#: widgets/dribbble-widget.php:80 widgets/flickr-widget.php:59
+#: widgets/video-widget.php:65
+msgid "Title"
+msgstr "Título"
+
+#: widgets/dribbble-widget.php:53
+msgid "Follow %s on Dribbble"
+msgstr "Sigue a %s en Dribbble"
+
+#: widgets/dribbble-widget.php:10
+msgid "Displays your latest Dribbble photos."
+msgstr "Muestra tus últimas fotos en Dribbble."
+
+#: template-contributors.php:88
+msgid "Twitter"
+msgstr "Twitter"
+
+#: template-contributors.php:85
+msgid "E-mail"
+msgstr "Correo electrónico"
+
+#: template-archives.php:113
+msgid "Archives by Day"
+msgstr "Archivo diario"
+
+#: template-archives.php:107
+msgid "Archives by Month"
+msgstr "Archivo mensual"
+
+#: template-archives.php:101
+msgid "Archives by Year"
+msgstr "Archivo anual"
+
+#: template-archives.php:95
+msgid "Contributors"
+msgstr "Colaboradores"
+
+#: template-archives.php:84
+msgid "View all posts in %s"
+msgstr "Ver todas las entradas en %s"
+
+#: template-archives.php:77
+msgid "Archives by Tags"
+msgstr "Archivo por etiquetas"
+
+#: template-archives.php:71
+msgid "Archives by Categories"
+msgstr "Archivo por categorías"
+
+#: template-archives.php:57
+msgid "Last 30 Posts"
+msgstr "Últimas 30 entradas"
+
+#: single.php:247
+msgid "Edit post"
+msgstr "Editar entrada"
+
+#: single.php:243
+msgid "Next post"
+msgstr "Entrada siguiente"
+
+#: single.php:243
+msgid "Next post:"
+msgstr "Entrada siguiente:"
+
+#: single.php:235
+msgid "Previous post"
+msgstr "Entrada anterior"
+
+#: single.php:235
+msgid "Previous post:"
+msgstr "Entrada anterior:"
+
+#: single.php:203
+msgid "on Twitter"
+msgstr "en Twitter"
+
+#: single.php:185
+msgid "Author website"
+msgstr "Sitio web del autor"
+
+#: single.php:177
+msgid "Author archive"
+msgstr "Archivo del Autor"
+
+#: searchform.php:3
+msgid "Search"
+msgstr "Buscar"
+
+#: search.php:55
+msgid "No results. Try again, would you kindly?"
+msgstr "No hay resultados. Puedes intentarlo de nuevo."
+
+#: search.php:7
+msgid "Search results"
+msgstr "Resultados de la búsqueda"
+
+#: index.php:15
+msgid "Page %s of %s"
+msgstr "Página %s de %s"
+
+#: image.php:57 page.php:57 single.php:263 template-archives.php:135
+#: template-fullwidth.php:67 template-nosidebar.php:65
+msgid "We couldn't find any posts that matched your query. Please try again."
+msgstr "No hemos encontrado ninguna entrada relacionada con tu búsqueda. Por favor, inténtalo de nuevo."
+
+#: image.php:34
+msgid "About the attachment"
+msgstr "Acerca del adjunto"
+
+#: functions.php:450 functions.php:464
+msgid "Logo"
+msgstr "Logo"
+
+#: functions.php:445
+msgid "Allows you to customize some settings for Baskerville."
+msgstr "Te permite personalizar algunos ajustes de Baskerville."
+
+#: functions.php:442
+msgid "Baskerville Options"
+msgstr "Opciones de Baskerville"
+
+#: widgets/video-widget.php:71
+msgid "Video URL"
+msgstr "URL del vídeo"
+
+#: functions.php:413
+msgid "Check if you want to display your email address in single posts and the contributors page template."
+msgstr "Actívalo si deseas mostrar tu dirección de correo electrónico en entradas individuales y en la plantilla de la página de colaboradores."
+
+#: functions.php:409
+msgid "Show email"
+msgstr "Mostrar correo electrónico"
+
+#: functions.php:358
+msgid "Awaiting moderation"
+msgstr "Pendiente de moderación"
+
+#: functions.php:346 functions.php:370
+msgid "Reply"
+msgstr "Responder"
+
+#: functions.php:344 functions.php:368
+msgid "Edit"
+msgstr "Editar"
+
+#: functions.php:318
+msgid "(Edit)"
+msgstr "(Editar)"
+
+#: functions.php:318
+msgid "Pingback:"
+msgstr "Pingback: "
+
+#: functions.php:217
+msgid "Continue Reading"
+msgstr "Seguir leyendo"
+
+#: functions.php:128
+msgid "Widgets in this area will be shown in the sidebar."
+msgstr "Los widgets en esta zona aparecerán en la barra lateral."
+
+#: functions.php:126
+msgid "Sidebar"
+msgstr "Barra lateral"
+
+#: functions.php:119
+msgid "Widgets in this area will be shown in the right column in the footer."
+msgstr "Los widgets de esta área se mostrarán en la columna derecha del pie de página."
+
+#: functions.php:117
+msgid "Footer C"
+msgstr "Pie de Página C"
+
+#: functions.php:110
+msgid "Widgets in this area will be shown in the middle column in the footer."
+msgstr "Los widgets de esta área se mostrarán en la columna central del pie de página."
+
+#: functions.php:108
+msgid "Footer B"
+msgstr "Pie de Página B"
+
+#: functions.php:101
+msgid "Widgets in this area will be shown in the left column in the footer."
+msgstr "Los widgets de esta área se mostrarán en la columna izquierda del pie de página."
+
+#: functions.php:99
+msgid "Footer A"
+msgstr "Pie de Página A"
+
+#: footer.php:131
+msgid "Up"
+msgstr "Ir arriba"
+
+#: footer.php:131
+msgid "To the top"
+msgstr "A la parte superior"
+
+#: footer.php:131
+msgid "Theme by <a href=\"%s\">Anders Noren</a>"
+msgstr "Tema realizado por <a href=\"%s\">Anders Noren</a>"
+
+#: footer.php:125
+msgid "Powered by <a href=\"%s\">WordPress</a>"
+msgstr "Funciona gracias a <a href=\"%s\">WordPress</a>"
+
+#: footer.php:104 sidebar.php:53
+msgid "These widgets are displayed because you haven't added any widgets of your own yet. You can do so at Appearance > Widgets in the WordPress settings."
+msgstr "Estos widgets se muestran porque tú aún no has añadido ninguno. Puedes hacerlo en Apariencia > Widgets en los ajustes de WordPress."
+
+#: footer.php:103 sidebar.php:49
+msgid "Text widget"
+msgstr "Widget de texto"
+
+#: footer.php:62 sidebar.php:27
+msgid "Latest posts"
+msgstr "&Uacute;ltimas entradas"
+
+#: footer.php:27 searchform.php:2
+msgid "Search form"
+msgstr "Formulario de búsqueda"
+
+#: content-aside.php:11 content-audio.php:7 content-gallery.php:5
+#: content-image.php:1 content-image.php:7 content-link.php:8
+#: content-quote.php:5 content-video.php:5 content.php:5
+msgid "Sticky post"
+msgstr "Entrada fija"
+
+#: comments.php:99 template-contributors.php:87
+msgid "Website"
+msgstr "Web"
+
+#: comments.php:96
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: comments.php:93
+msgid "Name"
+msgstr "Nombre"
+
+#: comments.php:84
+msgid "Your email address will not be published."
+msgstr "Tu dirección de correo electrónico no será publicada."
+
+#: comments.php:77
+msgid "Comments are closed."
+msgstr "Los comentarios están cerrados."
+
+#: comments.php:63
+msgid "Newer Comments"
+msgstr "Comentarios más recientes"
+
+#: comments.php:61
+msgid "Older Comments"
+msgstr "Comentarios anteriores"
+
+#: comments.php:43
+msgid "Pingback"
+msgid_plural "Pingbacks"
+msgstr[0] "Pingback"
+msgstr[1] "Pingbacks"
+
+#: comments.php:22
+msgid "Add yours"
+msgstr "Añade el tuyo"
+
+#: comments.php:16
+msgid "Comment"
+msgid_plural "Comments"
+msgstr[0] "Comentario"
+msgstr[1] "Comentarios"
+
+#: archive.php:64 index.php:55 search.php:41
+msgid "Newer posts"
+msgstr "Artículos siguientes"
+
+#: archive.php:62 index.php:53 search.php:39
+msgid "Older posts"
+msgstr "Artículos antiguos"
+
+#: archive.php:21
+msgid "Archive"
+msgstr "Archivo"
+
+#: archive.php:19
+msgid "Author"
+msgstr "Autor"
+
+#: archive.php:16
+msgid "Tag"
+msgstr "Etiqueta"
+
+#: archive.php:14
+msgid "Category"
+msgstr "Categoría"
+
+#: archive.php:12
+msgid "Year"
+msgstr "año"
+
+#: archive.php:10
+msgid "Month"
+msgstr "mes"
+
+#: archive.php:8
+msgid "Date"
+msgstr "Fecha"
+
+#: 404.php:19
+msgid "It seems like you have tried to open a page that doesn't exist. It could have been deleted, moved, or it never existed at all. You are welcome to search for what you are looking for with the form below."
+msgstr "Parece que has intentado abrir una página que no existe, o tal vez,  haya sido borrada o movida. Puede que encuentres lo que buscas usando el formulario de abajo."
+
+#: 404.php:13
+msgid "Error 404"
+msgstr "Error 404 "
+
+#. Author URI of the plugin/theme
+msgid "http://www.andersnoren.se"
+msgstr "http://www.andersnoren.se"
+
+#. Author of the plugin/theme
+msgid "Anders Norén"
+msgstr "Anders Norén"
+
+#. Theme URI of the plugin/theme
+msgid "http://www.andersnoren.se/teman/baskerville-wordpress-theme/"
+msgstr "http://www.andersnoren.se/teman/baskerville-wordpress-theme/"

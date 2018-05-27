@@ -1,0 +1,3 @@
+[08-Jul-2017 12:44:32 UTC] PHP Notice:  Undefined index: Name in /home/wizadadmin/public_html/contactengine.php on line 6
+[08-Jul-2017 12:44:32 UTC] PHP Notice:  Undefined index: Email in /home/wizadadmin/public_html/contactengine.php on line 7
+[08-Jul-2017 12:44:32 UTC] PHP Notice:  Undefined index: Message in /home/wizadadmin/public_html/contactengine.php on line 8
