@@ -5,12 +5,13 @@
  * # campaignMaterialsCtrl
  * Controller of the newappApp
  */
-
-var urlHost = 'https://localhost/';
-var urlHostEmpresas = 'https://localhost/wizad/empresas/';
  
 angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal) {
+	
+  	var urlHost = 'https://wizad.mx/';
+	var urlHostEmpresas = 'https://empresas.wizad.mx/';
+
 	$scope.icon_folder = 'Opcion2';
 	$scope.CampaignSelected =  {
 
@@ -948,8 +949,46 @@ angular.module('newApp')
 	  }
 	  
 	  var download = function download(url, name) {
-		angular.element('<a>').attr({ href: url, download: name })[0].click();
+
+	  	var data = url.replace("data:image/png;base64,", "");
+	    var blob = b64toBlob(data, 'image/png');
+	    var blobUrl = URL.createObjectURL(blob);
+	  	var a = document.createElement("a");
+		document.body.appendChild(a);
+		a.download = name;
+		a.href = blobUrl;
+		a.style = "display: none";
+		a.click();
+
 	  };
+
+	function b64toBlob(b64Data, contentType, sliceSize) {
+	    contentType = contentType || '';
+	    sliceSize = sliceSize || 512;
+
+	    var byteCharacters = atob(b64Data);
+	    var byteArrays = [];
+
+	    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+	        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+	        var byteNumbers = new Array(slice.length);
+	        for (var i = 0; i < slice.length; i++) {
+	            byteNumbers[i] = slice.charCodeAt(i);
+	        }
+
+	        var byteArray = new Uint8Array(byteNumbers);
+
+	        byteArrays.push(byteArray);
+	    }
+
+	    var blob = new Blob(byteArrays, {
+	        type: contentType
+	    });
+	    return blob;
+	}	
+
+
 		  
 	  $scope.exportPDF = function(name) {
 		previous_showgrid = $scope.showGrid;
@@ -1012,7 +1051,7 @@ angular.module('newApp')
 			$scope.factory.canvas.renderAll();
 			$scope.factory.canvas.calcOffset();
 			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
-			download($scope.factory.canvas.toDataURL({       format: 'png'   }), 'wizad_design.png');
+			download(imgData, 'wizad_design.png');
 			
 			
 			//AFTER DOWNLOAD RETURN TO NORMAL STATE

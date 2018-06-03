@@ -11,12 +11,7 @@
         <meta name="author" content="themes-lab">
         <link rel="shortcut icon" href="wizadicon.png" type="image/png">
         <title>WIZAD</title>
-        <!-- FPD BEGIN 
-            <link rel="stylesheet" type="text/css" href="css/main.css">
-            <!-- The CSS for the plugin itself - required -->
-        	<!-- <link rel="stylesheet" type="text/css" href="css/FancyProductDesigner-all.min.css" /> -->
-        <!-- FPD END -->
-
+        <script src='https://www.google.com/recaptcha/api.js'></script>
         <link href="assets/global/css/style.css" rel="stylesheet">
         <link href="assets/global/css/theme.css" rel="stylesheet">
         <link href="assets/global/css/ui.css" rel="stylesheet">
@@ -131,7 +126,7 @@
 						<!-- <li ng-class="{ active  : isActive('/newcampaign')}"><a href="#newcampaign"><i class="fa fa-check"></i><span>Nueva Campaña</span></a></li> -->
 						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span>Campañas</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && currentUser.id_company != '4' && (currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-flag"></i><span>Edita tus campañas</span></a></li>
-						<li ng-show="(currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == 3 || currentUser.typenum == '4') && currentUser.free_campaign == '1' ||  currentUser.id_company == '4' " ng-class="{ active  : isActive('/free-campaign')}"><a href="#/free-campaign"><i class="fa fa-flag"></i><span>Interfaz de diseño</span></a></li>
+						<!--<li ng-show="(currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == 3 || currentUser.typenum == '4') && currentUser.free_campaign == '1' ||  currentUser.id_company == '4' " ng-class="{ active  : isActive('/free-campaign')}"><a href="#/free-campaign"><i class="fa fa-flag"></i><span>Interfaz de diseño</span></a></li>-->
 						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/new-user')}"><a href="#/new-user"><i class="fa fa-user"></i><span>Mis Usuarios</span></a></li>
 						<!-- <li ng-class="{ active  : isActive('/campana')}"><a href="#/campana"><i class="fa fa-flag"></i><span>Crear campaña</span></a></li> -->
 						<!-- <li ng-class="{ active  : isActive('/pages-contact')}"><a href="#/pages-contact"><i class="fa fa-building"></i><span>Nueva Empresa</span></a></li> -->
@@ -144,7 +139,7 @@
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/free-materials')}"><a href="#/free-materials"><i class="fa fa-share-alt"></i><span>Config. Materials</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/suggestion-box')}"><a href="#/suggestion-box"><i class="fa fa-question"></i><span>Comentarios</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/new-company')}"><a href="#/new-company"><i class="fa fa-building"></i><span>Alta Compañía</span></a></li>
-						<li ng-show="currentUser.typenum ==  '2' || currentUser.id_company == '4'"  ng-class="{ active  : isActive('/subscription')}"><a href="#/subscription"><i class="fa fa-money"></i><span>Contratación</span></a></li>
+						<!-- <li ng-show="currentUser.typenum ==  '2' || currentUser.id_company == '4'"  ng-class="{ active  : isActive('/subscription')}"><a href="#/subscription"><i class="fa fa-money"></i><span>Contratación</span></a></li> -->
 	
                     <div class="sidebar-footer clearfix">
                         <a class="pull-left footer-settings" data-target="#" data-rel="tooltip" data-placement="top" data-original-title="Settings">
@@ -814,18 +809,23 @@
 					</form>
 					<form class="form-signin" role="form" ng-show="loginType === 3">
 						<h3><strong>REGISTRO</strong> de mis datos:	</h3>
+                        <div class="append-icon m-b-5">
+                            <input class="form-control input-lg" ng-model="rNombre" id="name" type="text" placeholder="NOMBRE COMPLETO" required>
+                            <i class="fa fa-user"></i>
+                        </div>
 						<div class="append-icon m-b-5">
-							<input type="text" ng-model="rEmail" class="form-control form-white password" placeholder="Email" required>
+							<input type="text" ng-model="rEmail" class="form-control input-lg" placeholder="CORREO ELECTRONICO" required>
 							<i class="fa fa-envelope"></i>
 						</div>
 						<div class="append-icon m-b-5">
-							<input type="text" ng-model="rCasa" class="form-control form-white password" placeholder="Tel. Casa (Opcional)" required>
+                            <input type="text" ng-model="rMobile" class="form-control input-lg" placeholder="TELEFONO CELULAR" required>
+                            <i class="fa fa-mobile-phone"></i>
+                        </div>
+                        <div class="append-icon m-b-5">
+							<input type="text" ng-model="rCasa" class="form-control input-lg" placeholder="TELEFONO OFICINA" required>
 							<i class="fa fa-phone"></i>
 						</div>
-						<div class="append-icon m-b-5">
-							<input type="text" ng-model="rMobile" class="form-control form-white password" placeholder="Móvil" required>
-							<i class="fa fa-mobile-phone"></i>
-						</div>
+                        <div class="g-recaptcha" data-sitekey="6Lcc_VwUAAAAAIcp2c-RCeB8cs3tC1-uVecrqX-K"></div>
 						<button ng-click="saveUser()" type="submit" id="submit-password" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left">Registrarme</button>
 						<div class="row">
 							<div class="col-sm-12">
@@ -849,7 +849,7 @@
 			</div>
 			<!-- END LOCKSCREEN BOX -->
 			<p class="account-copyright">
-				<span>Copyright © 2016 </span><span>MBLEDTEQ</span>.<span>All rights reserved.</span>
+				<span>Copyright © 2016 </span><span>WIZAD</span>.<span>All rights reserved.</span>
 			</p>
 		</section>
 		<script src="fabric.min.js"></script>
@@ -973,7 +973,7 @@
         <script src="js/plugins.js"></script> 
         <script src="js/quickview.js"></script>
         <script src="dashboard/dashboardCtrl.js"></script>
-		<script src="mainCtrl.js?asdasd"></script>
+		<script src="mainCtrl.js"></script>
         
         
         

@@ -16,14 +16,15 @@
 
  */
 
-var urlHost = 'https://wizad.mx/';
-var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 
 
 angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign) {
+
+  		var urlHost = 'https://wizad.mx/';
+		var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
@@ -171,11 +172,9 @@ angular.module('newApp')
 			var newPack 	= { id_cgpack: 0, image: '' };
 			newPack.id_cgpack = $scope.imagesArray.length+2150;
 			newPack.image 	= file.name;
-			console.log(newPack);
 			
 			$scope.imagesArray.push(newPack);
 			$scope.newImages.push(newPack);
-			console.log($scope.newImages);
 			
 		});
 		dzImages.on("removedfile", function(file) {
@@ -302,13 +301,11 @@ angular.module('newApp')
 				campaignService.GMaterials(params)
 				.then(function(data) {
 					$scope.allMaterials = data;
-					console.log("All materials");
+					
 					for(var i in $scope.allMaterials){
 						for(var j in $scope.materialArray){
 							if($scope.allMaterials[i].id_material === $scope.materialArray[j].id_material){
 								$scope.allMaterials[i].selected = "1";
-								
-								console.log($scope.allMaterials[i].selected);
 							}
 						}
 					}
@@ -317,11 +314,13 @@ angular.module('newApp')
 			
 			campaignService.GPackCampaign(params)
 			.then(function(data) {				
-				$scope.imagesArray = data;		
+				$scope.imagesArray = data;
+				console.log("images" + data);
 				for(var i in $scope.imagesArray){
 					$scope.imagesArrayCopy.push($scope.imagesArray[i]);
 					var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
 					dzImages.options.addedfile.call(dzImages, mockFile);
+					console.log(urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
 					dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
 					dzImages.files.push(mockFile);
 				}	
@@ -330,10 +329,8 @@ angular.module('newApp')
 			campaignService.GFontsCampaign(params)
 			.then(function(data) {
 				$scope.fontArray = data;
-				console.log("cargando info de campaña 2" + data);
 				
 				for(var i in $scope.fontArray){
-					console.log("font " + $scope.fontArray[i]);
 					$scope.fontArrayCopy.push($scope.fontArray[i]);
 					var mockFile = { name: $scope.fontArray[i].font, size: 12345 };
 					dzFonts.options.addedfile.call(dzFonts, mockFile);
@@ -381,6 +378,40 @@ angular.module('newApp')
 			} else {
 				params.autorization = 0;
 			}
+
+
+			for(var i in $scope.allMaterials){
+				for(var j in $scope.materialArray){
+					if($scope.allMaterials[i].id_material === $scope.materialArray[j].id_material){
+						$scope.allMaterials[i].selected = "1";
+					}
+				}
+			}
+
+
+			if($scope.paletteArray.length == 0 && (typeof $scope.newPalettes.length == 'undefined' || $scope.newPalettes.length == 0 || $scope.newPalettes.length == 1)) {
+				$scope.message 	  = "Favor de agregar al menos dos colores en la Palette";
+				$scope.alertClass = "alert alert-danger";
+				$scope.alertShow  = true;
+				
+				return;
+			}
+
+			if(dzFonts.files.length == 0 && (typeof $scope.newFonts.length == 'undefined' || $scope.newFonts.length == 0)) {
+				$scope.message 	  = "Favor de agregar al menos una fuente";
+				$scope.alertClass = "alert alert-danger";
+				$scope.alertShow  = true;
+				
+				return;
+			}
+
+			if($scope.materialArray.length == 0 && (typeof $scope.newMaterials.length == 'undefined' || $scope.newMaterials.length == 0)) {
+				$scope.message 	  = "Favor de agregar al menos un material";
+				$scope.alertClass = "alert alert-danger";
+				$scope.alertShow  = true;
+				
+				return;
+			}
 			
 			campaignService.SaveCampaignUpdate(params)
 			.then(function(data) {
@@ -410,4 +441,3 @@ angular.module('newApp')
 		
 		
   });
-

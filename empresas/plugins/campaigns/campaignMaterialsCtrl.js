@@ -6,11 +6,12 @@
  * Controller of the newappApp
  */
  
-var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 
 angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope, CanvasFactory, ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location) {
+
+  	var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 	$scope.CampaignSelected =  {
 

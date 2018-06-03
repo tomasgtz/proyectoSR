@@ -1,8 +1,9 @@
 'use strict';
 
-var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 angular.module('newApp').controller('identityCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
+		
+		var urlHostEmpresas = 'https://empresas.wizad.mx/';
 		
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];

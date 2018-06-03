@@ -9,7 +9,7 @@
  */
 
 angular.module('newApp')
-  .controller('myCampaignsCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $location, objCampaign) {
+  .controller('myCampaignsCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $location, objCampaign, generalService) {
 		
 		
       $scope.$on('$viewContentLoaded', function () {
@@ -174,9 +174,11 @@ angular.module('newApp')
 		
 	//  BEGIN - * UI - SCOPES * 
 	
+		$scope.selectedMaterials 	= [];
 		$scope.newImagesArray		= [];
 		$scope.newTextsArray 		= [];
 		$scope.newPaletteArray 		= [];
+		$scope.paletteArray 		= [];
 		$scope.textConfig 			= [];
 		$scope.paletteConfig 		= [];
 		$scope.filesUploaded		= [];
@@ -283,7 +285,7 @@ angular.module('newApp')
 		}
 		
 		$scope.newPalette = function(newColor){
-			
+			console.log(newColor);
 			if(typeof newColor != 'undefined') {
 				var newPaletteO = { id_palette: 0, color: '' };
 				newPaletteO.id_palette = $scope.paletteConfig.length+1;
@@ -291,6 +293,36 @@ angular.module('newApp')
 				$scope.paletteConfig.push(newPaletteO);
 				$scope.newPaletteArray.push(newPaletteO);
 			}
+		}
+
+		$scope.loadPalette = function(newColor){
+
+			var paramss = {
+				"idcompany_p" : ""
+			}
+			
+			paramss.idcompany_p 		= $scope.currentUser.id_company;
+			
+			generalService.getPaletteCompany(paramss)
+			.then(function(data) {
+
+				if(typeof data[0].color != 'undefined'){
+					
+					for(var i = 0; i < data.length; i++) {
+						var newPaletteO = { id_palette: 0, color: '' };
+						newPaletteO.id_palette = data[i].id_palette;
+						newPaletteO.color = data[i].color;
+						$scope.paletteArray.push(newPaletteO);
+					}
+					
+				}
+				else
+				{
+					$scope.messageCampaign	 	= "Ocurrió al descargar el pantone de la empresa, favor de contactar a soporte.";
+					$scope.alertCampaignClass 	= "alert alert-danger";
+					$scope.alertCampaignShow  	= true;
+				}
+			})
 		}
 		
 		
@@ -453,15 +485,40 @@ angular.module('newApp')
 				"pack_p" : "",
 				"font_p" : ""
 			}
-			
+
 			paramss.company_p 		= $scope.currentUser.id_company;
 			paramss.title_c 		= $scope.title;
+			
 			if($scope.autorization){
 				paramss.autorization_c 	= 1;
 			}else{
 				paramss.autorization_c 	= 0;
 			}
 			
+			if(typeof $scope.newPaletteArray.length == 'undefined' || $scope.newPaletteArray.length == 0 || $scope.newPaletteArray.length == 1) {
+				$scope.CreateText 	 = "Favor de agregar al menos dos colores en la Palette";
+				$scope.alertCreateClass = "alert alert-danger";
+				$scope.alertCreateShow  = true;
+				
+				return;
+			}
+
+			if(typeof $scope.fontsUploaded.length == 'undefined' || $scope.fontsUploaded.length == 0) {
+				$scope.CreateText 	 = "Favor de agregar al menos una fuente";
+				$scope.alertCreateClass = "alert alert-danger";
+				$scope.alertCreateShow  = true;
+				
+				return;
+			}
+
+			if(typeof $scope.selectedMaterials.length == 'undefined' || $scope.selectedMaterials.length == 0) {
+				$scope.CreateText 	 = "Favor de agregar al menos un material";
+				$scope.alertCreateClass = "alert alert-danger";
+				$scope.alertCreateShow  = true;
+				
+				return;
+			}
+
 			paramss.description_c 	= $scope.description;
 			paramss.segment_c 		= $( "#selectsegment" ).val();
 			paramss.city_c 			= $( "#selectcity" ).val();
@@ -483,15 +540,6 @@ angular.module('newApp')
 					pconfig.palette_p 			= $scope.newPaletteArray;
 					pconfig.pack_p 				= $scope.filesUploaded;
 					pconfig.font_p 				= $scope.fontsUploaded;
-					$scope.selectedMaterials 	= [];
-					
-					for( var i in $scope.allMaterials){
-						if(typeof $scope.allMaterials[i].selected != 'undefined' && 
-							$scope.allMaterials[i].selected == true
-						){
-							$scope.selectedMaterials.push($scope.allMaterials[i]);
-						}
-					}
 
 					pconfig.material_p 			= $scope.selectedMaterials;
 					campaignService.SaveCampaignConfig(pconfig)

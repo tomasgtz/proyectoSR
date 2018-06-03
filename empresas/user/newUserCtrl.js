@@ -63,7 +63,12 @@ angular.module('newApp').controller('newUserCtrl', function ($scope, userService
 				$scope.alertUserShow  = true;
 				
 				
-							
+			} else if(data[0].returnMessage === 'ERROR: MAX USERS'){
+				$("#myonoffswitch" + userid).click();
+				$scope.messageUser 	 = "Error: El numero maximo de usuarios para su subscripcion ya ha sido alcanzado, inactive algun otro para activar este.";
+				$scope.alertUserClass = "alert alert-danger";
+				$scope.alertUserShow  = true;
+
 			}else{
 				
 				$scope.messageUser 	 = "Ocurrió un error en la aplicación, favor de contactar soporte.";
@@ -154,8 +159,18 @@ angular.module('newApp').controller('newUserCtrl', function ($scope, userService
 						$scope.allUsers = data;
 				})
 							
-			}else{
-				
+			} else if(data[0].returnMessage ==='Ya existe'){
+				$scope.messageUser 	 = "Error: El usuario ya existe, intente con otro nombre de usuario.";
+				$scope.alertUserClass = "alert alert-danger";
+				$scope.alertUserShow  = true;
+
+			} else if(data[0].returnMessage === 'ERROR: MAX USERS'){
+				$scope.messageUser 	 = "Error: El numero maximo de usuarios para su subscripcion ya ha sido alcanzado, inactive alguno para dar de alta nuevos.";
+				$scope.alertUserClass = "alert alert-danger";
+				$scope.alertUserShow  = true;
+
+			} else{
+				console.log(data);
 				$scope.messageUser 	 = "Ocurrió un error en la aplicación, favor de contactar soporte.";
 				$scope.alertUserClass = "alert alert-danger";
 				$scope.alertUserShow  = true;

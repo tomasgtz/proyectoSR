@@ -370,40 +370,6 @@ angular.module('newApp')
 			$scope.images = [];
 			$scope.imagesIdentity = [];
 			
-			// campaignService.GPackCampaign(params)
-			// .then(function(data) {
-				// if(data.length>0){
-				// $scope.imageArray = data;
-				// for (var i in $scope.imageArray){
-					// var newImg   = { title: '', src: '' , isUserUploaded: false};
-					// newImg.title = $scope.imageArray[i].image;
-					// newImg.src   = 'http://wizadqa.mbledteq.com/uploads/' + $scope.imageArray[i].image;
-					// $scope.images.push(newImg);
-				// }
-				// }
-			// })
-			
-			// campaignService.GPackIdentity(params)
-			// .then(function(data) {
-				// if(data.length>0){
-				// $scope.identityImageArray = data;
-				// for (var i in $scope.identityImageArray){
-					// var newImg   = { title: '', src: '' , isUserUploaded: false};
-					// newImg.title = $scope.identityImageArray[i].image;
-					// newImg.src   = 'http://wizadqa.mbledteq.com/uploads/' + $scope.identityImageArray[i].image;
-					// $scope.imagesIdentity.push(newImg);
-				// }
-				// }
-			// })
-			
-			// campaignService.GPaletteCampaign(params)
-			// .then(function(data) {
-				// $scope.paletteArray = data;
-				
-				// var newPaletteO = { id_palette: 10000, color: '#FFFFFF' };
-				// $scope.paletteArray.push(newPaletteO);
-				
-			// })
 			
 			campaignService.GFontsCampaign(params)
 			.then(function(data) {

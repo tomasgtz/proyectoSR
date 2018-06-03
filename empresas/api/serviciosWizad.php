@@ -3354,11 +3354,39 @@ $app->post(
 			$password_p = $req->post('password_p');
 			$homephone_p = $req->post('homephone_p');
 			$mobilephone_p = $req->post('mobilephone_p');
+			$fromPublic = $req->post('fp');
+			$grecaptcharesponse = $req->post('grecaptcharesponse');
+
+			if($fromPublic == '1') {
+				
+				$ch = curl_init();
+
+				curl_setopt($ch, CURLOPT_URL,"https://www.google.com/recaptcha/api/siteverify");
+				curl_setopt($ch, CURLOPT_POST, 1);
+
+				curl_setopt($ch, CURLOPT_POSTFIELDS, 
+				http_build_query(array('secret' => '6Lcc_VwUAAAAAGx1OaVcT9Uwg-TBCclJH7ChwhEG',
+					'response' => $grecaptcharesponse)));
+
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$server_output = curl_exec ($ch);
+				curl_close ($ch);
+				$response = json_decode($server_output);
+				
+				if(!isset($response) || !isset($response->success) || $response->success === false) {
+					$data[0]["returnMessage"] = "ERROR: NO CAPTCHA";
+					echo json_encode($data);
+					return ;
+				}
+				
+			}
+
+
 			$to   = $name_p;
 			$from = 'notificaciones@wizad.mx';
 			$headers = "From: " . strip_tags($from) . "\r\n";
 			$headers .= "Reply-To: ". strip_tags($from) . "\r\n";
-			$headers .= "CC: alanbarreraf@hotmail.com, notificaciones@wizad.mx, jesusvicente@gmail.com \r\n";
+			$headers .= "CC: notificaciones@wizad.mx, \r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			$message =  '<html>
@@ -3375,7 +3403,7 @@ $app->post(
 										<th>Contrase&ntilde;a:</th><td>  '.$password_p.'   </td>
 									</tr>
 									<tr>
-										<th>Sitio Web:</th><td><a href="http://empresas.wizad.mx">empresas.wizad.mx</a></td>
+										<th>Sitio Web:</th><td><a href="http://empresas.wizad.mx">WIZAD</a></td>
 									</tr>
 								</table>
 							</body>
@@ -3403,11 +3431,17 @@ $app->post(
 						
 						if ( $name == null ){
 							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_p','$homephone_p','$mobilephone_p', '$username_p');")->fetchAll(PDO::FETCH_ASSOC);
-						
+
+							if($data[0]["returnMessage"] == "ERROR: MAX USERS") {
+								echo json_encode($data);
+								return;
+							}
+							
 							mail($to, "Wizad - Registrate", $message, $headers);
 							echo json_encode($data);
+						
 						}else{
-							$data = "Ya existe";
+							$data[0]["returnMessage"] = "Ya existe";
 							echo json_encode($data);
 						}
 						
@@ -3441,7 +3475,7 @@ $app->post(
 			$from = 'notificaciones@wizad.mx';
 			$headers = "From: " . strip_tags($from) . "\r\n";
 			$headers .= "Reply-To: ". strip_tags($from) . "\r\n";
-			$headers .= "CC: alanbarreraf@hotmail.com, notificaciones@wizad.mx, contacto@wizad.mx\r\n";
+			$headers .= "CC: notificaciones@wizad.mx, contacto@wizad.mx\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			$message =  '<html>
@@ -3523,7 +3557,7 @@ $app->post(
 			$from = 'sistema@wizad.com';
 			$headers = "From: " . strip_tags($from) . "\r\n";
 			$headers .= "Reply-To: ". strip_tags($from) . "\r\n";
-			$headers .= "CC: alanbarreraf@hotmail.com\r\n";
+			$headers .= "CC: sonia@wizad.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			$message =  '<html>
@@ -3604,7 +3638,7 @@ $app->post(
 			$from = 'sistema@wizad.com';
 			$headers = "From: " . strip_tags($from) . "\r\n";
 			$headers .= "Reply-To: ". strip_tags($from) . "\r\n";
-			$headers .= "CC: alanbarreraf@hotmail.com\r\n";
+			$headers .= "CC: sonia@wizad.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			$message =  '<html>
@@ -3621,7 +3655,7 @@ $app->post(
 										<th>Contrase&ntilde;a:</th><td>  '.$password_p.'   </td>
 									</tr>
 									<tr>
-										<th>Sitio Web:</th><td><a href="http://www.wizadqa.mbledteq.com">www.wizadqa.mbledteq.com</a></td>
+										<th>Sitio Web:</th><td><a href="https://empresas.wizad.mx/">WIZAD</a></td>
 									</tr>
 								</table>
 							</body>
@@ -4846,7 +4880,7 @@ $app->post(
 			$from = 'sistema@wizad.com';
 			$headers = "From: " . strip_tags($from) . "\r\n";
 			$headers .= "Reply-To: ". strip_tags($from) . "\r\n";
-			$headers .= "CC: alanbarreraf@hotmail.com\r\n";
+			$headers .= "CC: sonia@wizad.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			$message =  '<html>
@@ -4863,7 +4897,7 @@ $app->post(
 										<th>Contrase&ntilde;a:</th><td>  '.$password_p.'   </td>
 									</tr>
 									<tr>
-										<th>Sitio Web:</th><td><a href="http://www.wizadqa.mbledteq.com">www.wizadqa.mbledteq.com</a></td>
+										<th>Sitio Web:</th><td><a href="https://empresas.wizad.mx/">WIZAD</a></td>
 									</tr>
 								</table>
 							</body>
@@ -4919,7 +4953,7 @@ $app->post(
 			$from = 'sistema@wizad.com';
 			$headers = "From: " . strip_tags($from) . "\r\n";
 			$headers .= "Reply-To: ". strip_tags($from) . "\r\n";
-			$headers .= "CC: alanbarreraf@hotmail.com\r\n";
+			$headers .= "CC: sonia@wizad.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			
@@ -4952,7 +4986,7 @@ $app->post(
 										<th>El usuario empez&oacute; una campa&ntilde;a libre:</th><td>  '.$user_p.'  </td>
 									</tr>
 									<tr>
-										<th>Sitio Web:</th><td><a href="http://www.wizadqa.mbledteq.com">www.wizadqa.mbledteq.com</a></td>
+										<th>Sitio Web:</th><td><a href="https://empresas.wizad.mx/">WIZAD</a></td>
 									</tr>
 								</table>
 							</body>

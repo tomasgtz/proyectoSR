@@ -2090,6 +2090,15 @@ angular.module('newApp').service('generalService', function($http,$q){
 		NewUser : function(params){
 			var defered = $q.defer();
 			var promise = defered.promise;
+			if(typeof params.fp == 'undefined') {
+				params.fp = "";
+			}
+
+			if(typeof params.grecaptcharesponse == 'undefined') {
+				params.grecaptcharesponse = "";
+			}
+
+
 			$http({
 			method: 'POST',
 			url: webServiceUrl + 'NewUser',
@@ -2100,7 +2109,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 				return str.join("&");
 			},
-			data: { company_p : params.company_p, name_p : params.name_p, password_p : params.password_p, homephone_p : params.homephone_p, mobilephone_p : params.mobilephone_p, username_p : params.username_p}
+			data: { company_p : params.company_p, name_p : params.name_p, password_p : params.password_p, homephone_p : params.homephone_p, mobilephone_p : params.mobilephone_p, username_p : params.username_p, fp : params.fp, grecaptcharesponse : params.grecaptcharesponse}
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -2406,15 +2415,16 @@ angular.module('newApp').controller('mainCtrl',
                                 // "}\n" + 
                             // "</style>");
 				// }
+				
 				for (var i in $scope.fontArray){
 					var FormatType = "";
 					if($scope.fontArray[i].font.indexOf("otf") !== -1){
 						FormatType = "opentype";
-						$("head").append("<style>@font-face { font-family: "+$scope.fontArray[i].font.substring(0, $scope.fontArray[i].font.length-4)+";    src: url('/uploads/"+$scope.fontArray[i].font+"') format('"+FormatType+"');}</style>");
+						$("head").append("<style>@font-face { font-family: "+$scope.fontArray[i].font.substring(0, $scope.fontArray[i].font.length-4)+";    src: url('/empresas/uploads/"+$scope.fontArray[i].font+"') format('"+FormatType+"');}</style>");
 					}
 					if($scope.fontArray[i].font.indexOf("ttf") !== -1){
 						FormatType = "truetype";
-						$("head").append("<style>@font-face { font-family: "+$scope.fontArray[i].font.substring(0, $scope.fontArray[i].font.length-4)+";    src: url('/uploads/"+$scope.fontArray[i].font+"') format('"+FormatType+"');}</style>");
+						$("head").append("<style>@font-face { font-family: "+$scope.fontArray[i].font.substring(0, $scope.fontArray[i].font.length-4)+";    src: url('/empresas/uploads/"+$scope.fontArray[i].font+"') format('"+FormatType+"');}</style>");
 					}
 					
 				}
@@ -2448,14 +2458,16 @@ angular.module('newApp').controller('mainCtrl',
 			}
 			
 			$scope.saveUser = function(){
-				console.log("test");
+				
 				$scope.alertUserShow  = false;
 				var params = {
 					"name_p" : "",
 					"password_p" : "",
 					"company_p" : "",
 					"homephone_p" : "",
-					"mobilephone_p" : ""
+					"mobilephone_p" : "",
+					"fp" : "",
+					"grecaptcharesponse": ""
 				}
 				
 				var randomstring = Math.random().toString(36).slice(-8);
@@ -2465,7 +2477,9 @@ angular.module('newApp').controller('mainCtrl',
 				params.company_p 		= 4;
 				params.homephone_p 		= $scope.rCasa;
 				params.mobilephone_p 	= $scope.rMobile;
-				 
+				params.username_p 		= $scope.rNombre;
+				params.fp 				= "1";
+				params.grecaptcharesponse = $("#g-recaptcha-response").val();
 				 
 				generalService.NewUser(params)
 				.then(function(data) {
@@ -2478,18 +2492,30 @@ angular.module('newApp').controller('mainCtrl',
 						$scope.rNombre = "";
 						$scope.rCasa = "";
 						$scope.rMobile = "";
+						
+
+						setTimeout(function(){ 
+							window.location.replace("https://empresas.wizad.mx"); }, 3000);
+
 						return;		
 					}
 					
-					console.log(data);
-					if(data.indexOf('Ya') !== -1){
-						console.log("Y");
+					if(data[0].returnMessage === 'Ya existe'){
+
 						$scope.messageUser 	 = "El correo capturado ya existe, accede a la sección recuperar contraseña para recuperar tu cuenta.";
 						$scope.alertUserClass = "alert alert-danger";
 						$scope.alertUserShow  = true;
 						return;
 					}
-					
+
+					if(data[0].returnMessage === 'ERROR: NO CAPTCHA'){
+
+						$scope.messageUser 	 = "Favor de verificar que no eres un robot";
+						$scope.alertUserClass = "alert alert-danger";
+						$scope.alertUserShow  = true;
+						return;
+					}
+
 						
 					$scope.messageUser 	 = "Ocurrió un error en la aplicación, favor de contactar soporte.";
 					$scope.alertUserClass = "alert alert-danger";

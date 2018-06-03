@@ -25,6 +25,7 @@
 
         <!-- Google Fonts -->
         <link rel="stylesheet" href="css.css" />
+        <script src='https://www.google.com/recaptcha/api.js'></script>
 
     </head>
 
@@ -77,14 +78,21 @@
                                     <input type="hidden" name="u" value="503bdae81fde8612ff4944435">
                                     <input type="hidden" name="id" value="bfdba52708">
                                     <div class="form-group">
-                                        <input class="form-control input-lg" name="MERGE1" id="name" type="text" placeholder="NOMBRE" required>
+                                        <input class="form-control input-lg" name="MERGE1" id="name" type="text" placeholder="NOMBRE COMPLETO" required>
                                     </div>
                                     <div class="form-group">
                                         <input class="form-control input-lg" name="MERGE0" id="email" type="email" placeholder="CORREO ELECTRÓNICO" required>
                                     </div>
+                                    <div class="form-group">
+                                        <input class="form-control input-lg" name="MERGE2" id="cellphone" type="numeric" placeholder="TELEFONO CELULAR" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control input-lg" name="MERGE3" id="phone" type="numeric" placeholder="TELEFONO OFICINA" required>
+                                    </div>
                                     <div class="form-group last">
                                         <input id="btnclick" class="btn btn-warning btn-block btn-lg" value="SUBSCRÍBETE">
                                     </div>
+                                    <div class="g-recaptcha" data-sitekey="6Lcc_VwUAAAAAIcp2c-RCeB8cs3tC1-uVecrqX-K"></div>
                                     <p class="privacy text-center">Tu información es privada con nosotros.<br/>Lee nuestros <a href="privacy.html">términos y condiciones</a>.</p>
 									<p class="privacy text-right">*La versión gratis tiene funcionalidades limitadas</p>								
                                 </form>
@@ -1067,23 +1075,45 @@
 										fd.append( 'company_p', 4 );
 										fd.append( 'name_p', $('#email').val());
 										fd.append( 'password_p', text);
-										fd.append( 'homephone_p', '-' );
-										fd.append( 'mobilephone_p', '-' );
+										fd.append( 'homephone_p', $('#phone').val() );
+										fd.append( 'mobilephone_p', $('#cellphone').val() );
 										fd.append( 'username_p', $('#name').val());
-									
+                                        fd.append( 'fp', "1");
+                                        fd.append( 'grecaptcharesponse', $("#g-recaptcha-response").val());
+                                            
 										$.ajax({
 											type: "POST",
-											url: "http://test.mbledteq.com/serviciosWizad.php/NewUser",
+											url: "https://empresas.wizad.mx/api/serviciosWizad.php/NewUser",
 											data: fd,
 											processData: false,
 											contentType: false,
 											success: function (result) {
+                                                result = eval(result);
+                                                if(result[0]['returnMessage'] == 'Ya existe') {
+
+                                                    alert("El usuario ya existe, favor de intentar con otro o contactar a soporte@wizad.mx");    
+                                                
+                                                    return;
+                                                } 
+
+                                                if(result[0].returnMessage === 'ERROR: NO CAPTCHA'){
+
+                                                    alert("Favor de verificar que no eres un robot");
+                                                    return;
+                                                }                                                
+
+                                                alert("Su registro fué Exitoso. En un momento se le redireccionará para iniciar sesión.");    
+                                                
 												document.getElementById("email").value = "";
 												document.getElementById("name").value = "";
-												alert("Registro exitoso :) Ve a la plataforma a probar ¡Gratis!");
+                                                document.getElementById("cellphone").value = "";
+                                                document.getElementById("phone").value = "";
+
+                                                setTimeout(function(){ window.location.replace("https://empresas.wizad.mx"); }, 3000);
+												
 											},
 											error: function (xhr) {
-												alert("Ocurrió un error :( contacta soporte@wizad.mx");
+												alert("Ocurrió un error. contacta soporte@wizad.mx");
 											}
 										});
 									});

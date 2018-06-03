@@ -16,11 +16,12 @@
 
  */
 
-var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign) {
+
+  		var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
