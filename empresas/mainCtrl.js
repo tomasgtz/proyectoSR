@@ -2375,8 +2375,8 @@ angular.module('newApp').controller('mainCtrl',
 			
 			$scope.showLoggin = true;
 			$scope.indexClass = "sidebar-condensed account2";
-			$scope.username = "tomas@simpleydirecto.mx";
-			$scope.password = "yxgsyuhj";
+			$scope.username = "";
+			$scope.password = "";
 			$scope.alertShow = false;
 			$scope.alertRecoverShow = false;
 			$scope.loginType = 1;
