@@ -488,6 +488,17 @@ angular.module('newApp')
 
 			paramss.company_p 		= $scope.currentUser.id_company;
 			paramss.title_c 		= $scope.title;
+
+			$scope.selectedMaterials	= [];
+		
+			for( var i in $scope.allMaterials){
+				if(typeof $scope.allMaterials[i].selected !== 'undefined'){
+
+					if($scope.allMaterials[i].selected === true){					
+						$scope.selectedMaterials.push($scope.allMaterials[i]);
+					}
+				}
+			}
 			
 			if($scope.autorization){
 				paramss.autorization_c 	= 1;
@@ -527,21 +538,14 @@ angular.module('newApp')
 			campaignService.SaveNewCampaign(paramss)
 			.then(function(data) {
 				if(data[0].returnMessage){
-					// $scope.fontsUploaded
-					// $scope.filesUploaded
-					// $scope.newPaletteArray
-					// $scope.newTextsArray
-					//ok $scope.description
-					//ok $scope.title
-					//ok $scope.autorization
-					// $scope.allMaterials
+			
 					pconfig.campaignid 			= data[0].returnMessage;;
 					pconfig.textconfig_p 		= $scope.newTextsArray;
 					pconfig.palette_p 			= $scope.newPaletteArray;
 					pconfig.pack_p 				= $scope.filesUploaded;
 					pconfig.font_p 				= $scope.fontsUploaded;
-
 					pconfig.material_p 			= $scope.selectedMaterials;
+
 					campaignService.SaveCampaignConfig(pconfig)
 					.then(function(data) {
 						if(data[0].returnMessage === 'SUCCESS'){
@@ -551,11 +555,12 @@ angular.module('newApp')
 							$scope.newPaletteArray		= [];
 							$scope.filesUploaded		= [];
 							$scope.fontsUploaded		= [];
-							$scope.selectedMaterials	= [];
+							
 							$scope.campaignsVisible 	= true;
 							$scope.wizardSteps			= 1;
+
 							for( var i in $scope.allMaterials){
-								$scope.allMaterials[i].selected = "0";
+								$scope.allMaterials[i].selected = false;
 							}
 							
 							var params = {

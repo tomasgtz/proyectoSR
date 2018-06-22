@@ -21,13 +21,16 @@
 
 angular.module('newApp')
 
-  .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign) {
+  .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
 
   		var urlHost = 'https://wizad.mx/';
 		var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
+
+		$scope.imagesIdentidadArray 	= [];
+		$scope.imagesIdentidadArrayCopy	= [];
 		
 		$scope.fontArray 		= [];
 		$scope.fontArrayCopy	= [];
@@ -167,6 +170,8 @@ angular.module('newApp')
 		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: true , acceptedFiles: accepti });	
 		var dzFonts  = new Dropzone('#dzFonts',  { addRemoveLinks: true , acceptedFiles: acceptf });		
 		
+		var dzImagesIdentidad = new Dropzone('#dzImagesIdentidad', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
+
 		dzImages.on("success", function(file) {
 						
 			var newPack 	= { id_cgpack: 0, image: '' };
@@ -206,8 +211,25 @@ angular.module('newApp')
 				}
 			
 			}
-			console.log($scope.deletedImages);
-			console.log($scope.newImages);
+
+			
+		});
+
+
+		dzImagesIdentidad.on("removedfile", function(file) {
+			var newPack 	= { id_cgpack: 0, image: '' };
+			newPack.id_cgpack = $scope.imagesArray.length+2150;
+			newPack.image 	= file.name;
+			
+			$scope.imagesArray.push(newPack);
+			$scope.newImages.push(newPack);
+
+			$scope.imagesArrayCopy.push(newPack);
+			var mockFile = { name: newPack.image, size: 12345 };
+			dzImages.options.addedfile.call(dzImages, mockFile);
+			dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + newPack.image);
+			dzImages.files.push(mockFile);
+
 			
 		});
 		
@@ -315,7 +337,7 @@ angular.module('newApp')
 			campaignService.GPackCampaign(params)
 			.then(function(data) {				
 				$scope.imagesArray = data;
-				console.log("images" + data);
+				
 				for(var i in $scope.imagesArray){
 					$scope.imagesArrayCopy.push($scope.imagesArray[i]);
 					var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
@@ -323,6 +345,19 @@ angular.module('newApp')
 					console.log(urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
 					dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
 					dzImages.files.push(mockFile);
+				}	
+			})
+
+			generalService.getPackCompany({idcompany_p:$scope.CampaignSelected.fk_company})
+			.then(function(data) {				
+				$scope.imagesIdentidadArray = data;	
+				
+				for(var i in $scope.imagesIdentidadArray){
+					$scope.imagesIdentidadArrayCopy.push($scope.imagesIdentidadArray[i]);
+					var mockFile = { name: $scope.imagesIdentidadArray[i].image, size: 12345 };
+					dzImagesIdentidad.options.addedfile.call(dzImagesIdentidad, mockFile);
+					dzImagesIdentidad.options.thumbnail.call(dzImagesIdentidad, mockFile, urlHostEmpresas + "/uploads/" + $scope.imagesIdentidadArray[i].image);
+					dzImagesIdentidad.files.push(mockFile);
 				}	
 			})
 			
