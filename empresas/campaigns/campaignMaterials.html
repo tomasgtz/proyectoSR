@@ -54,11 +54,18 @@
 								<form enctype="multipart/form-data" id="loadWiz" action="uploadWiz.php" method="post"><input id="openWiz" name="wizFile" type="file" style="display: none" ng-model="uploadFileWiz" ng-change="sendingFile()"/></form>
 							</li>
 							<li>
+								<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal-open-template"><img src="images/utils/{{icon_folder}}/openDB32x32.png"></button>
+							</li>
+							<li>
 								<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="saving()"><img src="images/utils/{{icon_folder}}/save32x32.png"></button>
 							</li>
 							<li>
-								<button data-dismiss="modal" style="padding: 1px 1px 1px 1px; " ng-show="isObjectSelected" ng-click="deleteSelectedObject()" class="btn btn-xs btn-danger"><img src="images/utils/{{icon_folder}}/delete_red32x32.png" ></button>
+								<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-template" data-toggle="modal"><img src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
 							</li>
+						</ul>
+					</div>
+					<div class="panel-heading" style="min-height: 40px; max-height: 40px;">
+						<ul class="nav navbar-nav fixtop" >	
 							<li> 
 								<button data-toggle="modal" data-target="#modal-canvasoptions" ng-click="canvasIsTargeted()" class="btn btn-xs btn-default"><img src="images/utils/{{icon_folder}}/lienzo32x32.png" ></button>
 							</li>
@@ -71,7 +78,12 @@
 							<li> 
 								<button data-toggle="modal" data-target="#modal-phrases" ng-click="addPhrase()" class="btn btn-xs btn-default"><img src="images/utils/{{icon_folder}}/textlist32x32.png" ></button>
 							</li>
-
+							<li>
+								<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-formats" ng-show="isDownloadable()"><img src="images/utils/{{icon_folder}}/descargar32x32.png"></button>
+							</li>
+							<li>
+								<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="toggleGrid()"><img src="images/utils/{{icon_folder}}/grid32x32.png"></button>
+							</li>
 							<li>
 								<div class="btn-group fixBtnGroup">
 								  <button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false"><img src="images/utils/{{icon_folder}}/shapes32x32.png" ></button>
@@ -102,12 +114,8 @@
 								<button ng-show="formSelected" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img src="images/utils/{{icon_folder}}/color32x32.png" ></button>
 							</li>
 							<li>
-								<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-formats" ng-show="isDownloadable()"><img src="images/utils/{{icon_folder}}/descargar32x32.png"></button>
+								<button data-dismiss="modal" style="padding: 1px 1px 1px 1px; " ng-show="isObjectSelected" ng-click="deleteSelectedObject()" class="btn btn-xs btn-danger"><img src="images/utils/{{icon_folder}}/delete_red32x32.png" ></button>
 							</li>
-							<li>
-								<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="toggleGrid()"><img src="images/utils/{{icon_folder}}/grid32x32.png"></button>
-							</li>
-							
 							
 						</ul>
 					</div>
@@ -169,7 +177,7 @@
 				<div id="mContent" class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
-						<h4 class="modal-title">AGREGA UNA<strong> IMAGEN</strong></h4>
+						<h4 class="modal-title">SELECCIONA UNA<strong> IMAGEN</strong></h4>
 					</div>
 					<div class="modal-body">
 						<div class="row" >
@@ -348,6 +356,68 @@
 			</div>
 		</div>
 		
+
+
+		<div class="modal fade" id="save-template" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+						<h4 class="modal-title">NOMBRE DE<strong> PLANTILLA</strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-3 text-center">	
+								<input ng-model="template_name" style="width:120px;" type="text">
+							</div>
+							<div class="col-sm-3 text-center">	
+								<button ng-click="savingToDB()" style="width:120px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">Guardar</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="modal fade" id="modal-open-template" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+						<h4 class="modal-title">CARGAR UNA<strong> PLANTILLA</strong></h4>
+					</div>
+					<div class="modal-body" style="overflow-y:scroll; height:400px">
+
+						<div class="row" ng-repeat="template in templates" style="width: 95%">
+							<div class="col-sm-3 text-center">	
+
+								<button ng-click="deleteTemplate(template)" class="btn btn-embossed btn-danger m-r-20" ><span class="glyphicon btn-glyphicon glyphicon-trash img-circle"></span> Borrar</button>
+								
+							</div>
+							<div class="col-sm-3">Nombre: 
+								<small>{{ template.name }}</small>
+							</div>
+							<div class="col-sm-3">Fecha creación: 	
+								<small>{{ template.date_created }}</small>
+							</div>
+							<div class="col-sm-3">
+								<button ng-click="loadTemplate(template)" class="btn btn-embossed btn-primary m-r-20" style="width:130px;"><span class="glyphicon btn-glyphicon glyphicon-share img-circle text-info" data-dismiss="modal" type="ngdialog-button"></span> Cargar</button>
+								
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 		<div class="modal fade" id="apply-fonts" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">

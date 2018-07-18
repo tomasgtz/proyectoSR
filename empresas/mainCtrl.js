@@ -24,6 +24,8 @@ angular.module('newApp').service('userService', function($http,$q){
 				"company_update" 	: "",
 				"pc" 				: "",
 				"city" 				: "",
+				"city_name"			: "",
+				"state_name"		: "",
 				"web_page" 			: "",
 				"industry" 			: "",
 				"no_employees" 		: "",
@@ -74,6 +76,8 @@ angular.module('newApp').service('userService', function($http,$q){
 					UserContext.company_update 	 = data[0].company_update;	
 					UserContext.pc 		 		 = data[0].pc;
 					UserContext.city 			 = data[0].city;
+					UserContext.city_name		 = data[0].city_name;
+					UserContext.state_name		 = data[0].state_name;
 					UserContext.web_page 		 = data[0].web_page;
 					UserContext.industry 		 = data[0].industry;
 					UserContext.no_employees 	 = data[0].no_employees;	
@@ -1039,7 +1043,7 @@ angular.module('newApp').service('campaignService', function($http,$q){
 			return promise;
 			
 		},
-		
+
 		SaveCampaignUpdate : function(params){
 			
 			var defered 		= $q.defer();
@@ -1819,6 +1823,40 @@ angular.module('newApp').service('generalService', function($http,$q){
 			return promise;
 			
 		},
+
+		saveUserGeneralData : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+			console.log("enviando params");
+			console.log(params);
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'UUserGeneralData',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { name_p : params.name_p , namenoemail_p : params.namenoemail_p,  
+					mobilephone_p : params.mobilephone_p, homephone_p : params.homephone_p, iduser_p : params.iduser_p
+				  }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
 		
 		getUsersCompany : function(params){
 			
@@ -2234,6 +2272,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 			})
 			return promise;
 		},
+
 		
 		SaveWizFile : function(canvas) {
 	
@@ -2314,6 +2353,190 @@ angular.module('newApp').service('generalService', function($http,$q){
 					
 				}
 				console.log("tom cargando archivo" + data);
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		GTemplates : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GTemplates',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idcompany_p : params.idcompany_p, idmaterial_p : params.idmaterial_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		GTemplate : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'GTemplate',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { idtemplate_p : params.idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+		
+		NewTemplate : function(params){
+			var defered = $q.defer();
+			var promise = defered.promise;
+			
+			function encode( s ) {
+				var out = [];
+				for ( var i = 0; i < s.length; i++ ) {
+					out[i] = s.charCodeAt(i);
+				}
+				return new Uint8Array( out );
+			}
+
+			var content = JSON.stringify(params.contents_p);
+			var data = encode( content );
+			var data = content;
+			
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'NewTemplate',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+						str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					
+					return str.join("&");
+				},
+				data: { name_p : params.name_p, idmaterial_p : params.idmaterial_p, 
+					contents_p: data, iduser_p: params.iduser_p
+				}
+				}).success(function(data) {
+					if(data[0] !== undefined){
+					
+					}
+				
+					defered.resolve(data);		
+				}).error(function(data){
+					defered.reject(err)
+			})
+			
+			return promise;
+		},
+		
+		UTemplate : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 	= params.idtemplate_p;
+			var name_p 			= params.name_p;
+
+			function encode( s ) {
+				var out = [];
+				for ( var i = 0; i < s.length; i++ ) {
+					out[i] = s.charCodeAt(i);
+				}
+				return new Uint8Array( out );
+			}
+
+			var content = JSON.stringify(params.contents_p);
+			var data = encode( content );
+			var contents_p = content;
+
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'UTemplate',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p, name_p : name_p, contents_p: contents_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		DTemplate : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 				= params.idtemplate_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'DTemplate',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
 				defered.resolve(data);		
 			})
 			.error(function(data){

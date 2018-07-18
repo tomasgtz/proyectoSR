@@ -184,6 +184,7 @@ angular.module('newApp')
 		$scope.filesUploaded		= [];
 		$scope.fontsUploaded		= [];
 		$scope.description			= "";
+		$scope.segment			    = "";
 		$scope.title				= "";
 		$scope.searchValue			= "";
 		$scope.autorization			= false;
@@ -242,10 +243,10 @@ angular.module('newApp')
 			$scope.allAges = data;
 		})
 		
-		campaignService.GSegments(params)
+		/*campaignService.GSegments(params)
 		.then(function(data) {
 			$scope.allSegments = data;
-		})
+		})*/
 		
 	//  END - * LOADING DATA *	
 		
@@ -343,6 +344,11 @@ angular.module('newApp')
 		$scope.descriptionChange = function(desc){
 			$scope.description = desc;
 		}
+
+		$scope.segmentChange = function(seg){
+			$scope.segment = seg;
+		}
+
 		$scope.titleChange = function(title){
 			$scope.title = title;
 		}
@@ -376,18 +382,21 @@ angular.module('newApp')
 				"description_c" : "",
 				"title_c" : "",
 				"autorization_c" : "",
-				"company_p" : ""
+				"company_p" : "",
+				"segment_c" : ""
 			}
 			
 			paramss.company_p 		= $scope.currentUser.id_company;
 			paramss.title_c 		= $scope.title;
 			console.log("asd tom3");
+			return;
 			if($scope.autorization){
 				paramss.autorization_c 	= 1;
 			}else{
 				paramss.autorization_c 	= 0;
 			}
 			paramss.description_c 	= $scope.description;
+			paramss.segment_c 	= $scope.segment;
 			
 			campaignService.SaveNewCampaign(paramss)
 			.then(function(data) {
@@ -531,7 +540,8 @@ angular.module('newApp')
 			}
 
 			paramss.description_c 	= $scope.description;
-			paramss.segment_c 		= $( "#selectsegment" ).val();
+			//paramss.segment_c 		= $( "#selectsegment" ).val();
+			paramss.segment_c 		= $scope.segment;
 			paramss.city_c 			= $( "#selectcity" ).val();
 			paramss.age_c 			= $( "#selectage" ).val();
 			

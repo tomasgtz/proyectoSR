@@ -34,6 +34,18 @@
 									</div>
 								</div>
 								<div class="form-group">
+									<label class="col-sm-3 control-label">Ciudad</label>
+									<div class="col-sm-9">
+										<input disabled class="form-control" ng-model="currentUser.city_name" type="text">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Estado</label>
+									<div class="col-sm-9">
+										<input disabled class="form-control" ng-model="currentUser.state_name" type="text">
+									</div>
+								</div>
+								<div class="form-group">
 									<label class="col-sm-3 control-label">Compañía</label>
 									<div class="col-sm-9">
 										<input disabled class="form-control" ng-model="currentUser.company_name" type="text">
@@ -70,7 +82,6 @@
 			
 			 <div class="panel">
 				<div class="panel-content">
-				
 					<div class="row" ng-show="alertShow">
 						<div ng-class="alertClass" ng-show="alertShow">
 							<h4 class="alert-title">¡Alerta!</h4>
@@ -82,7 +93,7 @@
 							<button ng-click="saveChanges()" ng-if="currentUser.typenum == '2'" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-check"></i> Guardar cambios</button>
 						</div>
 					</div>
-				   <div class="row" >
+				    <div class="row">
 					  <div class="col-sm-12">
 						 <div class="row" style="margin-top:12px;">
 							<h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i><strong>LOGOS</strong></h3>

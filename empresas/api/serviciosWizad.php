@@ -2159,6 +2159,51 @@ $app->post(
 
 $app->post(
 		//CAMBIAR NOMBRE DEL SERVICIO
+		'/UUserGeneralData',function() use ($app){
+		
+			//NO MOVER
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			
+			//CAMBIAR PARAMETROS
+			$name_p = $req->post('name_p');
+			$namenoemail_p = $req->post('namenoemail_p');
+			$mobilephone_p = $req->post('mobilephone_p');
+			$homephone_p = $req->post('homephone_p');
+			$iduser_p = $req->post('iduser_p');
+
+				//NO MOVER
+				
+				//Replace the below connection parameters to fit your environment
+				$dbms = 'mysql';
+				$host = 'localhost'; 
+				$db = 'wizadadm_wizad';
+				$user = 'wizadadm_mrkt';
+				$pass = 'Decaene09!';
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{
+						//CAMBIAR PROCEDIMIENTO
+						$data = $cn->query("call uspUpd_UserGeneralData('$iduser_p', '$name_p','$namenoemail_p', '$homephone_p', '$mobilephone_p' );")->fetchAll(PDO::FETCH_ASSOC);
+						
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+
+$app->post(
+		//CAMBIAR NOMBRE DEL SERVICIO
 		'/GUserCompany',function() use ($app){
 		
 			//NO MOVER
@@ -5039,6 +5084,195 @@ $app->post(
 					
 			}
 );
+
+
+$app->post(
+		'/DTemplate',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idtemplate_p 		= $req->post('idtemplate_p');
+				
+				$dbms = 'mysql';
+				$host = 'localhost'; 
+				$db = 'wizadadm_wizad';
+				$user = 'wizadadm_mrkt';
+				$pass = 'Decaene09!';
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+						$callBack  = $cn->query("CALL uspDel_Template('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
+						echo json_encode($callBack);
+				}
+				
+				catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+
+$app->post(
+		'/GTemplates',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$idcompany_p = $req->post('idcompany_p');
+			$idmaterial_p = $req->post('idmaterial_p');
+
+			$dbms = 'mysql';
+			$host = 'localhost'; 
+			$db = 'wizadadm_wizad';
+			$user = 'wizadadm_mrkt';
+			$pass = 'Decaene09!';
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{ 
+						$data = $cn->query("call uspGet_Templates('$idcompany_p', '$idmaterial_p');")->fetchAll(PDO::FETCH_ASSOC);
+					
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+			}
+);
+
+
+$app->post(
+		'/GTemplate',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$idtemplate_p = $req->post('idtemplate_p');
+
+			$dbms = 'mysql';
+			$host = 'localhost'; 
+			$db = 'wizadadm_wizad';
+			$user = 'wizadadm_mrkt';
+			$pass = 'Decaene09!';
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{ 
+						$data = $cn->query("call uspGet_Template('$idtemplate_p');")->fetchAll(PDO::FETCH_ASSOC);
+					
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+			}
+);
+
+
+$app->post(
+		//CAMBIAR NOMBRE DEL SERVICIO
+		'/NewTemplate',function() use ($app){
+		
+			//NO MOVER
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			
+			//CAMBIAR PARAMETROS
+			$name_p = $req->post('name_p');
+			$idmaterial_p = $req->post('idmaterial_p');
+			$contents_p = $req->post('contents_p');
+			$iduser_p = $req->post('iduser_p');
+
+
+				//NO MOVER
+				
+				//Replace the below connection parameters to fit your environment
+				$dbms = 'mysql';
+				$host = 'localhost'; 
+				$db = 'wizadadm_wizad';
+				$user = 'wizadadm_mrkt';
+				$pass = 'Decaene09!';
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{
+						//CAMBIAR PROCEDIMIENTO
+						$data = $cn->query("call uspIns_NewTemplate ('$name_p','$idmaterial_p','$contents_p','$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+						
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+
+$app->post(
+		//CAMBIAR NOMBRE DEL SERVICIO
+		'/UTemplate',function() use ($app){
+		
+			//NO MOVER
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			
+			
+			//CAMBIAR PARAMETROS
+			$idtemplate_p = $req->post('idtemplate_p');
+			$name_p = $req->post('name_p');
+			$contents_p = $req->post('contents_p');
+			
+				//NO MOVER
+				
+				//Replace the below connection parameters to fit your environment
+				$dbms = 'mysql';
+				$host = 'localhost'; 
+				$db = 'wizadadm_wizad';
+				$user = 'wizadadm_mrkt';
+				$pass = 'Decaene09!';
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{
+						//CAMBIAR PROCEDIMIENTO
+						$data = $cn->query("call uspUpd_Template('$idtemplate_p','$name_p','$contents_p');")->fetchAll(PDO::FETCH_ASSOC);
+						
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //inicializamos la aplicacion(API)
 $app->run();

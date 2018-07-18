@@ -43,6 +43,67 @@ angular.module('newApp').controller('newUserCtrl', function ($scope, userService
 	$scope.selectedUserForDelete = function(user){
 		$scope.selectedUser = user;
 	}
+
+	$scope.selectedUserForEdit = function(user){
+		$scope.e_id				= user.id_user;
+		$scope.e_name 			= user.name;
+		$scope.e_namenoemail 	= user.namenoemail;
+		$scope.e_home_phone 	= user.home_phone;
+		$scope.e_mobile_phone 	= user.mobile_phone;
+	}
+
+	$scope.saveEditUser = function() {
+
+		var params = {
+			"iduser_p"		:  "",
+			"name_p"  		:  "",
+			"namenoemail_p"	:  "",
+			"homephone_p"	:  "",
+			"mobilehome_p"	:  ""
+		}
+
+		params.iduser_p 		= $scope.e_id;
+		params.name_p 			= $scope.e_name;
+		params.namenoemail_p 	= $scope.e_namenoemail;
+		params.homephone_p 		= $scope.e_home_phone;
+		params.mobilehome_p 	= $scope.e_mobile_phone;
+
+		generalService.saveUserGeneralData(params)
+		.then(function(data) {
+			if(data[0].returnMessage === 'SUCCESS'){
+				
+				$scope.messageUser 	 = "Datos actualizados exitosamente.";
+				$scope.alertUserClass = "alert alert-success";
+				$scope.alertUserShow  = true;
+
+
+				var params = {
+					"idcompany_p" : ""
+				}
+					
+				params.idcompany_p = $scope.currentUser.id_company;
+				
+				generalService.getUsersCompany(params)
+					.then(function(data) {
+						$scope.allUsers = data;
+						for(var i in $scope.allUsers){
+							if($scope.currentUser.id_user === $scope.allUsers[i].id_user){
+								$scope.allUsers.splice(i, 1);
+							}
+						}
+				})
+				
+
+			}else{
+				
+				$scope.messageUser 	 = "Ocurrió un error en la aplicación, favor de contactar soporte.";
+				$scope.alertUserClass = "alert alert-danger";
+				$scope.alertUserShow  = true;
+				
+			}
+		})
+
+	}
 	
 	$scope.newUserStatus = function(userid, status){
 		

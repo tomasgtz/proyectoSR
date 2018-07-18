@@ -111,7 +111,34 @@
 				</div>
 			</div> -->
 		</div>
-		
+
+
+
+		<div class="row" ng-if="currentUser.typenum == '3'">
+			<div class="col-xlg-12 col-lg-12" >
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<div class="panel-body p-10">
+								<div class="text-center col-xs-12 col-md-4">
+									<label for="file-input">
+										<img src="{{currentUser.logo}}" class="img-responsive" alt="Logo" id="imgLogo" style="    width: auto;    height: 200px;">
+									</label>
+								</div>
+								<div class="clearfix col-xs-12 col-md-6">
+									<h2 class="c-dark w-600">{{currentUser.UserName}}</h2>
+									<h3 class="c-dark w-600">{{currentUser.name}}</h3>
+									<p class="c-gray f-16">{{currentUser.company_name}} - {{currentUser.type}}</p>
+								</div>
+								<div class="clearfix col-xs-12 col-md-2 text-center	">
+									<img src="{{subsimage}}" style="width:100px; height:100px;"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
 		<div class="row" ng-if="currentUser.typenum != '3'">
 			<div class="col-xlg-12 col-lg-12" >
 				<div class="row">
@@ -137,7 +164,8 @@
 									<h3><a ng-click="downloadImg()"><i class="fa fa-download"></i>DESCARGAR</a></h3>
 								</div>
 								<div class="clearfix col-xs-12 col-md-6">
-									<h2 class="c-dark w-600">{{currentUser.name}}</h2>
+									<h2 class="c-dark w-600">{{currentUser.UserName}}</h2>
+									<h3 class="c-dark w-600">{{currentUser.name}}</h3>
 									<p class="c-gray f-16">{{currentUser.company_name}} - {{currentUser.type}}</p>
 								</div>
 								<div class="clearfix col-xs-12 col-md-2 text-center	">
@@ -736,6 +764,7 @@
 					<div class="modal-body">
 						<label>Industria: </label> {{industry}}<br/>
 						<label>Dirección: </label> {{address}}<br/>
+						<label>Cd, Edo: </label> {{city}}, {{state}}<br/>
 						<label>Página Web: </label> {{web_page}}<br/>
 					</div>
 					<div class="modal-footer">
@@ -748,7 +777,7 @@
 			<div class="copyright">
 				<p class="pull-left sm-pull-reset">
 					<span>Copyright <span class="copyright">&copy;</span> 2016 </span>
-					<span>MBLEDTEQ</span>.
+					<span>WIZAD</span>.
 					<span>DERECHOS RESERVADOS. </span>
 				</p>
 				<p class="pull-right sm-pull-reset">

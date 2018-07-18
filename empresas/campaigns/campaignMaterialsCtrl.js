@@ -12,6 +12,9 @@ angular.module('newApp')
   	var urlHost = 'https://wizad.mx/';
 	var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
+	$scope.templates = [];
+	$scope.template_name = "";
+	$scope.template_saved_id = 0;
 	$scope.icon_folder = 'Opcion2';
 	$scope.CampaignSelected =  {
 
@@ -108,8 +111,69 @@ angular.module('newApp')
 
 	})
 
+	$scope.deleteTemplate = function(template) {
+		
+		var params = {
+			idtemplate_p : ""
+		}
+
+		params.idtemplate_p = template.id;
+		
+		generalService.DTemplate(params)
+			.then(function(data) {
+					
+				var params = {
+					idcompany_p : "",
+					idmaterial_p: ""
+				}
+
+				params.idcompany_p = $scope.currentUser.id_company;
+				params.idmaterial_p = $scope.newMaterialChange.id_material ;
+
+				generalService.GTemplates(params)
+				.then(function(data) {
+					$scope.templates = data;
+				});
+
+			}, function(error){
+				
+				alert('Error al guardar. Mensaje de error: ' + error);
+				$scope.loading = false;
+			})
+	}
 	
+
+	$scope.loadTemplate = function(template) {
+
+		var params = {
+			idtemplate_p: ""
+		}
+		params.idtemplate_p = template.id;
+
+		generalService.GTemplate(params)
+			.then(function(data) {
+				
+				$scope.factory.canvas.clear();			
+				$scope.factory.canvas.loadFromJSON(data[0].contents);		
+				$scope.template_saved_id = data[0].id;
+				$scope.template_name = data[0].name;
+
+				$timeout( function(){
+					$scope.factory.canvas.renderAll();
+					
+				}, 1000 );
+				$scope.loading = false;
+
+
+			}, function(error){
+				
+				alert('Error al guardar. Mensaje de error: ' + error);
+				$scope.loading = false;
+			})
+
+	}
 	
+
 	var accepti = ".png,.jpg";
 	var acceptf = ".ttf,.otf";
 	var myDropzone2 = new Dropzone("#dropzoneFrm2", { addRemoveLinks: true , acceptedFiles: acceptf });
@@ -323,6 +387,19 @@ angular.module('newApp')
 		$scope.factory.canvas.deactivateAll().renderAll();
 		
 		$scope.redrawRulers();
+
+		var params = {
+			idcompany_p : "",
+			idmaterial_p: ""
+		}
+
+		params.idcompany_p = $scope.currentUser.id_company;
+		params.idmaterial_p = $scope.newMaterialChange.id_material ;
+
+		generalService.GTemplates(params)
+		.then(function(data) {
+			$scope.templates = data;
+		});
 	}
 	
 	$scope.addBackgroundGrid = function(options) {
@@ -1149,25 +1226,19 @@ angular.module('newApp')
 			var random = $scope.getRandomSpan();
 			random = "line" + random;
 			
-			var bkColor = $scope.factory.canvas.backgroundColor;
-			var presetColor = 0;
-			while(bkColor === $scope.paletteArray[presetColor].color  || bkColor === ""){
-				presetColor ++;
-				bkColor = "OK";
-			}
-		  
-			var fontColor = $scope.paletteArray[presetColor].color;
+			lineColor = $scope.selectFillColor();
 			
 			var lineSample = new fabric.Line([50, 100, 200, 100], {
 				left: 20,
 				top: 20,
-				stroke: $scope.paletteArray[presetColor].color,
+				stroke: lineColor,
 				strokeWidth: 5,
 				id: random
 			});
 			//console.log("addline");
 			$scope.factory.canvas.add(lineSample);
-			var rectSecondObj = $scope.findObjectWithPropertyValue($scope.factory.canvas, 'name', 'overlayImage');
+			var rectSecondObj = $scope.findObjectWithPropertyValue(
+				$scope.factory.canvas, 'name', 'overlayImage');
 			$scope.factory.canvas.bringToFront(rectSecondObj);
 		}
 	  
@@ -1346,8 +1417,7 @@ angular.module('newApp')
 				}
 			} 
 
-		
-			
+				
 			var text = "";
 			if(textParam === undefined) {
 				text = "Escribe tu texto..";
@@ -1409,19 +1479,14 @@ angular.module('newApp')
 		
 		var random = $scope.getRandomSpan();
 		random = "circle" + random;
-		//console.log("asd tom agrega circulo random" + random);
-		var bkColor = $scope.factory.canvas.backgroundColor;
-		var presetColor = 0;
-		while(bkColor === $scope.paletteArray[presetColor].color  || bkColor === ""){
-			presetColor ++;
-			bkColor = "OK";
-		}	
+		
+		fillColor = $scope.selectFillColor();	
 		
 		var circle=new fabric.Circle({
 			top: 0,
 			left: 0,
 			radius: 99,
-			fill: $scope.paletteArray[presetColor].color,
+			fill: fillColor,
 			id: random
 		});
 		$scope.factory.canvas.add(circle);
@@ -1433,42 +1498,75 @@ angular.module('newApp')
 		
 		var random = $scope.getRandomSpan();
 		random = "triangle" + random;
-		var bkColor = $scope.factory.canvas.backgroundColor;
-		var presetColor = 0;
-		while(bkColor === $scope.paletteArray[presetColor].color || bkColor === ""){
-			presetColor ++;
-			bkColor = "OK";
-		}
+	
+		fillColor = $scope.selectFillColor();
 		
 		var triangle=new fabric.Triangle({
 			top: 0,
 			left: 0,
 			radius: 99,
-			fill: $scope.paletteArray[presetColor].color,
+			fill: fillColor,
 			id: random
 		});
 		$scope.factory.canvas.add(triangle);
 		var rectSecondObj = $scope.findObjectWithPropertyValue($scope.factory.canvas, 'name', 'overlayImage');
 		$scope.factory.canvas.bringToFront(rectSecondObj);
 	}
+
+
+	$scope.selectFillColor = function() {
+
+		var bkColor = $scope.factory.canvas.backgroundColor;
+		var paletteSize = $scope.paletteArray.length;
+				
+		if (paletteSize == 1) {
+			
+			alert("ERROR: No se puede continuar.\nLa campaña solamente cuenta con un color definido, favor de reportarlo al usuario administrador");
+			return;
+		}
+
+
+		// Algoritmo para seleccionar el color de letra
+		if(bkColor === "" ) {
+			
+			// el fondo es transparente se busca uno diferente de blanco
+			for(i = 0; i < paletteSize; i++) {
+					
+				if($scope.paletteArray[i].color != "#ffffff") {
+				
+					fillColor = $scope.paletteArray[i].color;
+					break;
+				}
+			}
+			
+		} else {
+			// el fondo tiene color, se busca uno diferente
+			for(i = 0; i < paletteSize; i++) {
+					
+				if($scope.paletteArray[i].color != bkColor) {
+				
+					fillColor = $scope.paletteArray[i].color;
+					break;
+				}
+			}
+		}
+
+		return fillColor;
+
+	}
 	
 	$scope.addRectangle = function(){
 		
 		var random = $scope.getRandomSpan();
 		random = "rect" + random;
-		var bkColor = $scope.factory.canvas.backgroundColor;
-		var presetColor = 0;
-		while(bkColor === $scope.paletteArray[presetColor].color  || bkColor === ""){
-			presetColor ++;
-			bkColor = "OK";
-		}		
+		fillColor = $scope.selectFillColor();		
 		
 		var rectangle=new fabric.Rect({
 			left: 0,
 			top: 0,
 			width: 100,
 			height: 100,
-			fill: $scope.paletteArray[presetColor].color,
+			fill: fillColor,
 			padding: 10,
 			id:random
 		});
@@ -1628,7 +1726,99 @@ angular.module('newApp')
 		return false;
 		
 	}
+	
+
+	$scope.savingToDB = function() {
+	
+		$scope.loading = true;
+		$scope.waitingMessage = "Guardando";
 		
+		$scope.oldshowGrid = $scope.showGrid;
+		$scope.showGrid = true;
+		$scope.toggleGrid();
+		$scope.prepareClipToFunctions();
+	
+		var params = {
+				"name_p" : "",
+				"idmaterial_p"	: "",
+				"contents_p"	: "",
+				"iduser_p"	: ""
+			};
+		
+		params.name_p = $scope.template_name;
+		params.idmaterial_p = $scope.material;
+		params.contents_p = $scope.factory.canvas;
+		params.iduser_p = $scope.currentUser.id_user;
+
+		if($scope.template_saved_id === 0) {
+			
+			generalService.NewTemplate(params)
+			.then(function(data) {
+				
+				$scope.template_saved_id = data[0].id;
+				
+				$scope.fixClipToFunctions();
+				$scope.loading = false;
+				
+				$scope.showGrid = !$scope.oldshowGrid;
+				$scope.toggleGrid();
+
+				// reload list of templates
+				var params = {
+					idcompany_p : "",
+					idmaterial_p: ""
+				}
+
+				params.idcompany_p = $scope.currentUser.id_company;
+				params.idmaterial_p = $scope.newMaterialChange.id_material ;
+
+				generalService.GTemplates(params)
+				.then(function(data) {
+					$scope.templates = data;
+				});
+				
+			}, function(error){
+				
+				alert('Error al guardar. Mensaje de error: ' + error);
+				$scope.loading = false;
+			})
+		
+		} else {
+			params.idtemplate_p = $scope.template_saved_id;
+
+			generalService.UTemplate(params)
+			.then(function(data) {
+					
+				$scope.fixClipToFunctions();
+				$scope.loading = false;
+				
+				$scope.showGrid = !$scope.oldshowGrid;
+				$scope.toggleGrid();
+
+				// reload list of templates
+				var params = {
+					idcompany_p : "",
+					idmaterial_p: ""
+				}
+
+				params.idcompany_p = $scope.currentUser.id_company;
+				params.idmaterial_p = $scope.newMaterialChange.id_material ;
+
+				generalService.GTemplates(params)
+				.then(function(data) {
+					$scope.templates = data;
+				});
+				
+			}, function(error){
+				
+				alert('Error al guardar. Mensaje de error: ' + error);
+				$scope.loading = false;
+			})
+
+		}
+
+	}
+
 	$scope.saving = function() {
 		$scope.loading = true;
 		$scope.waitingMessage = "Guardando";
@@ -1817,6 +2007,8 @@ angular.module('newApp')
 		
 		$scope.showGrid = !grid;
 		$scope.toggleGrid();
+		$scope.template_saved_id = 0;
+		$scope.template_name = "";
 	}
 	
 	var ModalInstanceCtrl = function($scope, $modalInstance) {

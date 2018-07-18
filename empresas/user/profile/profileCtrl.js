@@ -3,11 +3,13 @@
 angular.module('newApp').controller('profileCtrl', function ($scope, userService, generalService, $timeout) {
 
     $scope.images = [];
-	
+	console.log($scope.currentUser);
+
 	userService.currentUser()
 	.then(function(data) {
 		if (data.id_user === undefined){
 			$location.path('/');
+
 		}else{
 			$scope.currentUser = data;
 		}			

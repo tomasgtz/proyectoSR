@@ -50,9 +50,10 @@
 										<label for="field-2" class="control-label">Segmento:</label>
 									</div>
 									<div class="col-sm-6">
-											<select id="selectsegment" name="singleSelect" ng-model="optionSegment" style="width:200px;">
+											<!--<select id="selectsegment" name="singleSelect" ng-model="optionSegment" style="width:200px;">
 												<option ng-repeat="optionSegment in allSegments" value="{{optionSegment.id_segment}}">{{optionSegment.description}}</option>
-											</select><br>
+											</select><br>-->
+											<input ng-model="segment" ng-change="segmentChange(segment)" type="text" class="form-control">
 									</div>
 								</div>
 								<div class="col-sm-6 form-group">
@@ -458,7 +459,7 @@
         <div class="copyright">
             <p class="pull-left sm-pull-reset">
                 <span>Copyright <span class="copyright">&copy;</span> 2016 </span>
-                <span>MBLEDTEQ</span>.
+                <span>WIZAD</span>.
                 <span>All rights reserved. </span>
             </p>
             <p class="pull-right sm-pull-reset">
