@@ -26,6 +26,8 @@ angular.module('newApp').service('userService', function($http,$q){
 				"city" 				: "",
 				"city_name"			: "",
 				"state_name"		: "",
+				"country"			: "",
+				"country_name"		: "",
 				"web_page" 			: "",
 				"industry" 			: "",
 				"no_employees" 		: "",
@@ -78,6 +80,8 @@ angular.module('newApp').service('userService', function($http,$q){
 					UserContext.city 			 = data[0].city;
 					UserContext.city_name		 = data[0].city_name;
 					UserContext.state_name		 = data[0].state_name;
+					UserContext.country		 	 = data[0].country;
+					UserContext.country_name	 = data[0].country_name;
 					UserContext.web_page 		 = data[0].web_page;
 					UserContext.industry 		 = data[0].industry;
 					UserContext.no_employees 	 = data[0].no_employees;	
@@ -983,6 +987,66 @@ angular.module('newApp').service('campaignService', function($http,$q){
 			return promise;
 			
 		},
+
+		GStates : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GStates',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			}
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		GCountries : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GCountries',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			}
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
 		
 		GAges : function(params){
 			
@@ -1495,7 +1559,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 				return str.join("&");
 			},
 			data: { name_p : params.name_p , address_p : params.address_p,  logo_p : params.logo_p,
-					city_p : params.city_p , nameuser_p : params.nameuser_p,  
+					city_p : params.city_p , state_p : params.state_p , country_p : params.country_p , nameuser_p : params.nameuser_p,  
 					password_p : params.password_p, homephone_p : params.homephone_p , mobilephone_p : params.mobilephone_p, 
 					employees_p : params.employees_p , industry_p : params.industry_p , webpage_p : params.webpage_p , pc_p : params.pc_p , 
 					subs_p : params.subs_p , storage_p : params.storage, freq_p : params.freq, nameusernoemail_p : params.nameusernoemail
@@ -2864,8 +2928,7 @@ angular.module('newApp').controller('mainCtrl',
 							userService.currentUser()
 							.then(function(data) {
 								$scope.currentUser = data;
-								//console.log($scope.currentUser);
-								
+														
 								
 								var payload = {
 								"user_p" : "",

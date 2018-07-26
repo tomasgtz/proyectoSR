@@ -10,8 +10,7 @@
 
 angular.module('newApp')
   .controller('myCampaignsCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $location, objCampaign, generalService) {
-		
-		
+
       $scope.$on('$viewContentLoaded', function () {
 
           function fnFormatDetails(oTable, nTr) {
@@ -167,10 +166,13 @@ angular.module('newApp')
 	var accepti = ".png,.jpg";
 	var acceptf = ".ttf,.otf";
 	
-	var myDropzone = new Dropzone("#dropzoneFrm", { addRemoveLinks: true , acceptedFiles: accepti });
-	var myDropzone2 = new Dropzone("#dropzoneFrm2", { addRemoveLinks: true , acceptedFiles: acceptf });
+	var myDropzone = new Dropzone("#dropzoneImages", { addRemoveLinks: true , acceptedFiles: accepti });
+	var myDropzone2 = new Dropzone("#dropzoneFonts", { addRemoveLinks: true , acceptedFiles: acceptf });
 
-	
+	var dzImagesIdentidad = new Dropzone('#dzImagesIdentidad', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
+	var dzFontsIdentidad = new Dropzone('#dzFontsIdentidad', { addRemoveLinks: true , acceptedFiles: acceptf, dictRemoveFile: 'Agregar a campaña' });
+	var urlHostEmpresas = 'https://empresas.wizad.mx/';
+
 		
 	//  BEGIN - * UI - SCOPES * 
 	
@@ -197,6 +199,10 @@ angular.module('newApp')
 		$scope.alertCreateClass  	= "";
 		$scope.alertCreateShow  	= false;
 		$scope.CreateText  			= "";
+		$scope.imagesIdentidadArray 	= [];
+		$scope.hideDzImagesIdentidad = false;
+		$scope.fontsIdentidadArray 		= [];
+		$scope.hideDzFontsIdentidad		= [];
 		
 		
 		
@@ -242,7 +248,106 @@ angular.module('newApp')
 		.then(function(data) {
 			$scope.allAges = data;
 		})
+
+
+		generalService.getPackCompany({idcompany_p:$scope.currentUser.id_company})
+		.then(function(data) {				
+			$scope.imagesIdentidadArray = data;	
+			
+			for(var i in $scope.imagesIdentidadArray){
+
+				var mockFile = { name: $scope.imagesIdentidadArray[i].image, size: 12345 };
+				dzImagesIdentidad.options.addedfile.call(dzImagesIdentidad, mockFile);
+				dzImagesIdentidad.options.thumbnail.call(dzImagesIdentidad, mockFile, urlHostEmpresas + "/uploads/" + $scope.imagesIdentidadArray[i].image);
+				dzImagesIdentidad.files.push(mockFile);
+			}	
+		})
+
+		generalService.getFontsCompany({idcompany_p:$scope.currentUser.id_company})
+			.then(function(data) {
+				$scope.fontsIdentidadArray = data;	
+				for(var i in $scope.fontsIdentidadArray){
+					
+					var mockFile = { name: $scope.fontsIdentidadArray[i].font, size: 12345 };
+					dzFontsIdentidad.options.addedfile.call(dzFontsIdentidad, mockFile);
+					dzFontsIdentidad.files.push(mockFile);
+				}					
+			})
+
+
+		dzImagesIdentidad.on("removedfile", function(file) {
+			
+			var newPack 	= { id_pack: 0, pack: '' };
+			newPack.id_pack = $scope.filesUploaded.length+1;
+			newPack.pack 	= file.name;
+			newPack.image 	= file.name;
+			
+			$scope.filesUploaded.push(newPack);
+			
+			var mockFile = { name: newPack.image, size: 12345 };
+			myDropzone.options.addedfile.call(myDropzone, mockFile);
+			myDropzone.options.thumbnail.call(myDropzone, mockFile, urlHostEmpresas + 'uploads/' + newPack.image);
+			myDropzone.files.push(mockFile);
+
+			var idx = 0;
+			var found = false;
+			for(var i = 0; i < $scope.imagesIdentidadArray.length; i++) {
+				if($scope.imagesIdentidadArray[i].image == file.name) {
+					idx = i;
+					found = true;
+				}
+			}
+
+			if(found) {
+				$scope.imagesIdentidadArray.splice(idx, 1);	
+			}
+
+			if($scope.imagesIdentidadArray.length == 0) {
+				$scope.$apply(function(){
+				$scope.hideDzImagesIdentidad = true;	
+			})
+			}
+
+		});
+
+
+		dzFontsIdentidad.on("removedfile", function(file) {
+						
+			console.log(file);
+
+			var newFont 	= { id_font: 0, font: '' };
+			newFont.id_font = $scope.fontsUploaded.length+1;
+			newFont.font 	= file.name;
+			$scope.fontsUploaded.push(newFont);
+
+			var mockFile = { name: newFont.font, size: 12345 };
+			myDropzone2.options.addedfile.call(myDropzone2, mockFile);
+			myDropzone2.files.push(mockFile);
+
+			var idx = 0;
+			var found = false;
+			for(var i = 0; i < $scope.fontsIdentidadArray.length; i++) {
+				if($scope.fontsIdentidadArray[i].font == file.name) {
+					idx = i;
+					found = true;
+				}
+			}
+
+			if(found) {
+				$scope.fontsIdentidadArray.splice(idx, 1);	
+			}
+
+			if($scope.fontsIdentidadArray.length == 0) {
+				$scope.$apply(function(){
+				$scope.hideDzFontsIdentidad = true;	
+			})
+			}
+
+			
+		});
 		
+		
+
 		/*campaignService.GSegments(params)
 		.then(function(data) {
 			$scope.allSegments = data;

@@ -124,6 +124,7 @@ angular.module('newApp')
 			$scope.address = company.address;
 			$scope.city = company.city;
 			$scope.state = company.state;
+			$scope.country = company.country;
 			$scope.industry = company.industry;
 			$scope.web_page = company.web_page;
 		}
@@ -291,8 +292,6 @@ angular.module('newApp')
 		generalService.AllCompaniesAdmin(params)
 		.then(function(data) {
 			$scope.allCompanies = data;
-
-			console.log(data);
 			for(var i in $scope.allCompanies){
 				if($scope.allCompanies[i].days_left > 0 && $scope.allCompanies[i].days_left < 30){
 					$scope.allCompanies[i].contract_status = "Expira pronto - "+ $scope.allCompanies[i].days_left+ " días";

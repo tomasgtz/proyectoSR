@@ -35,19 +35,19 @@
 							<div class="row" ng-show="wizardSteps === 1">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="field-1" class="control-label">Título</label>
-										<input ng-model="title" ng-change="titleChange(title)" type="text" class="form-control" id="field-1" >
+										<label for="titulo" class="control-label">Título</label>
+										<input ng-model="title" ng-change="titleChange(title)" type="text" class="form-control" id="titulo" >
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="field-2" class="control-label">Descripción:</label>
-										<input ng-model="description" ng-change="descriptionChange(description)" type="text" class="form-control" id="field-2" >
+										<label for="id_desc" class="control-label">Descripción:</label>
+										<input ng-model="description" ng-change="descriptionChange(description)" type="text" class="form-control" id="id_desc" >
 									</div>
 								</div>
 								<div class="col-sm-6 form-group">
 									<div class="col-sm-3">
-										<label for="field-2" class="control-label">Segmento:</label>
+										<label class="control-label">Segmento:</label>
 									</div>
 									<div class="col-sm-6">
 											<!--<select id="selectsegment" name="singleSelect" ng-model="optionSegment" style="width:200px;">
@@ -58,7 +58,7 @@
 								</div>
 								<div class="col-sm-6 form-group">
 									<div class="col-sm-3">
-										<label for="field-2" class="control-label">Ciudad:</label>
+										<label for="selectcity" class="control-label">Ciudad:</label>
 									</div>
 									<div class="col-sm-6">
 											<select id="selectcity" name="singleSelect" ng-model="optionCity" style="width:200px;">
@@ -71,7 +71,7 @@
 								</div>
 								<div class="col-sm-6 form-group">
 									<div class="col-sm-3">
-										<label for="field-2" class="control-label">Edad:{{selected}}</label>
+										<label for="selectage" class="control-label">Edad:{{selected}}</label>
 									</div>
 									<div class="col-sm-6">
 											<select id="selectage" ng-model="selected" style="width:200px;">
@@ -163,8 +163,8 @@
 										</div>
 										<div class="panel-content">
 											<div class="row">
-												<div class="col-sm-12">												
-													<form callbacks="dzCallbacks" id="dropzoneFrm" action="upload.php" class="dropzone">
+												<div class="col-sm-12">				
+													<form callbacks="dzCallbacks" id="dropzoneImages" action="upload.php" class="dropzone">
 														<div class="fallback">
 															<input name="file" type="file" multiple />
 														</div>
@@ -179,6 +179,13 @@
 													</div>
 												</div>
 											</div>
+											<div class="row" style="margin-top:12px;" ng-hide="hideDzImagesIdentidad === true"> 
+						                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA IDENTIDAD</strong></h3>
+						                        <h4>Dé click sobre la imagen para agregarla a la campaña</h4>
+						                        <form id="dzImagesIdentidad" action="upload.php" class="dropzone" 
+						                           ng-dropzone">
+						                        </form>
+						                     </div>
 										</div>
 									</div>
 									<div class="row">
@@ -260,7 +267,7 @@
 										<div class="panel-content">
 											<div class="row">
 												<div class="col-sm-12">
-													<form callbacks="dzCallbacks" id="dropzoneFrm2" action="upload.php" class="dropzone">
+													<form callbacks="dzCallbacks" id="dropzoneFonts" action="upload.php" class="dropzone">
 														<div class="fallback">
 															<input name="file" type="file" multiple />
 														</div>
@@ -268,6 +275,13 @@
 												</div>
 											</div>
 										</div>
+										<div class="row" style="margin-top:12px;" ng-hide="hideDzFontsIdentidad === true"> 
+					                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>FUENTES<strong> DE LA IDENTIDAD</strong></h3>
+					                        <h4>Dé click sobre la fuente para agregarla a la campaña</h4>
+					                        <form id="dzFontsIdentidad" action="upload.php" class="dropzone" 
+					                           ng-dropzone">
+					                        </form>
+					                    </div>
 									</div>
 									<div class="row">
 										<div class="col-md-12">
@@ -373,7 +387,7 @@
 						</div>
 						<div class="row text-left">
 							<div class="col-sm-6">
-								<h4 style="font-size:14px;"><b>BUSCAR:</b></h4><input ng-model="searchValue" ng-change="searchValueChange(searchValue)" type="text" class="form-control" id="field-1" >
+								<h4 style="font-size:14px;"><b>BUSCAR:</b></h4><input ng-model="searchValue" ng-change="searchValueChange(searchValue)" type="text" class="form-control" id="btnSearch" >
 							</div>
 						</div>
 						<!-- <div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div> -->
@@ -479,20 +493,20 @@
                     <div class="row" ng-if="wizardSteps === 1">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="field-1" class="control-label">Título</label>
-                                <input ng-model="title" ng-change="titleChange(title)" type="text" class="form-control" id="field-1" >
+                                <label for="titulo2" class="control-label">Título</label>
+                                <input ng-model="title" ng-change="titleChange(title)" type="text" class="form-control" id="titulo2" >
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="field-2" class="control-label">Descripcion</label>
-                                <input ng-model="description" ng-change="descriptionChange(description)" type="text" class="form-control" id="field-2" >
+                                <label for="desc2" class="control-label">Descripcion</label>
+                                <input ng-model="description" ng-change="descriptionChange(description)" type="text" class="form-control" id="desc2" >
                             </div>
                         </div>
 						<div class="col-md-12">
                             <div class="form-group">
 								<input ng-model="autorization" type="checkbox" data-checkbox="icheckbox_square-blue">
-                                <label for="field-2" class="control-label">Autorización para descargar</label>
+                                <label class="control-label">Autorización para descargar</label>
                             </div>
                         </div>
 						<div class="row">
@@ -583,7 +597,7 @@
 														<button ng-click="uploadImage(p)" type="button" class="btn btn-success btn-embossed bnt-square">Cargar <i class="fa fa-arrow-right"></i></button>
 														<div class="form-group">
 															<input ng-model="autorizationImage" type="checkbox" data-checkbox="icheckbox_square-blue">
-															<label for="field-2" class="control-label">Obligatoria</label>
+															<label class="control-label">Obligatoria</label>
 														</div>
 													</li>
 												</ul>

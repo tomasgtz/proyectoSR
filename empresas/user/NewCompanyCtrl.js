@@ -32,7 +32,9 @@ angular.module('newApp')
 		$scope.nameuser   = "";
 		$scope.telhome 	  = "";
 		$scope.telmobile  = "";
-		$scope.optionCity = 0;
+		$scope.optionCity    = 0;
+		$scope.optionState   = 0;
+		$scope.optionCountry = 0;
 		
 		$scope.message = "";
 		$scope.alertClass = "";
@@ -84,6 +86,16 @@ angular.module('newApp')
 		.then(function(data) {
 			$scope.allCities = data;
 		})
+
+		campaignService.GStates()
+		.then(function(data) {
+			$scope.allStates = data;
+		})
+
+		campaignService.GCountries()
+		.then(function(data) {
+			$scope.allCountries = data;
+		})
 		
 		generalService.GetAllSubscriptions(params)
 		.then(function(data) {
@@ -107,21 +119,11 @@ angular.module('newApp')
 				$scope.telhome 	  === "" ||
 				$scope.telmobile  === "" ||
 				$scope.optionCity === "" ||
+				$scope.optionState === "" ||
+				$scope.optionCountry === "" ||
 				$scope.optionSubs === "" ||
 				$scope.nameusernoemail === ""
 				){
-					
-					// console.log($scope.name);
-					// console.log($scope.desc);
-					// console.log($scope.noemp);
-					// console.log($scope.industry);
-					// console.log($scope.webpage);
-					// console.log($scope.pc);
-					// console.log($scope.nameuser);
-					// console.log($scope.telhome);
-					// console.log($scope.telmobile);
-					// console.log($scope.optionCity);
-					
 					$scope.message = "Favor de capturar todos los campos.";
 					$scope.alertClass = "alert alert-warning";
 					$scope.alertShow = true;
@@ -134,6 +136,8 @@ angular.module('newApp')
 				"address_p" : "",
 				"logo_p" : "",
 				"city_p" : "",
+				"state_p" : "",
+				"country_p" : "",
 				"nameuser_p" : "",
 				"password_p" : "",
 				"homephone_p" : "",
@@ -163,6 +167,8 @@ angular.module('newApp')
 			queryParam.address_p 		= $scope.desc;
 			queryParam.logo_p 			= "";
 			queryParam.city_p 			= $( "#selectcity" ).val();
+			queryParam.state_p 			= $( "#selectstate" ).val();
+			queryParam.country_p 		= $( "#selectcountry" ).val();
 			queryParam.nameuser_p 		= $scope.nameuser;
 			queryParam.password_p 		= randomstring;
 			queryParam.homephone_p 		= $scope.telhome;
@@ -177,7 +183,7 @@ angular.module('newApp')
 			
 			generalService.ICompanyNAdminUser(queryParam)
 			.then(function(data) {
-				console.log(data);
+				
 				if(data[0].returnMessage === "SUCCESS"){
 					$scope.message = "Nueva compañía y usuario administrador creados.";
 					$scope.alertClass = "alert alert-success";
@@ -191,7 +197,10 @@ angular.module('newApp')
 					$scope.nameuser   = "";
 					$scope.telhome 	  = "";
 					$scope.telmobile  = "";
-					$scope.optionCity = 0;
+					$scope.optionCity    = null;
+					$scope.optionState   = null;
+					$scope.optionCountry = null;
+					$scope.nameusernoemail = "";
 				}else{
 					$scope.message = "Error al guardar los datos, favor de intentar más tarde.";
 					$scope.alertClass = "alert alert-warning";
@@ -200,4 +209,3 @@ angular.module('newApp')
 			})
 		}
 });
-

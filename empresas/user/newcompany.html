@@ -47,6 +47,8 @@
 									<input ng-model="desc" ng-change="descChange(desc)" type="text" class="form-control" id="field-1" >
 								</div>
 							</div>
+						</div>
+						<div class="row" >
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="field-1" class="control-label">Industria</label>
@@ -59,32 +61,52 @@
 									<input ng-model="webpage" ng-change="webChange(webpage)" type="text" class="form-control" id="field-1" >
 								</div>
 							</div>
+						</div>
+						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="field-1" class="control-label">Código postal</label>
 									<input onkeypress='return event.charCode >= 48 && event.charCode <= 57' ng-model="pc" ng-change="pcChange(pc)" type="text" class="form-control" id="field-1" >
 								</div>
 							</div>
-							<div class="col-sm-6 form-group">
-								<div class="col-sm-3">
-									<label for="field-2" class="control-label">Ciudad:</label>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="selectcountry" class="control-label">País:</label><br>
+									<select id="selectcountry" name="Country" ng-model="optionCountry" class="form-control" style="width:200px;">
+										<option ng-repeat="optionCountry in allCountries" 
+											value="{{optionCountry.id_country}}">{{optionCountry.name}}</option>
+									</select>
 								</div>
-								<div class="col-sm-6">
-										<select id="selectcity" name="singleSelect" ng-model="optionCity" style="width:200px;">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="selectstate" class="control-label">Estado:</label><br>
+									<select id="selectstate" name="State" ng-model="optionState" style="width:200px;">
+											<option ng-repeat="optionState in allStates" 
+											value="{{optionState.id_state}}">{{optionState.name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="selectcity" class="control-label">Ciudad:</label><br>
+									<select id="selectcity" name="singleSelect" ng-model="optionCity" style="width:200px;">
 											<option ng-repeat="optionCity in allCities" 
 											value="{{optionCity.id_city}}">{{optionCity.name}}</option>
-										</select><br>
+									</select>
 										<!-- <select ng-options="optionCity.id_city as optionCity.name for optionCity in allCities"  ng-model="selectCity" style="width:200px;">
 										</select><br> -->
 								</div>
 							</div>
-							<div class="col-sm-6 form-group">
-								<div class="col-sm-3">
-									<label for="field-2" class="control-label">Subscripción:</label>
-								</div>
-								<div class="col-sm-6">
-										<select id="selectsubs" name="singleSelect" ng-model="optionSubs" style="width:200px;">
-											<option ng-repeat="optionSubs in allSubscriptions" 
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="selectsubs" class="control-label">Subscripción:</label><br>
+									<select id="selectsubs" name="singleSelect" ng-model="optionSubs" style="width:200px;">
+										<option ng-repeat="optionSubs in allSubscriptions" 
 											value="{{optionSubs.id_subs}}">{{optionSubs.description}}</option>
 										</select><br>
 										<!-- <select ng-options="optionCity.id_city as optionCity.name for optionCity in allCities"  ng-model="selectCity" style="width:200px;">
@@ -93,7 +115,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="field-1" class="control-label">Contratación</label>
+									<label for="field-1" class="control-label">Contratación</label><br>
 									<select id="selectcontact" style="width:200px;">
 										<option value="1">
 											Mensual

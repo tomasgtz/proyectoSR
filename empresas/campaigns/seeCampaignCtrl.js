@@ -284,7 +284,7 @@ angular.module('newApp')
 		.then(function(data) {
 
 			$scope.CampaignSelected = data;
-			console.log("asd tom5 [" + data.download + "] loading campaign info");	
+			//console.log("asd tom5 [" + data.download + "] loading campaign info");	
 			
 			if(data.download == '1') {
 				$scope.CampaignSelected.download = true;

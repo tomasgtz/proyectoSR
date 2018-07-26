@@ -4270,6 +4270,68 @@ $app->post(
 );
 
 $app->post(
+		'/GStates',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$dbms = 'mysql';
+				$host = 'localhost'; 
+				$db = 'wizadadm_wizad';
+				$user = 'wizadadm_mrkt';
+				$pass = 'Decaene09!';
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{						
+						$callBack  = $cn->query("CALL uspGet_States()")->fetchAll(PDO::FETCH_ASSOC);
+						echo json_encode($callBack);
+				}
+				
+				catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+$app->post(
+		'/GCountries',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$dbms = 'mysql';
+				$host = 'localhost'; 
+				$db = 'wizadadm_wizad';
+				$user = 'wizadadm_mrkt';
+				$pass = 'Decaene09!';
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{						
+						$callBack  = $cn->query("CALL uspGet_Countries()")->fetchAll(PDO::FETCH_ASSOC);
+						echo json_encode($callBack);
+				}
+				
+				catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+$app->post(
 		'/GAges',function() use ($app){
 						
 				$allPostVars = $app->request->post();
@@ -4909,6 +4971,8 @@ $app->post(
 			$address_p 		= $req->post('address_p');
 			$logo_p 		= $req->post('logo_p');
 			$city_p 		= $req->post('city_p');
+			$state_p 		= $req->post('state_p');
+			$country_p 		= $req->post('country_p');
 			$nameuser_p 	= $req->post('nameuser_p');
 			$password_p 	= $req->post('password_p');
 			$homephone_p 	= $req->post('homephone_p');
@@ -4960,7 +5024,7 @@ $app->post(
 			
 			try
 			{					
-					$callBack  = $cn->query("CALL uspIns_NewCompany ('$name_p','$address_p','$logo_p','$city_p','$employees_p','$industry_p','$webpage_p', '$pc_p', '$storage_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$callBack  = $cn->query("CALL uspIns_NewCompany ('$name_p','$address_p','$logo_p','$city_p','$employees_p','$industry_p','$webpage_p', '$pc_p', '$storage_p', '$state_p','$country_p')")->fetchAll(PDO::FETCH_ASSOC);
 					$callBack  = $cn->query("CALL uspGet_NewCompanyID ()")->fetchAll(PDO::FETCH_ASSOC);
 					$jsonresult = json_encode($callBack[0]);
 					$jsond = json_decode($jsonresult, true);
