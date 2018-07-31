@@ -43,7 +43,7 @@
                     <div class="row" style="margin-top:12px;">
                         <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA IDENTIDAD</strong></h3>
                         <h4>Dé click sobre la imagen para agregarla a la campaña</h4>
-                        <form id="dzImagesIdentidad" action="upload.php" class="dropzone" 
+                        <form id="dzImagesIdentidadSeeC" action="upload.php" class="dropzone" 
                            ng-dropzone">
                         </form>
                      </div>
@@ -60,7 +60,7 @@
                            <div class="form-group">
                               <div class="input-group">
                                  <ul class="icheck-colors">
-                                    <li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteArray" ng-click="pantoneToRemove(pal)" ng-style="{'background-color':pal.color}">
+                                    <li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteArray" ng-click="pantoneToRemove(pal)" ng-style="{'background-color':pal.color}" style="border: 1px solid black;">
                                     </li>
                                  </ul>
                               </div>

@@ -170,7 +170,7 @@ angular.module('newApp')
 		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: true , acceptedFiles: accepti });	
 		var dzFonts  = new Dropzone('#dzFonts',  { addRemoveLinks: true , acceptedFiles: acceptf });		
 		
-		var dzImagesIdentidad = new Dropzone('#dzImagesIdentidad', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
+		var dzImagesIdentidad = new Dropzone('#dzImagesIdentidadSeeC', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
 
 		dzImages.on("success", function(file) {
 						

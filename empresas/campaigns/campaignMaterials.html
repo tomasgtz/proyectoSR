@@ -62,6 +62,9 @@
 							<li>
 								<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-template" data-toggle="modal"><img src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
 							</li>
+							<li>
+								<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-formats" ng-show="isDownloadable()"><img src="images/utils/{{icon_folder}}/descargar32x32.png"></button>
+							</li>
 						</ul>
 					</div>
 					<div class="panel-heading" style="min-height: 40px; max-height: 40px;">
@@ -77,9 +80,6 @@
 							</li>
 							<li> 
 								<button data-toggle="modal" data-target="#modal-phrases" ng-click="addPhrase()" class="btn btn-xs btn-default"><img src="images/utils/{{icon_folder}}/textlist32x32.png" ></button>
-							</li>
-							<li>
-								<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-formats" ng-show="isDownloadable()"><img src="images/utils/{{icon_folder}}/descargar32x32.png"></button>
 							</li>
 							<li>
 								<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="toggleGrid()"><img src="images/utils/{{icon_folder}}/grid32x32.png"></button>
@@ -192,14 +192,14 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-12">
-								<ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style="list-style: none; max-height: 500px; overflow-y: scroll;">
-								   <li style="text-align: center; margin-bottom:10px;" class="item" ng-repeat="image in images" ng-click="dropImage(image, $event)">			
-									  <h3>{{image.title}}</h3>								
+								<ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages(images)" class="col">
+								   <li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | limitTo : limit" ng-click="dropImage(image, $event)" >			
+									  								
 									  <!-- <div  class="delete" ng-click="deleteSticker(image)">X</div> -->
 									  <!-- <img data-dismiss="modal" src="{{image.src}}" height="{{image.height}}" width="{{image.width}}" dragIt="true">	 -->
-										<div style="height:100%; width:100%;">
-											<img data-dismiss="modal" src="{{image.src}}"  style="width:100%; min-height:100%; box-shadow: 6px 6px 7px #888888;">
-										</div>
+										<p style="width: 90px;">{{image.title}}</p>
+											<img data-dismiss="modal" src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+										
 								   </li>	
 								</ul>
 							</div>

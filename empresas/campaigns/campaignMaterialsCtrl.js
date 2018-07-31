@@ -111,6 +111,24 @@ angular.module('newApp')
 
 	})
 
+	$scope.getColumnImages = function (array) {
+        
+        if(array.length % 2 === 0 ) { 
+        	return [
+            	Math.floor(array.length / 2) + 1,
+            	-Math.floor(array.length / 2)
+        	];
+        } else {
+
+        	return [
+            	Math.floor(array.length / 2) + 1,
+            	-Math.floor(array.length / 2)
+        	];
+        }
+
+        
+    };
+
 	$scope.deleteTemplate = function(template) {
 		
 		var params = {
