@@ -321,6 +321,7 @@ angular.module('newApp')
 				$scope.newMaterialChange = $scope.materialArray[i];
 				$scope.canvasWidth = $scope.materialArray[i].width;
 				$scope.canvasHeight = $scope.materialArray[i].height;
+				break;
 			}
 		}
 		
@@ -401,6 +402,12 @@ angular.module('newApp')
 			$scope.addBackgroundGrid(gridOptions);
 		}
 		
+		// print red printing margin lines, uses the same gridOptions
+		if($scope.newMaterialChange.offline == 1) {
+			$scope.drawPrintingMargins(gridOptions);	
+		}
+		
+
 		$scope.factory.canvas.deactivateAll().renderAll();
 		$scope.factory.canvas.deactivateAll().renderAll();
 		
@@ -418,6 +425,56 @@ angular.module('newApp')
 		.then(function(data) {
 			$scope.templates = data;
 		});
+	}
+
+	$scope.drawPrintingMargins = function(options) {
+
+		lineStyle = {
+          stroke: '#ff0000',
+          strokeWidth: 1,
+          selectable: false
+        }
+
+        hTopLineX1 = 36 / $scope.widthMultiplier;
+        hTopLineY1 = 36 / $scope.widthMultiplier;
+		hTopLineX2 = options.width - hTopLineX1;
+		hTopLineY2 = 36 / $scope.widthMultiplier;
+
+		hBtmLineX1 = 36 / $scope.widthMultiplier;
+        hBtmLineY1 = options.height - (36 / $scope.widthMultiplier);
+		hBtmLineX2 = options.width - (36 / $scope.widthMultiplier);
+		hBtmLineY2 = options.height - (36 / $scope.widthMultiplier);
+    
+//x1,y1,x2,y2
+
+		hMarginTop = new fabric.Line([ hTopLineX1, hTopLineY1, 
+									   hTopLineX2, hTopLineY2], lineStyle);		
+
+		hMarginBtm = new fabric.Line([ hBtmLineX1, hBtmLineY1, 
+									   hBtmLineX2, hBtmLineY2], lineStyle);		
+        
+		$scope.factory.canvas.add(hMarginTop);
+		$scope.factory.canvas.add(hMarginBtm);
+
+		vLftLineX1 = 36 / $scope.widthMultiplier;
+        vLftLineY1 = 36 / $scope.widthMultiplier;
+		vLftLineX2 = 36 / $scope.widthMultiplier;
+		vLftLineY2 = options.height - (36 / $scope.widthMultiplier);
+
+		vRgtLineX1 = options.width - (36 / $scope.widthMultiplier);
+        vRgtLineY1 = 36 / $scope.widthMultiplier;
+		vRgtLineX2 = options.width - (36 / $scope.widthMultiplier);
+		vRgtLineY2 = options.height - (36 / $scope.widthMultiplier);
+
+		vMarginLft = new fabric.Line([ vLftLineX1, vLftLineY1, 
+									   vLftLineX2, vLftLineY2], lineStyle);		
+
+		vMarginRgt = new fabric.Line([ vRgtLineX1, vRgtLineY1, 
+									   vRgtLineX2, vRgtLineY2], lineStyle);		
+        
+		$scope.factory.canvas.add(vMarginLft);
+		$scope.factory.canvas.add(vMarginRgt);
+			
 	}
 	
 	$scope.addBackgroundGrid = function(options) {
