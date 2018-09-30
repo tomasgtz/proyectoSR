@@ -40,10 +40,7 @@ $app->post(
 			$req = $app->request();
 			$email_p = $req->post('email_p');
 			$password_p = $req->post('password_p');
-			
-				//almaceno de el parámetro al servicio
-				//conexion con base de datos
-				//Replace the below connection parameters to fit your environment
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -51,14 +48,15 @@ $app->post(
 				$pass = 'Decaene09!';
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
-
 				$cn=new PDO($dsn, $user, $pass);
 				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 				try
 				{ 
-						$data = $cn->query("call uspGet_LoggedUser('$email_p', '$password_p');")->fetchAll(PDO::FETCH_ASSOC);
-					
-						echo json_encode($data);
+						$data = $cn->query("call uspGet_LoggedUser('$email_p');")->fetchAll(PDO::FETCH_ASSOC);
+
+						if (true === password_verify($password_p, $data[0]['password'])) {
+							echo json_encode($data);
+						}
 				}
 				
 				catch(PDOException $e) {
@@ -71,20 +69,20 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Campaigns',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$idcompany_p = $req->post('idcompany_p');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -112,15 +110,15 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
 			$description_p = $req->post('description_p');
 			$userup_p = $req->post('userup_p');
@@ -130,9 +128,9 @@ $app->post(
                         $download_p = $req->post('download_p');
 
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -163,24 +161,24 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
 			$description_p = $req->post('description_p');
 			$userupdate_p = $req->post('userupdate_p');
 			$dimension_p = $req->post('dimension_p');
 			$company_p = $req->post('company_p');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -209,21 +207,21 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UUserPhoto',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$userid = $req->post('userid');
 			$photo = $req->post('photo');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -251,21 +249,21 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UUserLogo',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$userid = $req->post('userid');
 			$photo = $req->post('photo');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -294,20 +292,20 @@ $app->post(
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/ISaveImageOnBank',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$image = $req->post('image');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -338,17 +336,17 @@ $app->post(
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GImageBank',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -378,21 +376,21 @@ $app->post(
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('company_p');
 			$status_p = $req->post('status_p');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -421,19 +419,19 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Company',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
 			
-				//NO MOVER
+			
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -461,21 +459,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/SelectedCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -504,21 +502,21 @@ $app->post(
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
 			$address_p = $req->post('address_p');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -546,14 +544,14 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
 			$address_p = $req->post('address_p');
 			$company_p = $req->post('company_p');
@@ -562,9 +560,9 @@ $app->post(
 			$webpage_p = $req->post('webpage_p');
 			$pc_p = $req->post('pc_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -592,21 +590,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$status_p = $req->post('status_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -634,20 +632,20 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Company_TextConfig',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -675,24 +673,24 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCompany_TextConfig',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$textconfig_p = $req->post('textconfig_p');
 			$array = json_decode( $textconfig_p, true );
 
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -723,24 +721,24 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCompany_Palette',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$color_p = $req->post('color_p');
 			$array = json_decode( $color_p, true );
 
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -771,21 +769,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCompany_TextConfig',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$textconfig_p = $req->post('textconfig_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -813,21 +811,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusCompany_TextConfig',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$status_p = $req->post('status_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -855,20 +853,20 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Company_Pack',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -896,21 +894,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCompany_Pack',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$image_p = $req->post('image_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -938,21 +936,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCompany_Pack',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$image_p = $req->post('image_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -980,21 +978,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusCompany_Pack',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$status_p = $req->post('status_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1022,21 +1020,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Company_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1064,21 +1062,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCompany_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$subscription_p = $req->post('subscription_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1106,21 +1104,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCompany_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1148,21 +1146,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusCompany_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$status_p = $req->post('status_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1190,21 +1188,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Design',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1232,21 +1230,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewDesign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$user_p = $req->post('user_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1274,21 +1272,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UDesign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1316,21 +1314,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusDesign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$status_p = $req->post('status_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1358,19 +1356,19 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Ct_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
 			
-				//NO MOVER
+			
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1398,20 +1396,20 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/SelectedCt_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$subs_p = $req->post('subs_p');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1439,20 +1437,20 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCt_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$description_p = $req->post('description_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1480,21 +1478,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCt_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$description_p = $req->post('description_p');
 			$subs_p = $req->post('subs_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1522,21 +1520,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Ct_Dimensions',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1564,24 +1562,24 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCt_Dimensions',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$height_p = $req->post('height_p');
 			$width_p = $req->post('width_p');
 
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1610,15 +1608,15 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UCt_Dimensions',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$height_p = $req->post('height_p');
 			$width_p = $req->post('width_p');
@@ -1626,9 +1624,9 @@ $app->post(
 
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1656,22 +1654,22 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Det_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1699,15 +1697,15 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewDet_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$subs_p = $req->post('subs_p');
 			$price_p = $req->post('price_p');
 			$individualusercost_p = $req->post('individualusercost_p');
@@ -1722,9 +1720,9 @@ $app->post(
 
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1752,15 +1750,15 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UDet_Subscription',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$subs_p = $req->post('subs_p');
 			$price_p = $req->post('price_p');
 			$individualusercost_p = $req->post('individualusercost_p');
@@ -1775,9 +1773,9 @@ $app->post(
 
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1805,22 +1803,22 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Control_Historic',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1848,23 +1846,23 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewControl_Historic',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$user_p = $req->post('user_p');
 			$description_p = $req->post('description_p');
 			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1892,24 +1890,24 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UControl_Historic',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$user_p = $req->post('user_p');
 			$description_p = $req->post('description_p');
 			$company_p = $req->post('company_p');
 			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1937,24 +1935,24 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusControl_Historic',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$user_p = $req->post('user_p');
 			$description_p = $req->post('description_p');
 			$company_p = $req->post('company_p');
 			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -1982,22 +1980,22 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/General_Messages',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2025,14 +2023,14 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UGeneral_Messages',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$idgmessage_p = $req->post('idgmessage_p');
 			$userup_p = $req->post('userup_p');
@@ -2042,9 +2040,9 @@ $app->post(
 			$message_p = $req->post('message_p');			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2072,21 +2070,21 @@ $app->post(
 );
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/StatusGeneral_Messages',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$status_p = $req->post('status_p');			
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2114,23 +2112,23 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UUser',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
-			$password_p = $req->post('password_p');
+			$password_p = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
 			$mobilephone_p = $req->post('mobilephone_p');
 			$homephone_p = $req->post('homephone_p');
 			$iduser_p = $req->post('iduser_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2158,23 +2156,23 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UUserGeneralData',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
 			$namenoemail_p = $req->post('namenoemail_p');
 			$mobilephone_p = $req->post('mobilephone_p');
 			$homephone_p = $req->post('homephone_p');
 			$iduser_p = $req->post('iduser_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2203,19 +2201,19 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GUserCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$idcompany_p = $req->post('idcompany_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2243,20 +2241,20 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UUserFreeCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$userArray = $req->post('user');
 			$userArray = json_decode($userArray, true );
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2288,19 +2286,19 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GTextsCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$idcompany_p = $req->post('idcompany_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2328,19 +2326,19 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GPaletteCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$idcompany_p = $req->post('idcompany_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2368,19 +2366,19 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GFontsCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$idcompany_p = $req->post('idcompany_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2408,19 +2406,19 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GPackCompany',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$idcompany_p = $req->post('idcompany_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2449,18 +2447,18 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GMaterials',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2488,19 +2486,19 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GPaletteCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2527,19 +2525,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GTextsCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2566,19 +2564,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GMaterialsCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2605,19 +2603,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GPackCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2645,19 +2643,19 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GPackIdentity',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2685,20 +2683,20 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/GFontsCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$host_p = $req->post('host_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2730,19 +2728,19 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/DPaletteCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2769,19 +2767,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/DTextsCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2808,19 +2806,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/DMaterialsCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2847,19 +2845,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/DPackCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2886,19 +2884,19 @@ $app->post(
 			}
 );
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/DFontsCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2931,20 +2929,20 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/IPaletteCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$color_p = $req->post('color_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -2972,21 +2970,21 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/IMaterialCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$material_p = $req->post('material_p');
 			$download_p = $req->post('download_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3015,20 +3013,20 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/ITextCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$text_p = $req->post('text_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3057,20 +3055,20 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/IFontCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$font_p = $req->post('font_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3098,20 +3096,20 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/IPackCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaign_p = $req->post('campaign_p');
 			$pack_p = $req->post('pack_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3139,22 +3137,22 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewMaterial',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$description_p = $req->post('description_p');
 			$width_p = $req->post('width_p');
 			$height_p = $req->post('height_p');
 			$thumbnail_p = $req->post('thumbnail_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3182,23 +3180,23 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UpdMaterial',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$description_p = $req->post('description_p');
 			$width_p = $req->post('width_p');
 			$height_p = $req->post('height_p');
 			$thumbnail_p = $req->post('thumbnail_p');
 			$material_p = $req->post('material_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3226,20 +3224,20 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UpdMaterialStatus',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$status_p = $req->post('status_p');
 			$material_p = $req->post('material_p');
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3268,18 +3266,18 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/AllUsersAdmin',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3307,18 +3305,18 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/AllCompaniesAdmin',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3346,18 +3344,18 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/CountSubscriptions',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3385,25 +3383,26 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewUser',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$username_p = $req->post('username_p');
 			$company_p = $req->post('company_p');
 			$name_p = $req->post('name_p');
 			$password_p = $req->post('password_p');
+			$password_encrypted = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
 			$homephone_p = $req->post('homephone_p');
 			$mobilephone_p = $req->post('mobilephone_p');
 			$fromPublic = $req->post('fp');
 			$grecaptcharesponse = $req->post('grecaptcharesponse');
 
 			if($fromPublic == '1') {
-				
+
 				$ch = curl_init();
 
 				curl_setopt($ch, CURLOPT_URL,"https://www.google.com/recaptcha/api/siteverify");
@@ -3453,9 +3452,9 @@ $app->post(
 								</table>
 							</body>
 						</html>';
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3475,7 +3474,9 @@ $app->post(
 						$test = 0;
 						
 						if ( $name == null ){
-							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_p','$homephone_p','$mobilephone_p', '$username_p');")->fetchAll(PDO::FETCH_ASSOC);
+
+
+							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_encrypted','$homephone_p','$mobilephone_p', '$username_p');")->fetchAll(PDO::FETCH_ASSOC);
 
 							if($data[0]["returnMessage"] == "ERROR: MAX USERS") {
 								echo json_encode($data);
@@ -3501,14 +3502,12 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/Comentario',function() use ($app){
 		
-			//NO MOVER
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
 			$nombrec = $req->post('nombrec');
 			$correoc = $req->post('correoc');
 			$companiac = $req->post('companiac');
@@ -3536,9 +3535,7 @@ $app->post(
 								<h3>Comentarios: '.$comentariosc.'<h3><br/>
 							</body>
 						</html>';
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3578,7 +3575,7 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewUserLanding',function() use ($app){
 		
 			$allPostVars = $app->request->post();
@@ -3588,15 +3585,10 @@ $app->post(
 			$company_p = $req->post('company_p');
 			$name_p = $req->post('name_p');
 			$password_p = $req->post('password_p');
+			$password_encrypted = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
 			$homephone_p = $req->post('homephone_p');
 			$mobilephone_p = $req->post('mobilephone_p');
-			 
-			// $company_p = $arraydata->company_p;
-			// $name_p = $arraydata->name_p;
-			// $password_p = $arraydata->password_p;
-			// $homephone_p =$arraydata->homephone_p;
-			// $mobilephone_p = $arraydata->mobilephone_p;
-			
+			 			
 			
 			$to   = $name_p;
 			$from = 'sistema@wizad.com';
@@ -3619,14 +3611,13 @@ $app->post(
 										<th>Contrase&ntilde;a:</th><td>  '.$password_p.'   </td>
 									</tr>
 									<tr>
-										<th>Sitio Web:</th><td><a href="http://www.empresas.wizad.mx">http://www.empresas.wizad.mx</a></td>
+										<th>Sitio Web:</th><td><a href="http://empresas.wizad.mx">http://empresas.wizad.mx</a></td>
 									</tr>
 								</table>
 							</body>
 						</html>';
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3646,10 +3637,10 @@ $app->post(
 						$test = 0;
 						
 						if ( $name == null ){
-							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_p','$homephone_p','$mobilephone_p');")->fetchAll(PDO::FETCH_ASSOC);
+							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_encrypted','$homephone_p','$mobilephone_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
 							mail($to, "Wizad - Registrate", $message, $headers);
-							// $test2 = json_decode($xx, true);
+
 							$data = "Usuario registrado exitosamente, se envió tu contraseña por correo. ¡Ya puedes iniciar en nuestra plataforma!";
 							echo json_encode($data);
 						}else{
@@ -3668,15 +3659,16 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/RecoverPassword',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$password_p = $req->post('password_p');
+			$password_encrypted = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
 			$email_p = $req->post('email_p');
 			
 			$to   = $email_p;
@@ -3705,9 +3697,9 @@ $app->post(
 								</table>
 							</body>
 						</html>';
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3721,9 +3713,7 @@ $app->post(
 				try
 				{
 						//CAMBIAR PROCEDIMIENTO
-						$data = $cn->query("call uspUpd_UserPassword('$password_p','$email_p');")->fetchAll(PDO::FETCH_ASSOC);
-						
-						
+						$data = $cn->query("call uspUpd_UserPassword('$password_encrypted','$email_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
 						mail($to, "Wizad - Nueva clave", $message, $headers);
 						echo json_encode($data);
@@ -3738,15 +3728,15 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/SaveNewCampaign',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$description_c = $req->post('description_c');
 			$title_c = $req->post('title_c');
 			$autorization_c = $req->post('autorization_c');
@@ -3762,9 +3752,9 @@ $app->post(
 			// }
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3792,15 +3782,15 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/SaveCampaignConfig',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaignid = $req->post('campaignid');
 			$textconfig_p = $req->post('textconfig_p');
 			$textarray = json_decode($textconfig_p, true );
@@ -3814,9 +3804,9 @@ $app->post(
 			$fontarray = json_decode( $font_p, true );
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -3862,15 +3852,15 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/SaveCampaignUpdate',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaignid = $req->post('campaignid');
 			$newTextArray = $req->post('newTextArray');
 			$newTextArray = json_decode($newTextArray, true );
@@ -3899,9 +3889,9 @@ $app->post(
                        
 
 			
-			//NO MOVER
 			
-			//Replace the below connection parameters to fit your environment
+			
+			
 			$dbms = 'mysql';
 			$host = 'localhost'; 
 			$db = 'wizadadm_wizad';
@@ -4005,15 +3995,15 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/SaveCompanyUpdate',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$company_p = $req->post('company_p');
 			$newTextArray = $req->post('newTextArray');
 			$newTextArray = json_decode($newTextArray, true );
@@ -4037,9 +4027,9 @@ $app->post(
 			$delFontArray = json_decode( $delFontArray, true );
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -4100,24 +4090,24 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCampaign_TextConfig',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaignid = $req->post('campaignid');
 			$textconfig_p = $req->post('textconfig_p');
 			$array = json_decode( $textconfig_p, true );
 
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -4148,24 +4138,24 @@ $app->post(
 );
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewCampaign_Palette',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$campaignid = $req->post('campaignid');
 			$color_p = $req->post('color_p');
 			$array = json_decode( $color_p, true );
 
 			
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -4975,6 +4965,7 @@ $app->post(
 			$country_p 		= $req->post('country_p');
 			$nameuser_p 	= $req->post('nameuser_p');
 			$password_p 	= $req->post('password_p');
+			$password_encrypted 	= password_hash($req->post('password_p'), PASSWORD_DEFAULT);
 			$homephone_p 	= $req->post('homephone_p');
 			$mobilephone_p 	= $req->post('mobilephone_p');
 			$employees_p 	= $req->post('employees_p');
@@ -5032,7 +5023,7 @@ $app->post(
 					
 					if ( $id_company > 0 ){
 						$data = $cn->query("call uspIns_CompanySubscription('$id_company','$subs_p', '$freq_p');")->fetchAll(PDO::FETCH_ASSOC);
-						$data = $cn->query("call uspIns_NewAdminUser('$id_company','$nameuser_p','$password_p','$homephone_p','$mobilephone_p', '$nameusernoemail');")->fetchAll(PDO::FETCH_ASSOC);
+						$data = $cn->query("call uspIns_NewAdminUser('$id_company','$nameuser_p','$password_encrypted','$homephone_p','$mobilephone_p', '$nameusernoemail');")->fetchAll(PDO::FETCH_ASSOC);
 					
 						mail($to, "Wizad - Inicia", $message, $headers);
 						echo json_encode($data);
@@ -5249,23 +5240,23 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/NewTemplate',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
-			//CAMBIAR PARAMETROS
+			
 			$name_p = $req->post('name_p');
 			$idmaterial_p = $req->post('idmaterial_p');
 			$contents_p = $req->post('contents_p');
 			$iduser_p = $req->post('iduser_p');
 
 
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';
@@ -5293,22 +5284,22 @@ $app->post(
 
 
 $app->post(
-		//CAMBIAR NOMBRE DEL SERVICIO
+		
 		'/UTemplate',function() use ($app){
 		
-			//NO MOVER
+			
 			$allPostVars = $app->request->post();
 			$req = $app->request();
 			
 			
-			//CAMBIAR PARAMETROS
+			
 			$idtemplate_p = $req->post('idtemplate_p');
 			$name_p = $req->post('name_p');
 			$contents_p = $req->post('contents_p');
 			
-				//NO MOVER
 				
-				//Replace the below connection parameters to fit your environment
+				
+				
 				$dbms = 'mysql';
 				$host = 'localhost'; 
 				$db = 'wizadadm_wizad';

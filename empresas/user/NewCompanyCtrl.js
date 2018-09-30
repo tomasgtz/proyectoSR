@@ -154,11 +154,11 @@ angular.module('newApp')
 			var randomstring = Math.random().toString(36).slice(-8);
 			
 			var subsId = $( "#selectsubs" ).val();
-			var usersS = 0;
+			var usersS = 1;
 			var storageS = 0;
 			for( var i in $scope.allSubscriptions ){
 				if($scope.allSubscriptions[i].id_subs === subsId){
-					usersS = $scope.allSubscriptions[i].users;
+					//usersS = $scope.allSubscriptions[i].users;
 					storageS = $scope.allSubscriptions[i].storage;
 				}
 			}

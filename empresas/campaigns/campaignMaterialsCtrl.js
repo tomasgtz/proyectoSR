@@ -58,12 +58,15 @@ angular.module('newApp')
 	$scope.cropStarted = false;
 	$scope.fontsSizeDropdown = [8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72];
 	$scope.gridElements = [];
+	$scope.printingLinesElements = [];
 	$scope.clipToFunctions = [];
 	$scope.clipToFunctionsValues = [];
 	$scope.clipToFunctionsFcs = [];
 	
 	$scope.showGrid = true;
 	$scope.oldshowGrid = true;
+	$scope.showPrintingLines = false;
+	$scope.oldshowPrintingLines = false;
 	
 	$scope.el = {};
 	$scope.object = {};
@@ -404,6 +407,7 @@ angular.module('newApp')
 		
 		// print red printing margin lines, uses the same gridOptions
 		if($scope.newMaterialChange.offline == 1) {
+			$scope.showPrintingLines = true;
 			$scope.drawPrintingMargins(gridOptions);	
 		}
 		
@@ -455,6 +459,8 @@ angular.module('newApp')
         
 		$scope.factory.canvas.add(hMarginTop);
 		$scope.factory.canvas.add(hMarginBtm);
+		$scope.printingLinesElements.push(hMarginTop);
+		$scope.printingLinesElements.push(hMarginBtm);
 
 		vLftLineX1 = 36 / $scope.widthMultiplier;
         vLftLineY1 = 36 / $scope.widthMultiplier;
@@ -474,6 +480,8 @@ angular.module('newApp')
         
 		$scope.factory.canvas.add(vMarginLft);
 		$scope.factory.canvas.add(vMarginRgt);
+		$scope.printingLinesElements.push(vMarginLft);
+		$scope.printingLinesElements.push(vMarginRgt);
 			
 	}
 	
@@ -511,6 +519,27 @@ angular.module('newApp')
 				vertical.set({stroke: '#cccccc'});
 		  }
 		}
+	}
+
+	$scope.togglePrintingLines = function() {
+
+		if($scope.showPrintingLines == true) {
+			
+			$scope.showPrintingLines = false;
+		
+			for (let i = 0; i < $scope.printingLinesElements.length; i++) {
+				$scope.factory.canvas.remove($scope.printingLinesElements[i]);
+			}
+		} else {
+
+			$scope.showPrintingLines = true;
+
+			for (let i = 0; i < $scope.printingLinesElements.length; i++) {
+				$scope.factory.canvas.add($scope.printingLinesElements[i]);
+			}
+
+		}
+		
 	}
 	
 	$scope.toggleGrid = function() {
@@ -1146,6 +1175,15 @@ angular.module('newApp')
 		previous_showgrid = $scope.showGrid;
 		$scope.showGrid = true;
 		$scope.toggleGrid();
+		previous_showprintingLines = $scope.showPrintingLines;
+		
+		if ( $scope.newMaterialChange.print_margins == 0 && $scope.showPrintingLines) {
+
+			if( $scope.showPrintingLines === true) {
+				$scope.togglePrintingLines();
+			}
+
+		}
 		
 		$scope.factory.canvas.deactivateAll().renderAll();
 		$scope.factory.canvas.setZoom(1);
@@ -1153,19 +1191,30 @@ angular.module('newApp')
 		//console.log($scope.newMaterialChange);
 		$scope.savingCanvasWidth = $scope.factory.canvas.width;
 		$scope.savingCanvasHeight = $scope.factory.canvas.height;
-		//console.log($scope.savingCanvasWidth);
-		//console.log($scope.savingCanvasHeight);
-		$scope.factory.canvas.setDimensions({width: parseInt($scope.newMaterialChange.width), height: parseInt($scope.newMaterialChange.height)});
+		console.log($scope.savingCanvasWidth);
+		console.log($scope.savingCanvasHeight);
+		console.log("w" + $scope.newMaterialChange.width);
+		console.log("h" + $scope.newMaterialChange.height);
+		//$scope.factory.canvas.setDimensions({width: parseInt($scope.newMaterialChange.width), height: parseInt($scope.newMaterialChange.height)});
 		var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
 		// download($scope.factory.canvas.toDataURL({       format: 'png'   }), 'wizad_design.png');
 		$scope.factory.canvas.setDimensions({width: parseInt($scope.savingCanvasWidth), height: parseInt($scope.savingCanvasHeight)});
-		var pdf = new jsPDF();
+		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
+			var pdf = new jsPDF('l');
+		} else {
+			var pdf = new jsPDF('p');
+		}
+		
 		pdf.addImage(imgData, 'JPEG', 0, 0);
 		var download = document.getElementById('download');
 		pdf.save("download.pdf");
 		
 		$scope.showGrid = !previous_showgrid;
-		$scope.toggleGrid();		
+		$scope.toggleGrid();
+
+		$scope.showPrintingLines = !previous_showprintingLines;
+		$scope.togglePrintingLines();
+	
 	 }
 	 
 	 $scope.exportPNG = function(name) {
@@ -1173,7 +1222,14 @@ angular.module('newApp')
 		previous_showgrid = $scope.showGrid;
 		$scope.showGrid = true;
 		$scope.toggleGrid();
-
+		previous_showprintingLines = $scope.showPrintingLines;
+		
+		if ( $scope.newMaterialChange.print_margins == 0 && $scope.showPrintingLines ) {
+			if( $scope.showPrintingLines === true) {
+				$scope.togglePrintingLines();
+			}
+		}
+		
         fabric.devicePixelRatio = 1;
 		 
 		 $("#hero_container").css("width", $scope.newMaterialChange.width+"px");
@@ -1237,6 +1293,9 @@ angular.module('newApp')
 		
 		$scope.showGrid = !previous_showgrid;
 		$scope.toggleGrid();
+
+		$scope.showPrintingLines = !previous_showprintingLines;
+		$scope.togglePrintingLines();
 
 	 }
 	  // $scope.changeFormColor = function(pal){
