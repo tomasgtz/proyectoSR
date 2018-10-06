@@ -15,7 +15,7 @@ angular.module('newApp')
 	$scope.templates = [];
 	$scope.template_name = "";
 	$scope.template_saved_id = 0;
-	$scope.icon_folder = 'Opcion2';
+	$scope.icon_folder = 'Opcion3';
 	$scope.CampaignSelected =  {
 
 				"id_campaign" 	: "",
@@ -429,6 +429,7 @@ angular.module('newApp')
 		.then(function(data) {
 			$scope.templates = data;
 		});
+	
 	}
 
 	$scope.drawPrintingMargins = function(options) {
@@ -1173,6 +1174,7 @@ angular.module('newApp')
 		  
 	  $scope.exportPDF = function(name) {
 		previous_showgrid = $scope.showGrid;
+		
 		$scope.showGrid = true;
 		$scope.toggleGrid();
 		previous_showprintingLines = $scope.showPrintingLines;
@@ -1191,49 +1193,17 @@ angular.module('newApp')
 		//console.log($scope.newMaterialChange);
 		$scope.savingCanvasWidth = $scope.factory.canvas.width;
 		$scope.savingCanvasHeight = $scope.factory.canvas.height;
-		console.log($scope.savingCanvasWidth);
-		console.log($scope.savingCanvasHeight);
-		console.log("w" + $scope.newMaterialChange.width);
-		console.log("h" + $scope.newMaterialChange.height);
+		//console.log($scope.savingCanvasWidth);
+		//console.log($scope.savingCanvasHeight);
+		//console.log("w" + $scope.newMaterialChange.width);
+		//console.log("h" + $scope.newMaterialChange.height);
 		//$scope.factory.canvas.setDimensions({width: parseInt($scope.newMaterialChange.width), height: parseInt($scope.newMaterialChange.height)});
-		var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
+		//var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
 		// download($scope.factory.canvas.toDataURL({       format: 'png'   }), 'wizad_design.png');
-		$scope.factory.canvas.setDimensions({width: parseInt($scope.savingCanvasWidth), height: parseInt($scope.savingCanvasHeight)});
-		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
-			var pdf = new jsPDF('l');
-		} else {
-			var pdf = new jsPDF('p');
-		}
-		
-		pdf.addImage(imgData, 'JPEG', 0, 0);
-		var download = document.getElementById('download');
-		pdf.save("download.pdf");
-		
-		$scope.showGrid = !previous_showgrid;
-		$scope.toggleGrid();
 
-		$scope.showPrintingLines = !previous_showprintingLines;
-		$scope.togglePrintingLines();
-	
-	 }
-	 
-	 $scope.exportPNG = function(name) {
 
-		previous_showgrid = $scope.showGrid;
-		$scope.showGrid = true;
-		$scope.toggleGrid();
-		previous_showprintingLines = $scope.showPrintingLines;
-		
-		if ( $scope.newMaterialChange.print_margins == 0 && $scope.showPrintingLines ) {
-			if( $scope.showPrintingLines === true) {
-				$scope.togglePrintingLines();
-			}
-		}
-		
-        fabric.devicePixelRatio = 1;
+		fabric.devicePixelRatio = 1;
 		 
-		 $("#hero_container").css("width", $scope.newMaterialChange.width+"px");
-		 $("#hero_container").css("height", $scope.newMaterialChange.height+"px");
 		 $scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width, height: 
 			parseInt($scope.newMaterialChange.height)});
 			
@@ -1259,13 +1229,107 @@ angular.module('newApp')
 			$scope.factory.canvas.renderAll();
 			$scope.factory.canvas.calcOffset();
 			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
-			download(imgData, 'wizad_design.png');
+			
 			
 			
 			//AFTER DOWNLOAD RETURN TO NORMAL STATE
 			
-		$("#hero_container").css("width", $scope.newMaterialChange.width_small+"px");
-		$("#hero_container").css("height", $scope.newMaterialChange.height_small+"px");
+		$scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width_small, height: 
+			parseInt($scope.newMaterialChange.height_small)});
+			
+		var objects =  $scope.factory.canvas.getObjects();
+			for (var i in objects) {
+				var scaleX = objects[i].scaleX;
+				var scaleY = objects[i].scaleY;
+				var left = objects[i].left;
+				var top = objects[i].top;
+
+				var tempScaleX = scaleX / $scope.newMaterialChange.width_multiplier;
+				var tempScaleY = scaleY / $scope.newMaterialChange.height_multiplier;
+				var tempLeft = left / $scope.newMaterialChange.width_multiplier;
+				var tempTop = top / $scope.newMaterialChange.height_multiplier;
+
+				objects[i].scaleX = tempScaleX;
+				objects[i].scaleY = tempScaleY;
+				objects[i].left = tempLeft;
+				objects[i].top = tempTop;
+
+				objects[i].setCoords();
+			}
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.calcOffset();
+		
+		// $scope.factory.canvas.setDimensions({width: parseInt($scope.savingCanvasWidth), height: parseInt($scope.savingCanvasHeight)}); 
+
+		// check paper orientation
+		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
+			var pdf = new jsPDF('l','cm', [$scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm]);
+			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
+		} else {
+			var pdf = new jsPDF('p','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
+			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm);
+		}
+
+		var now = new Date().toISOString().slice(0,16);
+		pdf.save("Wizad design " + now + ".pdf");
+		
+		$scope.showGrid = !previous_showgrid;
+		$scope.toggleGrid();
+
+		$scope.showPrintingLines = !previous_showprintingLines;
+		$scope.togglePrintingLines();
+	
+	 }
+	 
+	 $scope.exportPNG = function(name) {
+
+		previous_showgrid = $scope.showGrid;
+		$scope.showGrid = true;
+		$scope.toggleGrid();
+		previous_showprintingLines = $scope.showPrintingLines;
+		
+		if ( $scope.newMaterialChange.print_margins == 0 && $scope.showPrintingLines ) {
+			if( $scope.showPrintingLines === true) {
+				$scope.togglePrintingLines();
+			}
+		}
+		
+        fabric.devicePixelRatio = 1;
+		 
+		 
+		 $scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width, height: 
+			parseInt($scope.newMaterialChange.height)});
+			
+		 var objects =  $scope.factory.canvas.getObjects();
+			for (var i in objects) {
+				var scaleX = objects[i].scaleX;
+				var scaleY = objects[i].scaleY;
+				var left = objects[i].left;
+				var top = objects[i].top;
+
+				var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
+				var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
+				var tempLeft = left * $scope.newMaterialChange.width_multiplier;
+				var tempTop = top * $scope.newMaterialChange.height_multiplier;
+
+				objects[i].scaleX = tempScaleX;
+				objects[i].scaleY = tempScaleY;
+				objects[i].left = tempLeft;
+				objects[i].top = tempTop;
+
+				objects[i].setCoords();
+			}
+			$scope.factory.canvas.renderAll();
+			$scope.factory.canvas.calcOffset();
+			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
+
+			var now = new Date().toISOString().slice(0,16);
+			download(imgData, "Wizad image " + now + ".png");
+			
+			
+			//AFTER DOWNLOAD RETURN TO NORMAL STATE
+			
+		
 		$scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width_small, height: 
 			parseInt($scope.newMaterialChange.height_small)});
 			

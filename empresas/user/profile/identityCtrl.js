@@ -71,8 +71,7 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 		
 		$scope.erasePalette = function(){	
 			var existOnOriginal = $scope.paletteArrayCopy.indexOf($scope.pantoneDrop);
-			console.log(existOnOriginal);
-			console.log($scope.pantoneDrop);
+		
 			if(existOnOriginal>-1){
 				$scope.deletedPalettes.push($scope.pantoneDrop);		
 			}			
@@ -96,8 +95,6 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 			addMaterial.height		= material.height;
 			addMaterial.thumbnail	= material.thumbnail;
 			
-			console.log(addMaterial);
-			console.log(material);
 			
 			if(material.selected === "1"){
 							
@@ -138,108 +135,6 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 			}
 			
 		}
-
-		/* Dropzone functions */
-		var accepti = ".png,.jpg";
-		var acceptf = ".otf, .ttf";
-		
-		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: true , acceptedFiles: accepti });	
-		var dzFonts  = new Dropzone('#dzFonts',  { addRemoveLinks: true , acceptedFiles: acceptf });		
-		
-		
-		
-		dzImages.on("success", function(file) {
-						
-			var newPack 	= { id_cgpack: 0, image: '' };
-			newPack.id_cgpack = $scope.imagesArray.length+2150;
-			newPack.image 	= file.name;
-			console.log(newPack);
-			
-			$scope.imagesArray.push(newPack);
-			$scope.newImages.push(newPack);
-			console.log($scope.newImages);
-			
-		});
-		dzImages.on("removedfile", function(file) {
-			console.log(file);
-			for(var i in $scope.imagesArrayCopy){
-				
-				var newPack 	= { id_cgpack: 0, image: '' };
-				newPack.id_cgpack	= $scope.imagesArrayCopy[i].id_cgpack;
-				newPack.image		= $scope.imagesArrayCopy[i].image;
-					
-				if(file.name === $scope.imagesArrayCopy[i].image){
-										
-					$scope.deletedImages.push(newPack);
-							
-				}
-			}				
-			
-			for(var i in $scope.newImages){
-			
-				var newPack 	= { id_cgpack: 0, image: '' };
-				newPack.id_cgpack	= $scope.newImages[i].id_cgpack;
-				newPack.image		= $scope.newImages[i].image;
-				
-				if(file.name === $scope.newImages[i].image){
-					
-					var index = $scope.newImages.indexOf(newPack);				
-					$scope.newImages.splice(index, 1);
-					
-				}
-			
-			}
-			console.log($scope.deletedImages);
-			console.log($scope.newImages);
-			
-		});
-		
-		dzFonts.on("success", function(file) {
-						
-			var newFont 		= { id_cgfont: 0, font: '' };
-			newFont.id_cgfont 	= $scope.imagesArray.length+2150;
-			newFont.font 		= file.name;
-			console.log(newFont);
-			
-			$scope.fontArray.push(newFont);
-			$scope.newFonts.push(newFont);
-			console.log($scope.newFonts);
-			
-		});
-		dzFonts.on("removedfile", function(file) {
-			
-			for(var i in $scope.fontArrayCopy){
-				
-				var newFont 		= { id_cgfont: 0, font: '' };
-				newFont.id_cgfont	= $scope.fontArrayCopy[i].id_cgfont;
-				newFont.font		= $scope.fontArrayCopy[i].font;
-					
-				if(file.name === $scope.fontArrayCopy[i].font){
-										
-					$scope.deletedFonts.push(newFont);
-							
-				}
-			}				
-			
-			for(var i in $scope.newFonts){
-			
-				var newFont 		= { id_cgfont: 0, font: '' };
-				newFont.id_cgfont	= $scope.newFonts[i].id_cgfont;
-				newFont.font		= $scope.newFonts[i].font;
-				
-				if(file.name === $scope.newFonts[i].font){
-					
-					var index = $scope.newFonts.indexOf(newFont);				
-					$scope.newFonts.splice(index, 1);
-					
-				}
-			
-			}
-			console.log($scope.deletedFonts);
-			console.log($scope.newFonts);
-			
-		});
-		/* Dropzone functions */
 		
 		userService.currentUser()
 		.then(function(data) {
@@ -346,5 +241,106 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 			
 		}
 		
-	
+		/* Dropzone functions */
+		var accepti = ".png,.jpg";
+		var acceptf = ".otf, .ttf";
+		
+		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: false , acceptedFiles: accepti });	
+		var dzFonts  = new Dropzone('#dzFonts',  { addRemoveLinks: true , acceptedFiles: acceptf });		
+		
+		if($scope.currentUser.typenum == 1 || $scope.currentUser.typenum == 3) {
+			dzImages.removeEventListeners();
+			dzFonts.removeEventListeners();
+		}
+		
+		
+		dzImages.on("success", function(file) {
+						
+			var newPack 	= { id_cgpack: 0, image: '' };
+			newPack.id_cgpack = $scope.imagesArray.length+2150;
+			newPack.image 	= file.name;
+			console.log(newPack);
+			
+			$scope.imagesArray.push(newPack);
+			$scope.newImages.push(newPack);
+			console.log($scope.newImages);
+			
+		});
+		dzImages.on("removedfile", function(file) {
+			console.log(file);
+			for(var i in $scope.imagesArrayCopy){
+				
+				var newPack 	= { id_cgpack: 0, image: '' };
+				newPack.id_cgpack	= $scope.imagesArrayCopy[i].id_cgpack;
+				newPack.image		= $scope.imagesArrayCopy[i].image;
+					
+				if(file.name === $scope.imagesArrayCopy[i].image){
+										
+					$scope.deletedImages.push(newPack);
+							
+				}
+			}				
+			
+			for(var i in $scope.newImages){
+			
+				var newPack 	= { id_cgpack: 0, image: '' };
+				newPack.id_cgpack	= $scope.newImages[i].id_cgpack;
+				newPack.image		= $scope.newImages[i].image;
+				
+				if(file.name === $scope.newImages[i].image){
+					
+					var index = $scope.newImages.indexOf(newPack);				
+					$scope.newImages.splice(index, 1);
+					
+				}
+			
+			}
+			
+		});
+		
+		dzFonts.on("success", function(file) {
+						
+			var newFont 		= { id_cgfont: 0, font: '' };
+			newFont.id_cgfont 	= $scope.imagesArray.length+2150;
+			newFont.font 		= file.name;
+			console.log(newFont);
+			
+			$scope.fontArray.push(newFont);
+			$scope.newFonts.push(newFont);
+			console.log($scope.newFonts);
+			
+		});
+		dzFonts.on("removedfile", function(file) {
+			
+			for(var i in $scope.fontArrayCopy){
+				
+				var newFont 		= { id_cgfont: 0, font: '' };
+				newFont.id_cgfont	= $scope.fontArrayCopy[i].id_cgfont;
+				newFont.font		= $scope.fontArrayCopy[i].font;
+					
+				if(file.name === $scope.fontArrayCopy[i].font){
+										
+					$scope.deletedFonts.push(newFont);
+							
+				}
+			}				
+			
+			for(var i in $scope.newFonts){
+			
+				var newFont 		= { id_cgfont: 0, font: '' };
+				newFont.id_cgfont	= $scope.newFonts[i].id_cgfont;
+				newFont.font		= $scope.newFonts[i].font;
+				
+				if(file.name === $scope.newFonts[i].font){
+					
+					var index = $scope.newFonts.indexOf(newFont);				
+					$scope.newFonts.splice(index, 1);
+					
+				}
+			
+			}
+		
+			
+		});
+		/* Dropzone functions */
 });
