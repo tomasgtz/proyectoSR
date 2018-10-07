@@ -319,13 +319,13 @@
 											<span ng-show="sortType == 'name' && sortReverse"  class="fa fa-caret-up"></span>
 										</a>
 									</th>
-									<th ng-if="currentUser.typenum != '3'">
+									<!-- <th ng-if="currentUser.typenum != '3'">
 										<a style="cursor:pointer;" ng-click="sortType = 'free_campaign'; sortReverse = !sortReverse">
 										Campaña Libre
 										<span ng-show="sortType == 'free_campaign' && !sortReverse" class="fa fa-caret-down"></span>
 											<span ng-show="sortType == 'free_campaign' && sortReverse"  class="fa fa-caret-up"></span>
 										</a>
-									</th>
+									</th> -->
 									<th>
 										<a style="cursor:pointer;" ng-click="sortType = 'mobile_phone'; sortReverse = !sortReverse">
 										Móvil
@@ -346,9 +346,9 @@
 									</td>
 									<td>{{ user.date_up }}</td>
 									<td>{{ user.name }}</td>
-									<td ng-if="currentUser.typenum != '3'">
+									<!-- <td ng-if="currentUser.typenum != '3'">
 										<input ng-disabled="user.type === '2'" ng-model="user.free_campaign" ng-true-value="1" ng-false-value="0" ng-change="changeUser(user)" type="checkbox">
-									</td>
+									</td> -->
 									<td>{{ user.mobile_phone }} </td>
 									<td><a class="btn button-button_8 btn-success btn-md " href="tel:+{{ user.mobile_phone }}"  >Llamar</a></td>
 								</tr>  

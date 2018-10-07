@@ -11,6 +11,8 @@ angular.module('newApp')
 	
   	var urlHost = 'https://wizad.mx/';
 	var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	//var urlHost = 'https://localhost/wizad/';
+	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 	$scope.templates = [];
 	$scope.template_name = "";
@@ -1262,12 +1264,18 @@ angular.module('newApp')
 		// $scope.factory.canvas.setDimensions({width: parseInt($scope.savingCanvasWidth), height: parseInt($scope.savingCanvasHeight)}); 
 
 		// check paper orientation
+		// jsPDF(orientation, units, [ height, width ])
+		// doc.addImage(imgData, 'JPEG', 0, 0, width, height);
+
+		
 		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
-			var pdf = new jsPDF('l','cm', [$scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm]);
+			var pdf = new jsPDF('l','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
 			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
+			
 		} else {
 			var pdf = new jsPDF('p','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
-			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm);
+			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
+			
 		}
 
 		var now = new Date().toISOString().slice(0,16);

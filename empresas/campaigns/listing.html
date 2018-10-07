@@ -79,14 +79,14 @@
 											</select><br>
 									</div>
 								</div>
-								<div class="col-sm-6 form-group">
+								<!-- <div class="col-sm-6 form-group">
 									<div class="">
 									</div>
 									<div class="col-sm-10">
 										<input ng-model="autorization" id="aut" type="checkbox" ng-change="autorizationChange(autorization)">
 										<label for="aut" class="control-label">Autorización para descargar</label>
 									</div>
-								</div>
+								</div> -->
 								<div class="row">
 									<div class="col-sm-12">
 										<div ng-class="alertCampaignClass" ng-show="alertCampaignShow">
@@ -210,7 +210,7 @@
 													<div class="form-group">
 														<div class="input-group">
 															<ul class="icheck-colors">
-																<li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteConfig" ng-click="pantoneToRemove()" ng-style="{'background-color':pal.color}">
+																<li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteConfig" ng-click="pantoneToRemove()" ng-style="{'background-color':pal.color,'border':'1px black solid'}">
 																</li>
 															</ul>
 														</div>
@@ -503,12 +503,12 @@
                                 <input ng-model="description" ng-change="descriptionChange(description)" type="text" class="form-control" id="desc2" >
                             </div>
                         </div>
-						<div class="col-md-12">
+						<!-- <div class="col-md-12">
                             <div class="form-group">
 								<input ng-model="autorization" type="checkbox" data-checkbox="icheckbox_square-blue">
                                 <label class="control-label">Autorización para descargar</label>
                             </div>
-                        </div>
+                        </div> -->
 						<div class="row">
 							<div class="col-sm-12">
 								<div ng-class="alertCampaignClass" ng-show="alertCampaignShow">
@@ -635,7 +635,7 @@
 											<div class="form-group">
 												<div class="input-group">
 													<ul class="icheck-colors">
-														<li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteConfig" ng-click="pantoneToRemove()" ng-style="{'background-color':pal.color}">
+														<li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteConfig" ng-click="pantoneToRemove()" ng-style="{'background-color':pal.color, 'border':'1px black solid'}">
 														</li>
 													</ul>
 												</div>
@@ -657,7 +657,7 @@
 										   <div class="form-group">
 											  <div class="input-group">
 												 <ul class="icheck-colors">
-													<li ng-repeat="pal in paletteArray" ng-click="newPalette(pal.color)" ng-style="{'background-color':pal.color}">
+													<li ng-repeat="pal in paletteArray" ng-click="newPalette(pal.color)" ng-style="{'background-color':pal.color,'border':'1px black solid'}">
 													</li>
 												 </ul>
 											  </div>

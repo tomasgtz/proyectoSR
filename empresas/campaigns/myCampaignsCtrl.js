@@ -189,7 +189,7 @@ angular.module('newApp')
 		$scope.segment			    = "";
 		$scope.title				= "";
 		$scope.searchValue			= "";
-		$scope.autorization			= false;
+		$scope.autorization			= true;
 		
 		$scope.alertCampaignShow  	= false;
 		$scope.enableStepTwo 		= false;
@@ -493,8 +493,7 @@ angular.module('newApp')
 			
 			paramss.company_p 		= $scope.currentUser.id_company;
 			paramss.title_c 		= $scope.title;
-			console.log("asd tom3");
-			return;
+			
 			if($scope.autorization){
 				paramss.autorization_c 	= 1;
 			}else{
