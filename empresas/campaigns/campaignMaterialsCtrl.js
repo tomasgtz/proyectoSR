@@ -5,19 +5,21 @@
  * # campaignMaterialsCtrl
  * Controller of the newappApp
  */
- 
+
 angular.module('newApp')
-  .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal) {
+  .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal
+) {
 	
-  	var urlHost = 'https://wizad.mx/';
-	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	//var urlHost = 'https://localhost/wizad/';
-	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+  	//var urlHost = 'https://wizad.mx/';
+	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	var urlHost = 'https://localhost/wizad/';
+	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 	$scope.templates = [];
 	$scope.template_name = "";
 	$scope.template_saved_id = 0;
-	$scope.icon_folder = 'Opcion3';
+	$scope.template_group_id = 0;
+	$scope.icon_folder = 'Opcion4';
 	$scope.CampaignSelected =  {
 
 				"id_campaign" 	: "",
@@ -83,30 +85,30 @@ angular.module('newApp')
 	
 	$scope.topRuler = new fabric.Canvas('top-ruler');
 	$scope.leftRuler = new fabric.Canvas('left-ruler');
+	
 	$scope.loading = false;
 	$scope.waitingMessage = "";
 	
-	var main = document.getElementById("play_board");
-	//COMENTADO TOM 20180324 var zoom = document.getElementById("zoom");
-	var ctx = main.getContext("2d")
-	//COMENTADO TOM 20180324 var zoomCtx = zoom.getContext("2d");
+	/* vars for PPTs */
+	$scope.thumbnails = [];
+	$scope.pdf = null;
+	$scope.imgDataToExportPDF = [];
+    /* vars for PPTs */
 	
-	// main.addEventListener("mousemove", function(e){
-		// console.log(e);
-		// zoomCtx.fillStyle = "white";
-		// //zoomCtx.clearRect(0,0, zoom.width, zoom.height);
-		// //zoomCtx.fillStyle = "transparent";
-		// zoomCtx.fillRect(0,0, zoom.width, zoom.height);
-		// zoomCtx.drawImage(main, e.x, e.y, 200, 100, 0,0, 400, 200);
-		// console.log(zoom.style);
-		// zoom.style.top = e.pageY + 10 + "px"
-		// zoom.style.left = e.pageX + 10 + "px"
-		// zoom.style.display = "block";
-	// });
+	
+	var main = document.getElementById("play_board");
+	var ctx = main.getContext("2d")
+	
 
-	// main.addEventListener("mouseout", function(){
-		// zoom.style.display = "none";
-	// });
+	$scope.$watch(function() {
+		return $scope.myKey; 
+	}, function(newValue){
+
+		if(newValue.key === "Delete") {
+			$scope.deleteSelectedObject();
+		}	
+		
+	});
 		
 	$scope.fontsUploaded = [];
 	generalService.GFonts()
@@ -180,12 +182,18 @@ angular.module('newApp')
 				$scope.factory.canvas.loadFromJSON(data[0].contents);		
 				$scope.template_saved_id = data[0].id;
 				$scope.template_name = data[0].name;
+				$scope.template_group_id = data[0].template_group_id;
 
 				$timeout( function(){
 					$scope.factory.canvas.renderAll();
 					
 				}, 1000 );
 				$scope.loading = false;
+
+				if ($scope.newMaterialChange.multipage == 1) {
+				
+					$scope.getThumbnails();
+				}
 
 
 			}, function(error){
@@ -194,6 +202,27 @@ angular.module('newApp')
 				$scope.loading = false;
 			})
 
+	}
+
+
+	$scope.loadSlideFromThumbnail = function(template) {
+	
+		previous_showgrid = $scope.showGrid;
+	 
+		if( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = true;
+			$scope.togglePrintingLines();
+		}
+
+		$scope.savingToDB();
+
+		$scope.loadTemplate(template);
+
+		if( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = false;
+			$scope.togglePrintingLines();
+		}
+	
 	}
 	
 
@@ -379,7 +408,6 @@ angular.module('newApp')
 		$scope.widthMultiplier = $scope.canvasWidth / 800;
 		$scope.heightMultiplier = $scope.canvasHeight / 500;
 		
-		//console.log("asd tom materialChange $scope.newMaterialChange.width_small = " + $scope.newMaterialChange.width_small);
 		
 		// se le suman el ancho de las reglas (20px) y 10px mas de tolerancia
 		const hc_width = parseInt($scope.newMaterialChange.width_small) + 20 + 10;
@@ -419,6 +447,7 @@ angular.module('newApp')
 		
 		$scope.redrawRulers();
 
+		$scope.template_name = "";
 		var params = {
 			idcompany_p : "",
 			idmaterial_p: ""
@@ -1174,99 +1203,82 @@ angular.module('newApp')
 
 
 		  
-	  $scope.exportPDF = function(name) {
+	 $scope.exportOnePagePDF = function(name) {
 		previous_showgrid = $scope.showGrid;
 		
 		$scope.showGrid = true;
 		$scope.toggleGrid();
 		previous_showprintingLines = $scope.showPrintingLines;
 		
-		if ( $scope.newMaterialChange.print_margins == 0 && $scope.showPrintingLines) {
-
-			if( $scope.showPrintingLines === true) {
-				$scope.togglePrintingLines();
-			}
-
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = true;
+			$scope.togglePrintingLines();
 		}
 		
 		$scope.factory.canvas.deactivateAll().renderAll();
 		$scope.factory.canvas.setZoom(1);
-		//console.log($scope.factory.canvas);
-		//console.log($scope.newMaterialChange);
+	
 		$scope.savingCanvasWidth = $scope.factory.canvas.width;
 		$scope.savingCanvasHeight = $scope.factory.canvas.height;
-		//console.log($scope.savingCanvasWidth);
-		//console.log($scope.savingCanvasHeight);
-		//console.log("w" + $scope.newMaterialChange.width);
-		//console.log("h" + $scope.newMaterialChange.height);
-		//$scope.factory.canvas.setDimensions({width: parseInt($scope.newMaterialChange.width), height: parseInt($scope.newMaterialChange.height)});
-		//var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
-		// download($scope.factory.canvas.toDataURL({       format: 'png'   }), 'wizad_design.png');
-
 
 		fabric.devicePixelRatio = 1;
 		 
-		 $scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width, height: 
+		$scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width, height: 
 			parseInt($scope.newMaterialChange.height)});
 			
-		 var objects =  $scope.factory.canvas.getObjects();
-			for (var i in objects) {
-				var scaleX = objects[i].scaleX;
-				var scaleY = objects[i].scaleY;
-				var left = objects[i].left;
-				var top = objects[i].top;
+		var objects =  $scope.factory.canvas.getObjects();
+		for (var i in objects) {
+			var scaleX = objects[i].scaleX;
+			var scaleY = objects[i].scaleY;
+			var left = objects[i].left;
+			var top = objects[i].top;
 
-				var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
-				var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
-				var tempLeft = left * $scope.newMaterialChange.width_multiplier;
-				var tempTop = top * $scope.newMaterialChange.height_multiplier;
+			var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
+			var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
+			var tempLeft = left * $scope.newMaterialChange.width_multiplier;
+			var tempTop = top * $scope.newMaterialChange.height_multiplier;
 
-				objects[i].scaleX = tempScaleX;
-				objects[i].scaleY = tempScaleY;
-				objects[i].left = tempLeft;
-				objects[i].top = tempTop;
+			objects[i].scaleX = tempScaleX;
+			objects[i].scaleY = tempScaleY;
+			objects[i].left = tempLeft;
+			objects[i].top = tempTop;
 
-				objects[i].setCoords();
-			}
-			$scope.factory.canvas.renderAll();
-			$scope.factory.canvas.calcOffset();
-			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
-			
-			
-			
-			//AFTER DOWNLOAD RETURN TO NORMAL STATE
-			
+			objects[i].setCoords();
+		}
+
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.calcOffset();
+		
+		var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
+		console.log("img ind", imgData);
+		
+		//AFTER DOWNLOAD RETURN TO NORMAL STATE
+		
 		$scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width_small, height: 
 			parseInt($scope.newMaterialChange.height_small)});
 			
 		var objects =  $scope.factory.canvas.getObjects();
-			for (var i in objects) {
-				var scaleX = objects[i].scaleX;
-				var scaleY = objects[i].scaleY;
-				var left = objects[i].left;
-				var top = objects[i].top;
+		for (var i in objects) {
+			var scaleX = objects[i].scaleX;
+			var scaleY = objects[i].scaleY;
+			var left = objects[i].left;
+			var top = objects[i].top;
 
-				var tempScaleX = scaleX / $scope.newMaterialChange.width_multiplier;
-				var tempScaleY = scaleY / $scope.newMaterialChange.height_multiplier;
-				var tempLeft = left / $scope.newMaterialChange.width_multiplier;
-				var tempTop = top / $scope.newMaterialChange.height_multiplier;
+			var tempScaleX = scaleX / $scope.newMaterialChange.width_multiplier;
+			var tempScaleY = scaleY / $scope.newMaterialChange.height_multiplier;
+			var tempLeft = left / $scope.newMaterialChange.width_multiplier;
+			var tempTop = top / $scope.newMaterialChange.height_multiplier;
 
-				objects[i].scaleX = tempScaleX;
-				objects[i].scaleY = tempScaleY;
-				objects[i].left = tempLeft;
-				objects[i].top = tempTop;
+			objects[i].scaleX = tempScaleX;
+			objects[i].scaleY = tempScaleY;
+			objects[i].left = tempLeft;
+			objects[i].top = tempTop;
 
-				objects[i].setCoords();
-			}
+			objects[i].setCoords();
+		}
+
 		$scope.factory.canvas.renderAll();
 		$scope.factory.canvas.calcOffset();
-		
-		// $scope.factory.canvas.setDimensions({width: parseInt($scope.savingCanvasWidth), height: parseInt($scope.savingCanvasHeight)}); 
-
-		// check paper orientation
-		// jsPDF(orientation, units, [ height, width ])
-		// doc.addImage(imgData, 'JPEG', 0, 0, width, height);
-
 		
 		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
 			var pdf = new jsPDF('l','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
@@ -1284,31 +1296,245 @@ angular.module('newApp')
 		$scope.showGrid = !previous_showgrid;
 		$scope.toggleGrid();
 
-		$scope.showPrintingLines = !previous_showprintingLines;
-		$scope.togglePrintingLines();
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = false;
+			$scope.togglePrintingLines();
+		}
+	 }
+
+
+	 $scope.exportWholeDocPDF = async function() {
+
+		$scope.imgDataToExportPDF = [];
+
+		previous_showgrid = $scope.showGrid;
+	 
+		if( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = true;
+			$scope.togglePrintingLines();
+		}
+
+		$scope.savingToDB();
+
+		$scope.loading = true;
+		$scope.waitingMessage = "Generando archivo PDF. Tarda aproximadamente 3 segundos por pagina. Por favor espere...";
+
+		var params = { idtemplategroup_p : "" }
+		
+		params.idtemplategroup_p = $scope.template_group_id;
+		$scope.savingCanvasWidth = $scope.factory.canvas.width;
+		$scope.savingCanvasHeight = $scope.factory.canvas.height;
+
+		const data = await generalService.GSlides(params);
+
+		$scope.loading = true;
+		
+		async function processArray(data) {
+
+			for (const slide of data) {
+
+				$scope.loading = true;
+				$scope.factory.canvas.clear();
+
+				await $scope.loadSlide(slide);
+				
+				
+				$scope.showGrid = true;
+				$scope.toggleGrid();
+				$scope.factory.canvas.deactivateAll().renderAll();
+				$scope.factory.canvas.setZoom(1);
+				$scope.savingCanvasWidth = $scope.factory.canvas.width;
+				$scope.savingCanvasHeight = $scope.factory.canvas.height;
+				fabric.devicePixelRatio = 1;
+				$scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width, height: 
+					parseInt($scope.newMaterialChange.height)});
+					
+				var objects =  $scope.factory.canvas.getObjects();
+				
+				for (var i in objects) {
+					var scaleX = objects[i].scaleX;
+					var scaleY = objects[i].scaleY;
+					var left = objects[i].left;
+					var top = objects[i].top;
+
+					var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
+					var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
+					var tempLeft = left * $scope.newMaterialChange.width_multiplier;
+					var tempTop = top * $scope.newMaterialChange.height_multiplier;
+
+					objects[i].scaleX = tempScaleX;
+					objects[i].scaleY = tempScaleY;
+					objects[i].left = tempLeft;
+					objects[i].top = tempTop;
+
+					objects[i].setCoords();
+				}
+
+				$scope.factory.canvas.renderAll();
+				$scope.factory.canvas.calcOffset();
+						
+				const imgData = await $scope.getImage();
+				
+				$scope.imgDataToExportPDF.push( imgData );
+				
+				$scope.factory.canvas.clear();
+				$scope.factory.canvas.renderAll();
+				
+			}
+
+		}
+
+		await processArray(data);
+		$scope.sendPDF();
+
+		$scope.loadSlide(data[0]);
 	
+	}
+
+
+	$scope.getImage = function() {
+		return new Promise( resolve => {
+			var img = $scope.factory.canvas.toDataURL({ format: 'png' });
+			
+			setTimeout(() => {
+				resolve(img)
+			}, 1000);
+		});
+	}
+
+	$scope.loadSlide = function(slide) {
+		return new Promise( resolve => {
+			$scope.factory.canvas.loadFromJSON(slide.contents);	
+			
+			setTimeout(() => {
+				$scope.factory.canvas.renderAll();
+				resolve(true);
+			}, 2000);
+		});
+	}
+
+	 $scope.sendPDF = function() {
+
+		$scope.pdf = null;
+		var pageOrientation = 'p';
+		var pageSize = [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm];
+
+		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
+			pageOrientation = 'l';
+		} 
+
+		for(var i = 0; i < $scope.imgDataToExportPDF.length; i++) {
+
+			if($scope.pdf === null) {
+				$scope.pdf = new jsPDF(pageOrientation,'cm', pageSize);
+			} else {
+				$scope.pdf.addPage();
+			}
+
+			$scope.pdf.addImage($scope.imgDataToExportPDF[i], 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
+		}
+		
+		var now = new Date().toISOString().slice(0,16);
+		$scope.pdf.save("Wizad design " + now + ".pdf");
+		
+		$scope.showGrid = !previous_showgrid;
+		$scope.toggleGrid();
+
+		if( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = false;
+			$scope.togglePrintingLines();
+		}
+
+		$scope.loading = false;
+
+		return;
+	 }
+
+	 $scope.addSlide = function() {
+		
+		if($scope.template_group_id !== 0) {
+
+			var temp_name = $scope.template_name;
+
+			if( $scope.newMaterialChange.offline == 1 ) {
+				$scope.showPrintingLines = true;
+				$scope.togglePrintingLines();
+			}
+
+			$scope.savingToDB();
+
+			reallyNew();
+
+			$scope.template_name = temp_name;
+
+			if( $scope.newMaterialChange.offline == 1 ) {
+				$scope.showPrintingLines = false;
+				$scope.togglePrintingLines();
+			}
+
+			$scope.savingToDB();
+			
+		} else {
+			$scope.alertClass = "alert alert-danger";
+			$scope.alertShow = true;
+			$scope.message = "Primero debe guardar como plantilla"; 
+		}
+	 }
+
+	 $scope.createThumbnail = function() {
+		
+		imgData = $scope.createPNG('', true);
+
+		if($scope.template_saved_id !== 0) {
+	
+			var params = {
+						idtemplate_p : "",
+						img_data: ""
+					}
+			params.idtemplate_p = $scope.template_saved_id;
+			params.img_data = imgData;
+
+			generalService.SaveNewThumbnail(params)
+				.then(function(data) {
+
+					$scope.getThumbnails();
+					
+				}, function(error){
+					
+					alert('Error al guardar. Mensaje de error: ' + error);
+					$scope.loading = false;
+				})
+		} 
+
+	 }
+
+	 $scope.exportPNG = function(name) {
+		$scope.createPNG(name, false);
 	 }
 	 
-	 $scope.exportPNG = function(name) {
+	 $scope.createPNG = function(name, returnImageData) {
 
 		previous_showgrid = $scope.showGrid;
 		$scope.showGrid = true;
 		$scope.toggleGrid();
-		previous_showprintingLines = $scope.showPrintingLines;
 		
-		if ( $scope.newMaterialChange.print_margins == 0 && $scope.showPrintingLines ) {
-			if( $scope.showPrintingLines === true) {
+		if ( $scope.newMaterialChange.offline == 1 ) {
+				$scope.showPrintingLines = true;
 				$scope.togglePrintingLines();
-			}
 		}
 		
         fabric.devicePixelRatio = 1;
+				
 		 
-		 
-		 $scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width, height: 
-			parseInt($scope.newMaterialChange.height)});
-			
-		 var objects =  $scope.factory.canvas.getObjects();
+		 if (returnImageData === false ) {
+			$scope.factory.canvas.setDimensions(
+				{
+					width:  parseInt($scope.newMaterialChange.width), 
+					height: parseInt($scope.newMaterialChange.height)
+				});
+
+			var objects =  $scope.factory.canvas.getObjects();
+	
 			for (var i in objects) {
 				var scaleX = objects[i].scaleX;
 				var scaleY = objects[i].scaleY;
@@ -1327,21 +1553,59 @@ angular.module('newApp')
 
 				objects[i].setCoords();
 			}
-			$scope.factory.canvas.renderAll();
-			$scope.factory.canvas.calcOffset();
-			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
+		 } else {
+			 $scope.factory.canvas.setDimensions(
+				{
+					width:  parseInt($scope.newMaterialChange.width * 0.25), 
+					height: parseInt($scope.newMaterialChange.height * 0.25)
+				});
+			var objects =  $scope.factory.canvas.getObjects();
+		 
+			for (var i in objects) {
+				var scaleX = objects[i].scaleX;
+				var scaleY = objects[i].scaleY;
+				var left = objects[i].left;
+				var top = objects[i].top;
 
-			var now = new Date().toISOString().slice(0,16);
-			download(imgData, "Wizad image " + now + ".png");
-			
-			
-			//AFTER DOWNLOAD RETURN TO NORMAL STATE
-			
+				var tempScaleX = scaleX * 0.25;
+				var tempScaleY = scaleY * 0.25;
+				var tempLeft = left * 0.25;
+				var tempTop = top * 0.25;
+
+				objects[i].scaleX = tempScaleX;
+				objects[i].scaleY = tempScaleY;
+				objects[i].left = tempLeft;
+				objects[i].top = tempTop;
+
+				objects[i].setCoords();
+			}
+		 }
+		 
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.calcOffset();
 		
-		$scope.factory.canvas.setDimensions({width: $scope.newMaterialChange.width_small, height: 
-			parseInt($scope.newMaterialChange.height_small)});
-			
+		try
+		{
+			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
+		}
+		catch(err) {
+			console.log(err);
+			$scope.alertClass = "alert alert-danger";
+			$scope.alertShow = true;
+			$scope.message = "Error: al crear imagen"; 
+		}
+		
+		//AFTER PROCESS RETURN TO NORMAL STATE
+		$scope.factory.canvas.setDimensions(
+				{
+					width:  parseInt($scope.newMaterialChange.width_small), 
+					height: parseInt($scope.newMaterialChange.height_small)
+				});
+		
 		var objects =  $scope.factory.canvas.getObjects();
+
+		if (returnImageData === false ) {
+		
 			for (var i in objects) {
 				var scaleX = objects[i].scaleX;
 				var scaleY = objects[i].scaleY;
@@ -1360,14 +1624,45 @@ angular.module('newApp')
 
 				objects[i].setCoords();
 			}
-			$scope.factory.canvas.renderAll();
-			$scope.factory.canvas.calcOffset();
+		} else {
+
+			for (var i in objects) {
+				var scaleX = objects[i].scaleX;
+				var scaleY = objects[i].scaleY;
+				var left = objects[i].left;
+				var top = objects[i].top;
+
+				var tempScaleX = scaleX / 0.25;
+				var tempScaleY = scaleY / 0.25;
+				var tempLeft = left / 0.25;
+				var tempTop = top / 0.25;
+
+				objects[i].scaleX = tempScaleX;
+				objects[i].scaleY = tempScaleY;
+				objects[i].left = tempLeft;
+				objects[i].top = tempTop;
+
+				objects[i].setCoords();
+			}
+		}
+
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.calcOffset();
 		
 		$scope.showGrid = !previous_showgrid;
 		$scope.toggleGrid();
 
-		$scope.showPrintingLines = !previous_showprintingLines;
-		$scope.togglePrintingLines();
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = false;
+			$scope.togglePrintingLines();
+		}
+
+		if (returnImageData ) {
+			return imgData;
+		} else {
+			var now = new Date().toISOString().slice(0,16);
+			download(imgData, "Wizad image " + now + ".png");
+		}
 
 	 }
 	  // $scope.changeFormColor = function(pal){
@@ -1377,6 +1672,15 @@ angular.module('newApp')
 			// $scope.factory.canvas.renderAll();
 			// // activeObject.setColor(pal.color);
 	  // }
+
+	  $scope.getThumbnails = function() {
+
+		generalService.GThumbnails({ idtemplategroup_p: $scope.template_group_id })
+					.then(function(data) {
+						$scope.thumbnails = data;
+					})
+	  
+	  }
 	  
 	  $scope.canvasIsTargeted = function(){
 		  $scope.canvasTarget = true;
@@ -1934,7 +2238,7 @@ angular.module('newApp')
 	}
 	
 
-	$scope.savingToDB = function() {
+	$scope.savingToDB = async function() {
 	
 		$scope.loading = true;
 		$scope.waitingMessage = "Guardando";
@@ -1942,19 +2246,27 @@ angular.module('newApp')
 		$scope.oldshowGrid = $scope.showGrid;
 		$scope.showGrid = true;
 		$scope.toggleGrid();
+
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = true;
+			$scope.togglePrintingLines();
+		}
+
 		$scope.prepareClipToFunctions();
 	
 		var params = {
 				"name_p" : "",
 				"idmaterial_p"	: "",
 				"contents_p"	: "",
-				"iduser_p"	: ""
+				"iduser_p"	: "",
+				"idtemplategroup_p" : ""
 			};
 		
 		params.name_p = $scope.template_name;
 		params.idmaterial_p = $scope.material;
 		params.contents_p = $scope.factory.canvas;
 		params.iduser_p = $scope.currentUser.id_user;
+		params.idtemplategroup_p = $scope.template_group_id;
 
 		if($scope.template_saved_id === 0) {
 			
@@ -1962,6 +2274,7 @@ angular.module('newApp')
 			.then(function(data) {
 				
 				$scope.template_saved_id = data[0].id;
+				$scope.template_group_id = data[0].template_group_id;
 				
 				$scope.fixClipToFunctions();
 				$scope.loading = false;
@@ -1982,6 +2295,11 @@ angular.module('newApp')
 				.then(function(data) {
 					$scope.templates = data;
 				});
+
+				if($scope.newMaterialChange.multipage == 1) {
+
+					$scope.createThumbnail();
+				}
 				
 			}, function(error){
 				
@@ -1991,6 +2309,11 @@ angular.module('newApp')
 		
 		} else {
 			params.idtemplate_p = $scope.template_saved_id;
+
+			if($scope.newMaterialChange.multipage == 1) {
+
+				$scope.createThumbnail();
+			}
 
 			generalService.UTemplate(params)
 			.then(function(data) {
@@ -2014,6 +2337,7 @@ angular.module('newApp')
 				.then(function(data) {
 					$scope.templates = data;
 				});
+
 				
 			}, function(error){
 				
@@ -2021,6 +2345,11 @@ angular.module('newApp')
 				$scope.loading = false;
 			})
 
+		}
+
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = false;
+			$scope.togglePrintingLines();
 		}
 
 	}
@@ -2192,7 +2521,7 @@ angular.module('newApp')
 	}
 	
 	$scope.creatingNewFile = function() {
-		var message = "Al crear nuevo documento se perderán los cambios realizados hasta el momento. ¿Desea continuar?";
+		var message = "Al limpiar el diseño se perderán los cambios realizados hasta el momento. ¿Desea continuar?";
 		var modalHtml = '<div class="modal-body">' + message + '</div>';
 		modalHtml += '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">Aceptar</button><button class="btn btn-warning" ng-click="cancel()">Cancelar</button></div>';
 
@@ -2202,7 +2531,14 @@ angular.module('newApp')
 		});
 
 		modalInstance.result.then(function() {
+
 			reallyNew();
+
+			if ( $scope.newMaterialChange.offline == 1 ) {
+				$scope.showPrintingLines = false;
+				$scope.togglePrintingLines();
+			}
+			
 		});
 		
 	}
@@ -2225,6 +2561,102 @@ angular.module('newApp')
 		$scope.cancel = function() {
 			$modalInstance.dismiss('cancel');
 		};
+	}
+
+
+	// liberia https://github.com/Templarian/ui.bootstrap.contextMenu
+	$scope.slideOptions = [
+          ['Borrar', function ($itemScope) {
+              $scope.deleteSlide($itemScope.image.id);
+          }],
+          ['Duplicar', function ($itemScope) {
+              $scope.duplicateSlide($itemScope.image.id);
+          }],
+		  ['Insertar', function ($itemScope) {
+              $scope.insertSlide($itemScope.image.id);
+          }],
+		  ['Mover <<', function ($itemScope) {
+              $scope.moveSlide($itemScope.image.id, 'left');
+          }],
+		  ['Mover >>', function ($itemScope) {
+              $scope.moveSlide($itemScope.image.id, 'right');
+          }]
+      ];
+
+	$scope.deleteSlide = function(template_id) {
+
+		var message = "¿Desea borrar este elemento?";
+		var modalHtml = '<div class="modal-body">' + message + '</div>';
+		modalHtml += '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">Aceptar</button><button class="btn btn-warning" ng-click="cancel()">Cancelar</button></div>';
+
+		var modalInstance = $modal.open({
+			template: modalHtml,
+			controller: ModalInstanceCtrl
+		});
+
+		modalInstance.result.then(function() {
+
+			var params = {
+				idtemplate_p : ""
+			}
+
+			params.idtemplate_p = template_id;
+			
+			generalService.DSlide(params)
+			.then(function(data) {
+				$scope.getThumbnails();
+
+			})
+			
+			
+		});
+	}
+
+
+	$scope.duplicateSlide = function(template_id) {
+	
+		var params = {
+				idtemplate_p : ""
+			}
+
+			params.idtemplate_p = template_id;
+			
+			generalService.DuplicateSlide(params)
+			.then(function(data) {
+				$scope.getThumbnails();
+
+			})
+	}
+
+
+
+	$scope.insertSlide = function(template_id) {
+	
+		var params = { idtemplate_p : "" }
+
+		params.idtemplate_p = template_id;
+		
+		generalService.ISlide(params)
+		.then(function(data) {
+			$scope.getThumbnails();
+
+		})
+	}
+
+
+	$scope.moveSlide = function (template_id, direction) {
+	
+		var params = { idtemplate_p : "" }
+
+		params.idtemplate_p = template_id;
+		params.direction_p = direction;
+		
+		generalService.MSlide(params)
+		.then(function(data) {
+			$scope.getThumbnails();
+
+		})
+	
 	}
 	
   });

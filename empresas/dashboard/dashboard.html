@@ -10,7 +10,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-4 intro-pic wow slideInLeft animated" style="visibility: visible; animation-name: slideInLeft;">
-                        <img src="http://wizad.mx/images/freelancerss.png" alt="image" class="img-responsive">
+                        <img src="../images/freelancerss.png" alt="image" class="img-responsive">
 						<div style="width:280px; padding: 15px; box-shadow: 10px 10px 10px #888888;  height: 340px;">
 							<h4>Permite a los más profesionales independientes diseñar materiales de calidad para su uso
 							electrónico o impreso.</h4>
@@ -24,7 +24,7 @@
 						</div>						
                 </div>
 				<div class="col-md-4 intro-pic wow slideInLeft animated" style="visibility: visible; animation-name: slideInLeft;">
-                        <img src="http://wizad.mx/images/entrepreneurr.png" alt="image" class="img-responsive">
+                        <img src="../images/entrepreneurr.png" alt="image" class="img-responsive">
 						<div style="width:280px; padding: 15px; box-shadow: 10px 10px 10px #888888;  height: 340px;">
 							<h4>Estandariza la imagen y ejecución de las Estrategias Comerciales en los  múltiples Puntos de Venta o a la Fuerza de Ventas.</h4>
 							<p>- Protección de la Identidad Corporativa</p>
@@ -36,7 +36,7 @@
 						</div>
                 </div>
 				<div class="col-md-4 intro-pic wow slideInLeft animated" style="visibility: visible; animation-name: slideInLeft;">
-                        <img src="http://wizad.mx/images/teamm.png" alt="image" class="img-responsive">
+                        <img src="../images/teamm.png" alt="image" class="img-responsive">
 						<div style="width:280px; padding: 15px; box-shadow: 10px 10px 10px #888888;  height: 340px;">
 							<h4>Brinda a pequeñas empresas sin un departamento de Marketing en forma, la posibilidad de diseñar
 							e imprimir materiales de excelente calidad gráfica.</h4>
@@ -57,7 +57,7 @@
 				<div class="row text-center">
 					<div class="col-sm-4 feat-list">
 						<div>
-							<img style="display: block;    margin: auto;" src="http://wizad.mx/images/computer.png" alt="image" class="img-responsive">
+							<img style="display: block;    margin: auto;" src="../images/computer.png" alt="image" class="img-responsive">
 						</div>
 						<div class="inner">
 							<h4 class="text-center">CREAR CAMPAÑAS FACILMENTE</h4>
@@ -66,14 +66,14 @@
 						</div>
 					</div>
 					<div class="col-sm-4 feat-list">
-						<img style="display: block;    margin: auto;" src="http://wizad.mx/images/people.png" alt="image" class="img-responsive">
+						<img style="display: block;    margin: auto;" src="../images/people.png" alt="image" class="img-responsive">
 						<div class="inner">
 							<h4 class="text-center">ADMINISTRADOR</h4>
 							<p>Construye una red de trabajo con diferentes perfiles y comparte con ellos tus Campañas y Promociones.</p>
 						</div>
 					</div>
 					<div class="col-sm-4 feat-list">
-						<img style="display: block;    margin: auto;" src="http://wizad.mx/images/tablet.png" alt="image" class="img-responsive">
+						<img style="display: block;    margin: auto;" src="../images/tablet.png" alt="image" class="img-responsive">
 						<div class="inner">
 							<h4 class="text-center">INTERFAZ DE DISEÑO</h4>
 							<p>Permite a tu equipo adaptar los materiales en formatos según sus necesidades, offline u online.</p>
@@ -84,14 +84,14 @@
 					<div class="col-sm-2 feat-list">
 					</div>
 					<div class="col-sm-4 feat-list">
-						<img style="display: block;    margin: auto;" src="http://wizad.mx/images/permisos.png" alt="image" class="img-responsive">
+						<img style="display: block;    margin: auto;" src="../images/permisos.png" alt="image" class="img-responsive">
 						<div class="inner">
 							<h4 class="text-center">FLUJO DE PERMISOS</h4>
 							<p>Decide que puede o no realizar tu equipo de trabajo y controla así la identidad de imagen Corporativa</p>
 						</div>
 					</div>	
 					<div class="col-sm-4 feat-list">
-						<img style="display: block;    margin: auto;" src="http://wizad.mx/images/message.png" alt="image" class="img-responsive">
+						<img style="display: block;    margin: auto;" src="../images/message.png" alt="image" class="img-responsive">
 						<div class="inner">
 							<h4 class="text-center">COMUNICACIÓN EFECTIVA</h4>
 							<p>Mejora la comunicación de tu equipo geográficamente disperso y envía notificaciones.</p>
@@ -122,7 +122,7 @@
 							<div class="panel-body p-10">
 								<div class="text-center col-xs-12 col-md-4">
 									<label for="file-input">
-										<img src="{{currentUser.logo}}" class="img-responsive" alt="Logo" id="imgLogo" style="    width: auto;    height: 200px;">
+										<img ng-src="{{currentUser.logo}}" class="img-responsive" alt="Logo" id="imgLogo" style="    width: auto;    height: 200px;">
 									</label>
 								</div>
 								<div class="clearfix col-xs-12 col-md-6">
@@ -131,7 +131,7 @@
 									<p class="c-gray f-16">{{currentUser.company_name}} - {{currentUser.type}}</p>
 								</div>
 								<div class="clearfix col-xs-12 col-md-2 text-center	">
-									<img src="{{subsimage}}" style="width:100px; height:100px;"/>
+									<img ng-src="{{subsimage}}" style="width:100px; height:100px;"/>
 								</div>
 							</div>
 						</div>
@@ -157,7 +157,7 @@
 							<div class="panel-body p-10" ng-if="currentUser.typenum == '2'">
 								<div class="text-center col-xs-12 col-md-4">
 									<label for="file-input">
-										<img src="{{currentUser.logo}}" class="img-responsive" alt="Logo" id="imgLogo" style="    width: auto;    height: 200px;">
+										<img ng-src="{{currentUser.logo}}" class="img-responsive" alt="Logo" id="imgLogo" style="    width: auto;    height: 200px;">
 									</label>
 
 									<input style="display:none;" id="file-input" type="file" fileread="currentUser.logo"/>
@@ -169,7 +169,7 @@
 									<p class="c-gray f-16">{{currentUser.company_name}} - {{currentUser.type}}</p>
 								</div>
 								<div class="clearfix col-xs-12 col-md-2 text-center	">
-									<img src="{{subsimage}}" style="width:100px; height:100px;"/>
+									<img ng-src="{{subsimage}}" style="width:100px; height:100px;"/>
 								</div>
 							</div>
 							<div class="panel-content p-t-0 p-b-0" style="margin-bottom:15px;" ng-if="currentUser.typenum == '1'">

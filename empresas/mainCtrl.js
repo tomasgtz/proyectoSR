@@ -1,6 +1,9 @@
 
-var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
-var host		  = 'https://empresas.wizad.mx/uploads/'
+//var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
+//var host		  = 'https://empresas.wizad.mx/uploads/'
+
+var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
+var host		  = 'https://localhost/wizad/empresas/uploads/';
 
 angular.module('newApp').service('userService', function($http,$q){
 	
@@ -1393,7 +1396,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 				return str.join("&");
 			},
-			data: { description_p : params.description_p, width_p : params.width_p, height_p : params.height_p }
+			data: { description_p : params.description_p, width_p : params.width_p, height_p : params.height_p, multipage_p : params.multipage_p }
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -1426,6 +1429,38 @@ angular.module('newApp').service('generalService', function($http,$q){
 				return str.join("&");
 			},
 			data: { idmaterial_p : params.idmaterial_p, status_p : params.status_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		UMaterialMultipage : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'UMaterialMultipage',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idmaterial_p : params.idmaterial_p, multipage_p : params.multipage_p }
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -2416,7 +2451,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 				if(data[0] !== undefined){
 					
 				}
-				console.log("tom cargando archivo" + data);
+				
 				defered.resolve(data);		
 			})
 			.error(function(data){
@@ -2424,6 +2459,101 @@ angular.module('newApp').service('generalService', function($http,$q){
 			})
 			return promise;
 			
+		},
+
+		GThumbnails : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'getSlidesThumbnails',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplategroup_p : params.idtemplategroup_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(err){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+
+		SaveNewThumbnail: function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'SaveNewThumbnail',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : params.idtemplate_p, img_data : params.img_data}
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+
+		GSlides : function( params ) {
+		
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GSlides',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplategroup_p : params.idtemplategroup_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
 		},
 
 		GTemplates : function(params){
@@ -2516,7 +2646,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 					return str.join("&");
 				},
 				data: { name_p : params.name_p, idmaterial_p : params.idmaterial_p, 
-					contents_p: data, iduser_p: params.iduser_p
+					contents_p: data, iduser_p: params.iduser_p, idtemplategroup_p: params.idtemplategroup_p
 				}
 				}).success(function(data) {
 					if(data[0] !== undefined){
@@ -2608,7 +2738,140 @@ angular.module('newApp').service('generalService', function($http,$q){
 			})
 			return promise;
 			
-		}
+		},
+
+		DSlide : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 				= params.idtemplate_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'DSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+
+	  DuplicateSlide : function(params) {
+	  
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 				= params.idtemplate_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'DuplicateSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+	  
+	  },
+
+	  ISlide : function(params) {
+	  
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 				= params.idtemplate_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'ISlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+	  
+	  },
+	
+	  MSlide: function(params) {
+	
+		var defered 		= $q.defer();
+		var promise 		= defered.promise;
+		
+		var idtemplate_p 				= params.idtemplate_p;	
+		var direction_p					= params.direction_p;
+		
+		$http({
+			method: 'POST',
+			url: webServiceUrl + 'MSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p, direction_p : direction_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+		return promise;
+	}
 	}
 })
 
@@ -2657,8 +2920,7 @@ angular.module('newApp').factory('Excel',function($window){
 angular.module('newApp').controller('mainCtrl',
     ['$scope', 'applicationService', 'quickViewService', 'builderService', 'pluginsService', '$location', 'userService', 'generalService',
         function ($scope, applicationService, quickViewService, builderService, pluginsService, $location, userService, generalService) {
-            
-			
+    
 			
 			$scope.showLoggin = true;
 			$scope.indexClass = "sidebar-condensed account2";
@@ -2686,7 +2948,10 @@ angular.module('newApp').controller('mainCtrl',
 
 			document.head.appendChild(newStyle);
 			
-			
+			$scope.pressedKey = function(keyObj) {
+				$scope.myKey = {"key": keyObj.key};
+			}
+	
 			
 			generalService.GFonts()
 			.then(function(data) {
@@ -2942,7 +3207,7 @@ angular.module('newApp').controller('mainCtrl',
 								
 								generalService.AddHistory(payload)
 								.then(function(data) {
-									console.log(data);
+
 								});
 								$scope.alertShow = false;
 								$scope.showLoggin = false;

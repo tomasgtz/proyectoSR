@@ -24,7 +24,8 @@ var MakeApp = angular
 	'ngDragDrop',
 	'ngFileSelect',
 	'ngTableToCsv',
-	'ng-file-input'
+	'ng-file-input',
+	'ui.bootstrap.contextMenu'
   ])
   .config(function ($routeProvider, ngDialogProvider) {
       $routeProvider

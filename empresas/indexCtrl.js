@@ -9,5 +9,5 @@
  */
 angular.module('newApp')
   .controller('indexCtrl', ['$scope', 'dashboardService', 'pluginsService', function ($scope, dashboardService, pluginsService) {
-		alert("b");
+		
   }]);

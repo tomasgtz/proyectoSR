@@ -19,6 +19,13 @@ function cors() {
         exit(0);
     }
 }
+
+$dbms = 'mysql';
+$host = 'localhost'; 
+$db = 'wizadadm_wizad';
+$user = 'wizadadm_mrkt';
+$pass = 'Decaene09!';
+
 //incluir el archivo principal
 //include("Slim/Slim.php");
 include("vendor/autoload.php");
@@ -41,11 +48,11 @@ $app->post(
 			$email_p = $req->post('email_p');
 			$password_p = $req->post('password_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 				$cn=new PDO($dsn, $user, $pass);
@@ -83,11 +90,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -131,11 +138,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -179,11 +186,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -222,11 +229,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -264,11 +271,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -306,11 +313,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -347,11 +354,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -391,11 +398,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -432,11 +439,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -474,11 +481,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -517,11 +524,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -563,11 +570,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -605,11 +612,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -646,11 +653,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -691,11 +698,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db";
 
 
@@ -739,11 +746,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db";
 
 
@@ -784,11 +791,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -826,11 +833,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -867,11 +874,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -909,11 +916,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -951,11 +958,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -993,11 +1000,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1035,11 +1042,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1077,11 +1084,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1119,11 +1126,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1161,11 +1168,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1203,11 +1210,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1245,11 +1252,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1287,11 +1294,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1329,11 +1336,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1369,11 +1376,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1410,11 +1417,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1451,11 +1458,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1493,11 +1500,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1535,11 +1542,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1580,11 +1587,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1627,11 +1634,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1670,11 +1677,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1723,11 +1730,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1776,11 +1783,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1819,11 +1826,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1863,11 +1870,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1908,11 +1915,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1953,11 +1960,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -1996,11 +2003,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2043,11 +2050,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2085,11 +2092,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2129,11 +2136,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2173,11 +2180,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2214,11 +2221,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2255,11 +2262,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2299,11 +2306,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2339,11 +2346,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2379,11 +2386,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2419,11 +2426,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2459,11 +2466,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2499,11 +2506,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2538,11 +2545,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2577,11 +2584,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2616,11 +2623,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2656,11 +2663,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2697,11 +2704,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2741,11 +2748,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2780,11 +2787,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2819,11 +2826,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2858,11 +2865,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2897,11 +2904,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2943,11 +2950,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -2985,11 +2992,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3027,11 +3034,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3069,11 +3076,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3110,11 +3117,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3153,11 +3160,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3197,11 +3204,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3238,11 +3245,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3278,11 +3285,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3317,11 +3324,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3356,11 +3363,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3455,11 +3462,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3536,11 +3543,11 @@ $app->post(
 							</body>
 						</html>';
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3618,11 +3625,11 @@ $app->post(
 						</html>';
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3700,11 +3707,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3755,11 +3762,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3807,11 +3814,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -3892,11 +3899,11 @@ $app->post(
 			
 			
 			
-			$dbms = 'mysql';
-			$host = 'localhost'; 
-			$db = 'wizadadm_wizad';
-			$user = 'wizadadm_mrkt';
-			$pass = 'Decaene09!';
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
 			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -4030,11 +4037,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -4108,11 +4115,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db";
 
 
@@ -4156,11 +4163,11 @@ $app->post(
 				
 				
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db";
 
 
@@ -4191,11 +4198,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db";
 
 				$campaignid 	= $req->post('campaignid');
@@ -4234,11 +4241,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 				
@@ -4265,11 +4272,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 				
@@ -4296,11 +4303,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 				
@@ -4327,11 +4334,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 				$cn=new PDO($dsn, $user, $pass);
@@ -4358,11 +4365,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4394,11 +4401,11 @@ $app->post(
 				$phone_c 	= $req->post('phone_c');
 				
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4424,11 +4431,11 @@ $app->post(
 				$allPostVars = $app->request->post();
 				$req = $app->request();
 						
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4456,11 +4463,11 @@ $app->post(
 						
 				$idinbox_c 	= $req->post('idinbox_c');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4490,11 +4497,11 @@ $app->post(
 				$message_p 		= $req->post('message_p');
 				$campaign_p 	= $req->post('campaign_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4522,11 +4529,11 @@ $app->post(
 						
 				$user_p 		= $req->post('user_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4555,11 +4562,11 @@ $app->post(
 				$user_p 		= $req->post('user_p');
 				$status_p 		= $req->post('status_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4588,11 +4595,11 @@ $app->post(
 				$company_p 		= $req->post('company_p');
 				$status_p 		= $req->post('status_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4621,11 +4628,11 @@ $app->post(
 				$idmaterial_p	= $req->post('idmaterial_p');
 				$status_p 		= $req->post('status_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4654,12 +4661,13 @@ $app->post(
 				$description_p	= $req->post('description_p');
 				$width_p 		= $req->post('width_p');
 				$height_p 		= $req->post('height_p');
+				$multipage_p 	= $req->post('multipage_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4667,7 +4675,7 @@ $app->post(
 				
 				try
 				{					
-						$callBack  = $cn->query("CALL uspIns_NewMaterial ('$description_p','$width_p','$height_p')")->fetchAll(PDO::FETCH_ASSOC);
+						$callBack  = $cn->query("CALL uspIns_NewMaterial ('$description_p','$width_p','$height_p', $multipage_p)")->fetchAll(PDO::FETCH_ASSOC);
 						echo json_encode($callBack);
 				}
 				
@@ -4690,11 +4698,11 @@ $app->post(
 				$idmaterial_p	= $req->post('idmaterial_p');
 				$free_p 		= $req->post('free_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4716,6 +4724,40 @@ $app->post(
 
 
 $app->post(
+		'/UMaterialMultipage',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idmaterial_p	= $req->post('idmaterial_p');
+				$multipage_p 		= $req->post('multipage_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+						$callBack  = $cn->query("CALL uspUpd_MultipageMaterial ('$idmaterial_p','$multipage_p')")->fetchAll(PDO::FETCH_ASSOC);
+						echo json_encode($callBack);
+				}
+				
+				catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+
+$app->post(
 		'/DCampaign',function() use ($app){
 						
 				$allPostVars = $app->request->post();
@@ -4723,11 +4765,11 @@ $app->post(
 						
 				$campaign_p	= $req->post('campaign_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4754,11 +4796,11 @@ $app->post(
 				$req = $app->request();
 						
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4785,11 +4827,11 @@ $app->post(
 				$req = $app->request();
 						
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4816,11 +4858,11 @@ $app->post(
 				$req = $app->request();
 				$array = array();
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4856,11 +4898,11 @@ $app->post(
 				$array = array();
 				$idcompany_p	= $req->post('idcompany_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4891,11 +4933,11 @@ $app->post(
 				$req = $app->request();
 				$array = array();
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4924,11 +4966,11 @@ $app->post(
 				$req = $app->request();
 				$idcompany_p 		= $req->post('idcompany_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -5003,11 +5045,11 @@ $app->post(
 							</body>
 						</html>';
 			
-			$dbms = 'mysql';
-			$host = 'localhost'; 
-			$db = 'wizadadm_wizad';
-			$user = 'wizadadm_mrkt';
-			$pass = 'Decaene09!';
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
 			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 			
 			$cn=new PDO($dsn, $user, $pass);
@@ -5058,11 +5100,11 @@ $app->post(
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			
 			
-			$dbms = 'mysql';
-			$host = 'localhost'; 
-			$db = 'wizadadm_wizad';
-			$user = 'wizadadm_mrkt';
-			$pass = 'Decaene09!';
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
 			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 			
 			$cn=new PDO($dsn, $user, $pass);
@@ -5114,11 +5156,11 @@ $app->post(
 				$array = array();
 				$idcompany_p	= $req->post('idcompany_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -5149,11 +5191,11 @@ $app->post(
 						
 				$idtemplate_p 		= $req->post('idtemplate_p');
 				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -5182,11 +5224,11 @@ $app->post(
 			$idcompany_p = $req->post('idcompany_p');
 			$idmaterial_p = $req->post('idmaterial_p');
 
-			$dbms = 'mysql';
-			$host = 'localhost'; 
-			$db = 'wizadadm_wizad';
-			$user = 'wizadadm_mrkt';
-			$pass = 'Decaene09!';
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
 			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -5214,11 +5256,11 @@ $app->post(
 			$req = $app->request();
 			$idtemplate_p = $req->post('idtemplate_p');
 
-			$dbms = 'mysql';
-			$host = 'localhost'; 
-			$db = 'wizadadm_wizad';
-			$user = 'wizadadm_mrkt';
-			$pass = 'Decaene09!';
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
 			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -5252,26 +5294,44 @@ $app->post(
 			$idmaterial_p = $req->post('idmaterial_p');
 			$contents_p = $req->post('contents_p');
 			$iduser_p = $req->post('iduser_p');
-
-
+			$idtemplategroup_p = $req->post('idtemplategroup_p');
+			$group_id = 0;
 				
-				
-				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 				$cn=new PDO($dsn, $user, $pass);
 				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 				try
 				{
-						//CAMBIAR PROCEDIMIENTO
-						$data = $cn->query("call uspIns_NewTemplate ('$name_p','$idmaterial_p','$contents_p','$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$data = $cn->query("call uspGet_Material ('$idmaterial_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$is_multipage = $data[0]['multipage'];
+				
+						if ($is_multipage == '1') {
+
+							if($idtemplategroup_p == '0') {
+								$data = $cn->query("call uspIns_NewTemplateGroup ('$name_p','$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+								$group_id = $data[0]['id'];
+							} else {
+								$group_id = $idtemplategroup_p;
+							}
+							
+						}
+
+						$dataT = $cn->query("call uspIns_NewTemplate ('$name_p','$idmaterial_p','$contents_p','$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$template_id = $dataT[0]['id'];
+
+						if ($is_multipage == '1') {
+							$data = $cn->query("call uspIns_NewTemplateTemplateGroup ($group_id, $template_id);")->fetchAll(PDO::FETCH_ASSOC);
+						}
+
+						$dataT[0]['template_group_id'] = $group_id;
 						
-						echo json_encode($data);
+						echo json_encode($dataT);
 				}
 				
 				catch(PDOException $e) {
@@ -5297,14 +5357,12 @@ $app->post(
 			$name_p = $req->post('name_p');
 			$contents_p = $req->post('contents_p');
 			
-				
-				
-				
-				$dbms = 'mysql';
-				$host = 'localhost'; 
-				$db = 'wizadadm_wizad';
-				$user = 'wizadadm_mrkt';
-				$pass = 'Decaene09!';
+			
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
 
 
@@ -5325,6 +5383,279 @@ $app->post(
 					
 			}
 );
+
+$app->post(
+		
+		'/SaveNewThumbnail',function() use ($app) {
+
+			$path = '../images/thumbnails/';
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+
+			$idtemplate_p = $req->post('idtemplate_p');
+			
+			$filename = $idtemplate_p . '_' . rand(1, 10000) . '.png';
+			
+			try {
+				
+				$img_base64 = str_replace(' ', '+', urldecode($req->post('img_data')));
+				$data = explode(',', $img_base64);
+				$img_bin = base64_decode($data[1]);
+
+				$P = fopen($path.$filename, "wb");
+				fwrite($P, $img_bin);
+				fclose($P);
+
+
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+				try
+				{
+					$data = $cn->query("call uspUpd_Thumbnail('$idtemplate_p','$filename');")->fetchAll(PDO::FETCH_ASSOC);
+					
+					echo json_encode($data);
+				
+				} catch(PDOException $e) {
+						echo $e->getMessage();
+				}	
+
+			} catch(Exception $e) {
+				echo $e->getMessage();
+			}
+		
+		}
+);
+
+
+
+$app->post(
+		
+		'/getSlidesThumbnails',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+
+			$idtemplategroup_p = $req->post('idtemplategroup_p');
+			
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+			try {
+				
+				$data = $cn->query("call uspGet_Thumbnails($idtemplategroup_p);")->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($data);
+			
+			} catch(PDOException $e) {
+				echo $e->getMessage();
+			}
+	
+	}
+);
+
+$app->post(
+		'/DSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idtemplate_p 		= $req->post('idtemplate_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_TemplateGroup('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspDel_Slide('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					$data = $cn->query("CALL uspUpd_FixSlidesOrder('$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
+
+$app->post(
+		'/GSlides',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idtemplategroup_p 		= $req->post('idtemplategroup_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_TemplatesOfGroup('$idtemplategroup_p')")->fetchAll(PDO::FETCH_ASSOC);
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+					echo $e->getMessage();
+				}			
+		
+			}
+
+);
+
+
+$app->post(
+		'/DuplicateSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idtemplate_p 		= $req->post('idtemplate_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_TemplateGroup('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspDuplicate_Slide('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
+
+$app->post(
+		'/ISlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idtemplate_p 		= $req->post('idtemplate_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_TemplateGroup('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspIns_Slide('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
+
+$app->post(
+		'/MSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idtemplate_p 		= $req->post('idtemplate_p');
+				$direction_p 		= $req->post('direction_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_TemplateGroup('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspUpd_SlideOrder('$idtemplate_p', '$group_id', '$direction_p')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
 
 
 

@@ -13687,3 +13687,40 @@ select:focus,
     opacity: .7;
 }
 
+.thumbnail-section {
+	width: 660px;
+}
+
+.thumbnail {
+	width: 150px;
+}
+
+img.thumbnail:hover { 
+  border: 2px solid gray; 
+} 
+
+.thumbnail-inline {
+	display: inline;
+}
+
+.thumbnail-add {
+	font-size: 48px; color: Dodgerblue;
+	cursor: pointer;
+}
+
+.thumbnail-add-div {
+	width: 80px;
+	display: inline-block;
+    float: none;
+}
+
+.thumbnail-group > .row {
+  overflow-x: auto;
+  white-space: nowrap;
+  width: 650px;
+}
+
+.thumbnail-group > .row > .thumbnail-div {
+  display: inline-block;
+  float: none;
+}

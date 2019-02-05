@@ -61,6 +61,9 @@
 								Dimensiones(BxA)
 							</th>
 							<th>
+								Mutip&aacute;gina
+							</th>
+							<th>
 								Gratis
 							</th>
 							<th>
@@ -73,6 +76,16 @@
 							
 							<td>{{ material.description }}</td>
 							<td>{{ material.width }} x {{ material.height }}</td>
+							<td>
+								<div class="onoffswitch2">
+									<input type="checkbox" ng-change="chngMutipageMaterial(material.id_material, material.multipage)"  ng-model="material.multipage" ng-true-value="1" ng-false-value="0"
+										name="onoffswitch" class="onoffswitch-checkbox" id="myonfreeswitch{{material.id_material}}" checked>
+									<label class="onoffswitch-label" for="myonfreeswitch{{material.id_material}}">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</td>
 							<td>
 								<div class="onoffswitch2">
 									<input type="checkbox" ng-change="chngFreeMaterial(material.id_material, material.free)"  ng-model="material.free" ng-true-value="1" ng-false-value="0"
@@ -127,6 +140,12 @@
 							<label class="col-sm-3 control-label">Largo(Pixeles)</label>
 							<div class="col-sm-9">
 								<input class="form-control" ng-model="height_p" type="text">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Tiene varias p&aacute;ginas (PPT)</label>
+							<div class="col-sm-9">
+								<input class="form-control" ng-model="multipage_p" type="checkbox">
 							</div>
 						</div>
 					</div>

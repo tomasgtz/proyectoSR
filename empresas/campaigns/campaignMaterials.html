@@ -1,40 +1,37 @@
      
-	<div class="header">
-        <div class="row">
-			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO <strong>DE LA CAMPAÑA</strong>:</div>
-			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-model="CampaignSelected">{{CampaignSelected.name}}</div>
-		</div>
-        <div class="breadcrumb-wrapper">
-        
-        </div>
-		
-    </div>
+<div class="header">
+	<div class="row">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO <strong>DE LA CAMPAÑA</strong>:</div>
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-model="CampaignSelected">{{CampaignSelected.name}}</div>
+	</div>
+	<div class="breadcrumb-wrapper">
+	</div>
+</div>
     
 <div class="row">
-		<div ng-class="alertClass" ng-show="alertShow">
-			<a class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-			<h4 class="alert-title">¡Alerta!</h4>
-			<p>{{message}}</p>
-		</div>
+	<div ng-class="alertClass" ng-show="alertShow">
+		<a class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+		<h4 class="alert-title">¡Alerta!</h4>
+		<p>{{message}}</p>
 	</div>
+</div>
 	
 <div class="wrapper" >
-		
-	    <div class="row panel" style="padding-top:20px; padding-bottom:20px;">
-			<div class="col-sm-6 form-group">
-				<div class="col-sm-3">
-					<label for="field-2" class="control-label">Escoger material:</label>
-				</div>
-				<div class="col-sm-6" style="z-index: 0;">
-						<select class="form-control" ng-change="materialChange(material)" id="selectmateriall" name="singleSelect" ng-model="material" style="width:200px;">
-							<option ng-repeat="material in materialArray" value="{{material.id_material}}">{{material.description}}</option>
-						</select><br>
-				</div>
-				<div class="col-sm-2">
-						<button ng-click="materialChange()" class="btn btn-embossed btn-warning m-r-20" style="width:130px;">Seleccionar</button>
-				</div>			
+	<div class="row panel" style="padding-top:20px; padding-bottom:20px;">
+		<div class="col-sm-6 form-group">
+			<div class="col-sm-3">
+				<label for="field-2" class="control-label">Escoger material:</label>
 			</div>
+			<div class="col-sm-6" style="z-index: 0;">
+					<select class="form-control" ng-change="materialChange(material)" id="selectmateriall" name="singleSelect" ng-model="material" style="width:200px;">
+						<option ng-repeat="material in materialArray" value="{{material.id_material}}">{{material.description}}</option>
+					</select><br>
+			</div>
+			<div class="col-sm-2">
+					<button ng-click="materialChange()" class="btn btn-embossed btn-warning m-r-20" style="width:130px;">Seleccionar</button>
+			</div>			
 		</div>
+	</div>
 	    <div class="row panel" ng-show="showCanvasMaterialSelected">
 			<div class="col-sm-12">
 				<div class="panel with-nav-tabs panel-default edit_utils_container">
@@ -50,16 +47,16 @@
 								<li>
 									<button style="z-index:200; "  class="btn btn-xs btn-default" ng-click="creatingNewFile()"><img title="Nuevo" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/new32x32.png"></button>
 								</li>
-								<li>
+								<!-- <li>
 									<button style="z-index:200; "  class="btn btn-xs btn-default" ng-click="opening()"><img title="Abrir archivo" src="images/utils/{{icon_folder}}/open32x32.png" style="width:48px; height:48px"></button>
 									<form enctype="multipart/form-data" id="loadWiz" action="uploadWiz.php" method="post"><input id="openWiz" name="wizFile" type="file" style="display: none" ng-model="uploadFileWiz" ng-change="sendingFile()"/></form>
-								</li>
+								</li>-->
 								<li>
 									<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal-open-template"><img title="Abrir Plantilla" src="images/utils/{{icon_folder}}/openDB32x32.png" style="width:48px; height:48px"></button>
 								</li>
-								<li>
+								<!-- <li>
 									<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="saving()"><img title="Descargar archivo" src="images/utils/{{icon_folder}}/save32x32.png" style="width:48px; height:48px"></button>
-								</li>
+								</li> -->
 								<li>
 									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-template" data-toggle="modal"><img title="Guardar como Plantilla" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
 								</li>
@@ -84,19 +81,21 @@
 								</li>
 								<li>
 									<div class="btn-group fixBtnGroup">
-									<button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false"><img style="width:48px; height:48px" title="Insertar forma" src="images/utils/{{icon_folder}}/shapes32x32.png" ></button>
+									<button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" style="height: 48px"><img style="width:48px; height:48px" title="Insertar forma" src="images/utils/{{icon_folder}}/shapes32x32.png" ></button>
 									<ul class="dropdown-menu">
 										<li>
-										<button ng-click="addTriangle()" class="btn btn-xs btn-default"> <i style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);	" class="fa fa-play fa-3x"></i></button>
+										<button ng-click="addTriangle()" class="btn btn-xs btn-default"> 
+											<i style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);" class="fa fa-play fa-3x"></i>
+										</button>
 										</li>
 										<li>
-										<button ng-click="addCircle()" class="btn btn-xs btn-default"> <i class="fa fa-circle fa-3x"></i></button>
+											<button ng-click="addCircle()"  class="btn btn-default" ><i class="fa fa-circle fa-3x"></i></button>
 										</li>
 										<li>
-										<button ng-click="addRectangle()" class="btn btn-xs btn-default"> <i class="fa fa-stop fa-3x"></i></button>
+											<button ng-click="addRectangle()" class="btn btn-xs btn-default"> <i class="fa fa-stop fa-3x"></i></button>
 										</li>
 										<li>
-										<button ng-click="addLine()" class="btn btn-xs btn-default"> <i class="fa fa-minus fa-3x"></i></button>
+											<button ng-click="addLine()" class="btn btn-xs btn-default"> <i class="fa fa-minus fa-3x"></i></button>
 										</li>								
 									</ul>
 									</div>		
@@ -159,15 +158,27 @@
 											<td><canvas id="left-ruler" width="20" height="400" style="box-shadow: 0px 10px 20px #888888"/></td>
 											<td style="padding: 1px; border-collapse: collapse;" valign="top">
 												<canvas id="play_board" style="border: 1px solid black; box-shadow: 5px 10px 20px #888888"/>
-												<!-- <canvas id="zoom" width="400" height="200" style="position:absolute; top:0; left:0; display:none"></canvas>-->
 											</td>
 										</tr>
 									</table>										
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+						<div id="slides" class="thumbnail-section" ng-if="newMaterialChange.multipage">
+
+							<div class="container thumbnail-group">
+								<div class="row text-center">
+									<div class="thumbnail-div" ng-repeat="image in thumbnails">
+										<img ng-click="loadSlideFromThumbnail(image)" ng-src="images/thumbnails/{{ image.thumbnail }}" class="thumbnail thumbnail-inline" context-menu="slideOptions">
+									</div>
+									<div class="thumbnail-add-div"  ng-click="addSlide()">
+										<span class="thumbnail-add"><i class="fa fa-plus-circle thumbnail-inline"></i></span>
+									</div>
+								</div>
+							</div>
+						
+						
+						</div>
 		</div>
 		<div class="modal fade modal-slideright" id="modal-images" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog" style="width:300px;">
@@ -193,9 +204,9 @@
 								   <li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | limitTo : limit" ng-click="dropImage(image, $event)" >			
 									  								
 									  <!-- <div  class="delete" ng-click="deleteSticker(image)">X</div> -->
-									  <!-- <img data-dismiss="modal" src="{{image.src}}" height="{{image.height}}" width="{{image.width}}" dragIt="true">	 -->
+									  <!-- <img data-dismiss="modal" ng-src="{{image.src}}" height="{{image.height}}" width="{{image.width}}" dragIt="true">	 -->
 										<p style="width: 90px;">{{image.title}}</p>
-											<img data-dismiss="modal" src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+											<img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
 										
 								   </li>	
 								</ul>
@@ -241,7 +252,7 @@
 								   <li style="text-align: center; margin:15px; " class="item" ng-repeat="phrase in phrases" ng-click="dropPhrase(phrase, $event)">			
 									  
 										<div style="height:100%; width:100%;">
-											<div data-dismiss="modal" style="width:100%; min-height:100%; box-shadow: 1px 1px 1px 1px #888888;"> A {{phrase.text}} </div>
+											<div data-dismiss="modal" style="width:100%; min-height:100%; box-shadow: 1px 1px 1px 1px #888888;">{{phrase.text}}</div>
 										</div>
 										<p class="text-info"><small>Fecha creación: {{phrase.date_up}}</small></p>
 								   </li>	
@@ -339,10 +350,16 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-3 text-center">	
-								<button ng-click="exportPDF()" style="width:120px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">PDF</button>
-							</div>
-							<div class="col-sm-3 text-center">	
 								<button ng-click="exportPNG()" style="width:120px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">PNG</button>
+							</div>
+							<div class="col-sm-3 text-center" ng-if="newMaterialChange.multipage == 0">	
+								<button ng-click="exportOnePagePDF()" style="width:120px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">PDF</button>
+							</div>
+							<div class="col-sm-3 text-center" ng-if="newMaterialChange.multipage == 1">	
+								<button ng-click="exportOnePagePDF()" style="width:120px; padding:5px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">PDF Esta página</button>
+							</div>
+							<div class="col-sm-3 text-center" ng-if="newMaterialChange.multipage == 1">	
+								<button ng-click="exportWholeDocPDF()" style="width:180px; padding:5px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">PDF Todas las páginas</button>
 							</div>
 						</div>
 					</div>
@@ -365,7 +382,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-3 text-center">	
-								<input ng-model="template_name" style="width:120px;" type="text">
+								<input ng-model="template_name" style="width:120px;" type="text" >
 							</div>
 							<div class="col-sm-3 text-center">	
 								<button ng-click="savingToDB()" style="width:120px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">Guardar</button>

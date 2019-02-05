@@ -60,7 +60,7 @@
         <!-- FPD END -->
            
     </head>
-    <body ng-app="newApp" ng-class="indexClass" ng-controller="mainCtrl">
+    <body ng-app="newApp" ng-class="indexClass" ng-controller="mainCtrl" ng-keydown="pressedKey($event)">
         <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -176,7 +176,7 @@
                             <!-- BEGIN USER DROPDOWN -->
                             <li class="dropdown" id="user-header">
                                 <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <img style="width:40px;height:40px;" src="{{currentUser.image}}" alt="user image">
+                                <img style="width:40px;height:40px;" ng-src="{{currentUser.image}}" alt="user image">
                                 <span class="username">{{currentUser.UserName}}</span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -810,7 +810,7 @@
 					<form class="form-signin" role="form" ng-show="loginType === 3">
 						<h3><strong>REGISTRO</strong> de mis datos:	</h3>
                         <div class="append-icon m-b-5">
-                            <input class="form-control input-lg" ng-model="rNombre" id="name" type="text" placeholder="NOMBRE COMPLETO" required>
+                            <input class="form-control input-lg" ng-model="rNombre" id="rname" type="text" placeholder="NOMBRE COMPLETO" required>
                             <i class="fa fa-user"></i>
                         </div>
 						<div class="append-icon m-b-5">
@@ -826,7 +826,7 @@
 							<i class="fa fa-phone"></i>
 						</div>
                         <div class="g-recaptcha" data-sitekey="6Lcc_VwUAAAAAIcp2c-RCeB8cs3tC1-uVecrqX-K"></div>
-						<button ng-click="saveUser()" type="submit" id="submit-password" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left">Registrarme</button>
+						<button ng-click="saveUser()" type="submit" id="submit-rpassword" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left">Registrarme</button>
 						<div class="row">
 							<div class="col-sm-12">
 								<div ng-class="alertUserClass" ng-show="alertUserShow">
@@ -869,12 +869,7 @@
         <!-- END ANGULARJS SCRIPTS -->
 		<script src="bootstrap-colorpicker-module.js"></script>
 		
-		
-	  <!--	SE REMUEVEN LIBRERIAS POR CONFLICTO CON FANCY DESIGNER
-        <script src="assets/global/plugins/jquery/jquery-3.1.0.min.js"></script>
-        <script src="assets/global/plugins/jquery/jquery-migrate-3.0.0.min.js"></script>
-        <script src="assets/global/plugins/jquery-ui/jquery-ui.min.js"></script>
-      -->
+
         <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <script src="assets/global/plugins/gsap/main-gsap.min.js"></script>
         <script src="assets/global/plugins/tether/js/tether.min.js"></script>
@@ -958,6 +953,7 @@
         <script src="assets/global/plugins/autosize/autosize.min.js"></script>
         <script src="assets/global/js/widgets/widget_weather.js"></script>
         <script src="assets/global/js/pages/ecommerce.js"></script>
+		<script src="assets/global/plugins/angular-bootstrap-contextmenu/contextMenu.js"></script>
 		<!-- <script src="js/fontselector/angular-fontselect.js"></script> 
 		<script src="js/fontselector/libs/webfontloader.js"></script> -->
         
@@ -1018,6 +1014,6 @@
 
         <!-- END CUSTOM ANGULARJS SCRIPTS -->
 		
-        	
+
     </body>
 </html>

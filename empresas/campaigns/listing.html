@@ -592,7 +592,7 @@
 												<ul style="color:black; list-style:none;">
 													<li ng-repeat="p in filesUploaded">
 														<a class="check btn btn-sm btn-success" href="javascript:;">
-															<img src="{{p.preview}}" width="100px" height="100px"/>{{p.name}}<i class="fa fa-check"></i>
+															<img ng-src="{{p.preview}}" width="100px" height="100px"/>{{p.name}}<i class="fa fa-check"></i>
 														</a>
 														<button ng-click="uploadImage(p)" type="button" class="btn btn-success btn-embossed bnt-square">Cargar <i class="fa fa-arrow-right"></i></button>
 														<div class="form-group">

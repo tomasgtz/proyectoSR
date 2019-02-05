@@ -91,18 +91,49 @@ angular.module('newApp').controller('freeMaterialsCtrl', function ($scope, userS
 			}
 		})
 	}
+
+
+	$scope.chngMutipageMaterial = function(idmaterial, multipage){
+		
+		var params = {
+			"idmaterial_p"  :  "",
+			"multipage_p"	:  ""
+		}
+		
+		params.idmaterial_p		= idmaterial;
+		params.multipage_p			= multipage;
+		
+		generalService.UMaterialMultipage(params)
+		.then(function(data) {
+			if(data[0].returnMessage === 'SUCCESS'){
+				
+				$scope.messageUser 	 = "Datos actualizados exitosamente.";
+				$scope.alertUserClass = "alert alert-success";
+				$scope.alertUserShow  = true;
+				
+							
+			}else{
+				
+				$scope.messageUser 	 = "Ocurrió un error en la aplicación, favor de contactar soporte.";
+				$scope.alertUserClass = "alert alert-danger";
+				$scope.alertUserShow  = true;
+				
+			}
+		})
+	}
 	
 	$scope.saveMaterial = function(){
 		
 		var params = {
 			"description_p" : "",
 			"width_p" : "",
-			"height_p" : ""
+			"height_p" : "",
+			"multipage_p" : ""
 		}
 		params.description_p 	= $scope.description_p;
 		params.width_p 			= $scope.width_p;
 		params.height_p 		= $scope.height_p;
-		 
+		params.multipage_p 		= $scope.multipage_p;
 		 
 		generalService.IMaterial(params)
 		.then(function(data) {

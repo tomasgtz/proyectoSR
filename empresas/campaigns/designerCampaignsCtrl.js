@@ -333,12 +333,8 @@ angular.module('newApp')
 		}
 		
 		$scope.goToMaterials = function(campaign){
-			
-			//aqui manda llamar a setCampaign que es una funcion del mainCtrl.js
-			objCampaign.setCampaign(campaign);
-			
-			console.log("asd tom6 selecciona campaña -> revisando la propiedad de autorization=" + campaign.download);
-			
+		
+			objCampaign.setCampaign(campaign);	
 			$location.path( '/campaign-materials' );
 		}
 		
