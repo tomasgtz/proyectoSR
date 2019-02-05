@@ -10,10 +10,10 @@ angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal
 ) {
 	
-  	//var urlHost = 'https://wizad.mx/';
-	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	var urlHost = 'https://localhost/wizad/';
-	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+  	var urlHost = 'https://wizad.mx/';
+	var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	//var urlHost = 'https://localhost/wizad/';
+	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 	$scope.templates = [];
 	$scope.template_name = "";

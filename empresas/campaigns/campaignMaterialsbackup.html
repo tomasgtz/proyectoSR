@@ -226,14 +226,14 @@
 				    <ul ng-show="showImagesCampaign" ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style="list-style: none; max-height: 350px; overflow-y: scroll;">
 					   <li style="text-align: center;" class="item" ng-repeat="image in images" ng-click="dropImage(image, $event)">			
 						  <h3>{{image.title}}</h3>								
-						  <img src="{{image.src}}" height="100" width="100" dragIt="true">		
+						  <img ng-src="{{image.src}}" height="100" width="100" dragIt="true">		
 					   </li>	
 				    </ul>	
 				    <h3 style="font-size:18px;"><b><i ng-click="seeImagesIdentity()" ng-show="showImagesIdentity  === 0" class="fa fa-plus" style="color:#01DF01; cursor:pointer;"></i><i ng-click="hideImagesIdentity()"  ng-show="showImagesIdentity  === 1" class="fa fa-minus" style="color:#FF0000; cursor:pointer;"></i> Identidad corporativa</b></h3>
 					<ul ng-show="showImagesIdentity" ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style="list-style: none; max-height: 350px; overflow-y: scroll;">
 					  <li style="text-align: center;" class="item" ng-repeat="image in imagesIdentity" ng-click="dropImage(image, $event)">			
 						  <h3>{{image.title}}</h3>								
-						  <img src="{{image.src}}" height="100" width="100" dragIt="true">		
+						  <img ng-src="{{image.src}}" height="100" width="100" dragIt="true">		
 					  </li>	
 				   </ul>					   
 				</div>
@@ -292,7 +292,7 @@
 								   <li style="text-align: center;" class="item" ng-repeat="image in images" ng-click="dropImage(image, $event)">			
 									  <h3>{{image.title}}</h3>								
 									  <!-- <div  class="delete" ng-click="deleteSticker(image)">X</div> -->
-									  <img data-dismiss="modal" src="{{image.src}}" height="100" width="100" dragIt="true">		
+									  <img data-dismiss="modal" ng-src="{{image.src}}" height="100" width="100" dragIt="true">		
 								   </li>	
 								</ul>	
 							</div>
@@ -319,7 +319,7 @@
 								   <li style="text-align: center;" class="item" ng-repeat="image in imagesIdentity" ng-click="dropImage(image, $event)">			
 									  <h3>{{image.title}}</h3>								
 									  <!-- <div  class="delete" ng-click="deleteSticker(image)">X</div> -->
-									  <img data-dismiss="modal" src="{{image.src}}" height="100" width="100" dragIt="true">		
+									  <img data-dismiss="modal" ng-src="{{image.src}}" height="100" width="100" dragIt="true">		
 								   </li>	
 								</ul>	
 							</div>
