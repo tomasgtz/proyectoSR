@@ -5223,6 +5223,7 @@ $app->post(
 			$req = $app->request();
 			$idcompany_p = $req->post('idcompany_p');
 			$idmaterial_p = $req->post('idmaterial_p');
+			$idcampaign_p = $req->post('idcampaign_p');
 
 			global $dbms;
 			global $host; 
@@ -5236,7 +5237,7 @@ $app->post(
 				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 				try
 				{ 
-						$data = $cn->query("call uspGet_Templates('$idcompany_p', '$idmaterial_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$data = $cn->query("call uspGet_Templates('$idcompany_p', '$idmaterial_p', '$idcampaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
 						echo json_encode($data);
 				}
@@ -5294,6 +5295,7 @@ $app->post(
 			$idmaterial_p = $req->post('idmaterial_p');
 			$contents_p = $req->post('contents_p');
 			$iduser_p = $req->post('iduser_p');
+			$idcampaign_p = $req->post('idcampaign_p');
 			$idtemplategroup_p = $req->post('idtemplategroup_p');
 			$group_id = 0;
 				
@@ -5322,7 +5324,7 @@ $app->post(
 							
 						}
 
-						$dataT = $cn->query("call uspIns_NewTemplate ('$name_p','$idmaterial_p','$contents_p','$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$dataT = $cn->query("call uspIns_NewTemplate ('$name_p','$idmaterial_p','$contents_p','$iduser_p','$idcampaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						$template_id = $dataT[0]['id'];
 
 						if ($is_multipage == '1') {

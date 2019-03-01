@@ -2557,7 +2557,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 		},
 
 		GTemplates : function(params){
-			
+			console.log("params", params);
 			var defered = $q.defer();
 			var promise = defered.promise;
 						
@@ -2571,7 +2571,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 				return str.join("&");
 			},
-			data: { idcompany_p : params.idcompany_p, idmaterial_p : params.idmaterial_p }
+			data: { idcompany_p : params.idcompany_p, idmaterial_p : params.idmaterial_p, idcampaign_p: params.idcampaign_p }
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -2646,7 +2646,7 @@ angular.module('newApp').service('generalService', function($http,$q){
 					return str.join("&");
 				},
 				data: { name_p : params.name_p, idmaterial_p : params.idmaterial_p, 
-					contents_p: data, iduser_p: params.iduser_p, idtemplategroup_p: params.idtemplategroup_p
+					contents_p: data, iduser_p: params.iduser_p, idtemplategroup_p: params.idtemplategroup_p, idcampaign_p : params.idcampaign_p
 				}
 				}).success(function(data) {
 					if(data[0] !== undefined){

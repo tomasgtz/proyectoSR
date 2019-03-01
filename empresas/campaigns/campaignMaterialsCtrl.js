@@ -149,11 +149,13 @@ angular.module('newApp')
 					
 				var params = {
 					idcompany_p : "",
-					idmaterial_p: ""
+					idmaterial_p: "",
+					idcampaign_p: ""
 				}
 
 				params.idcompany_p = $scope.currentUser.id_company;
 				params.idmaterial_p = $scope.newMaterialChange.id_material ;
+				params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
 
 				generalService.GTemplates(params)
 				.then(function(data) {
@@ -450,11 +452,13 @@ angular.module('newApp')
 		$scope.template_name = "";
 		var params = {
 			idcompany_p : "",
-			idmaterial_p: ""
+			idmaterial_p: "",
+			idcampaign_p: ""
 		}
 
 		params.idcompany_p = $scope.currentUser.id_company;
 		params.idmaterial_p = $scope.newMaterialChange.id_material ;
+		params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
 
 		generalService.GTemplates(params)
 		.then(function(data) {
@@ -2259,7 +2263,8 @@ angular.module('newApp')
 				"idmaterial_p"	: "",
 				"contents_p"	: "",
 				"iduser_p"	: "",
-				"idtemplategroup_p" : ""
+				"idtemplategroup_p" : "",
+				"idcampaign" : ""
 			};
 		
 		params.name_p = $scope.template_name;
@@ -2267,6 +2272,7 @@ angular.module('newApp')
 		params.contents_p = $scope.factory.canvas;
 		params.iduser_p = $scope.currentUser.id_user;
 		params.idtemplategroup_p = $scope.template_group_id;
+		params.idcampaign_p = $scope.CampaignSelected.id_campaign;
 
 		if($scope.template_saved_id === 0) {
 			
@@ -2285,11 +2291,13 @@ angular.module('newApp')
 				// reload list of templates
 				var params = {
 					idcompany_p : "",
-					idmaterial_p: ""
+					idmaterial_p: "",
+					idcampaign_p: ""
 				}
 
 				params.idcompany_p = $scope.currentUser.id_company;
 				params.idmaterial_p = $scope.newMaterialChange.id_material ;
+				params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
 
 				generalService.GTemplates(params)
 				.then(function(data) {
@@ -2327,11 +2335,13 @@ angular.module('newApp')
 				// reload list of templates
 				var params = {
 					idcompany_p : "",
-					idmaterial_p: ""
+					idmaterial_p: "",
+					idcampaign_p: ""
 				}
 
 				params.idcompany_p = $scope.currentUser.id_company;
 				params.idmaterial_p = $scope.newMaterialChange.id_material ;
+				params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
 
 				generalService.GTemplates(params)
 				.then(function(data) {
