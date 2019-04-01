@@ -1,10 +1,9 @@
 <div>
-   <div class="header">
-      <h2 style="font-size:20px;">NOMBRE: <strong><input type="text" ng-model="CampaignSelected.campaign_name"></strong></h2>
-      <div class="breadcrumb-wrapper">
-      </div>
-   </div>
-   <div class="row">
+	<div class="header">
+		<h2 style="font-size:20px;">NOMBRE: <strong><input type="text" ng-model="CampaignSelected.campaign_name"></strong></h2>
+		<div class="breadcrumb-wrapper"></div>
+	</div>
+	<div class="row">
 		<div ng-class="alertClass" ng-show="alertShow">
 			<h4 class="alert-title">¡Alerta!</h4>
 			<p>{{message}}</p>
@@ -20,39 +19,31 @@
 						<button ng-click="saveChanges()" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-check"></i> Guardar cambios</button>
 					</div>
 				</div>
-               <div class="row" >
-                  <div class="col-sm-12">
-				     <div class="row" >
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i>PERMISO PARA <strong> DESCARGAR</strong></h3>
-                        
+             <div class="row" >
+				<div class="col-sm-12">
+					<div class="row" >
+						<h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i>PERMISO PARA <strong> DESCARGAR</strong></h3>
 						<input ng-model="CampaignSelected.download" id="aut" type="checkbox">
 						<label for="aut" class="control-label">Autorización para descargar</label>
-						
-                     </div>
-					 <div class="row" >
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i>DESCRIPCIÓN<strong> DE LA CAMPAÑA</strong></h3>
-                        <textarea ng-model="CampaignSelected.description" rows="4" class="form-control" required="" aria-required="true"></textarea>
+					</div>
+					<div class="row" >
+						<h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i>DESCRIPCIÓN<strong> DE LA CAMPAÑA</strong></h3>
+						<textarea ng-model="CampaignSelected.description" rows="4" class="form-control" required="" aria-required="true"></textarea>
 						<!-- <h3><strong>{{CampaignSelected.description}}</strong></h3> -->
-                     </div>
-                     <div class="row" style="margin-top:12px;">
+					</div>
+                    <div class="row" style="margin-top:12px;">
                         <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA CAMPAÑA</strong></h3>
-                        <form id="dzImages" action="upload.php" class="dropzone" 
-                           ng-dropzone">
-                        </form>
-                     </div>
+                        <form id="dzImages_c" action="upload.php" class="dropzone" ng-dropzone"> </form>
+                    </div>
                     <div class="row" style="margin-top:12px;">
                         <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA IDENTIDAD</strong></h3>
                         <h4>Dé click sobre la imagen para agregarla a la campaña</h4>
-                        <form id="dzImagesIdentidadSeeC" action="upload.php" class="dropzone" 
-                           ng-dropzone">
-                        </form>
-                     </div>
+                        <form id="dzImagesIdentidadSeeC_c" action="upload.php" class="dropzone" ng-dropzone"> </form>
+                    </div>
 
                      <div  class="row" style="margin-top:12px;">
                         <h3 style="border-bottom: 1px solid black;"><i class="fa fa-font"></i>FUENTES<strong> DE LA CAMPAÑA</strong></h3>
-                        <form id="dzFonts" action="upload.php" class="dropzone" 
-                           ng-dropzone">
-                        </form>
+                        <form id="dzFonts_c" action="upload.php" class="dropzone" ng-dropzone">  </form>
                      </div>
                      <div class="row" style="margin-top:12px;">
                         <h3 style="border-bottom: 1px solid black;"><i class="fa fa-paint-brush"></i>PANTONES<strong> DE LA CAMPAÑA</strong></h3>
@@ -67,16 +58,16 @@
                            </div>
                         </div>
                         <div class="row">
-                           <div class="col-sm-3">Agrega tus colores
-                           </div>
-                           <div class="col-sm-9">
-                              <input colorpicker colorpicker-position="right" type="text" ng-model="your_model" />
-                              <button ng-click="newPalette(your_model)" type="button" class="btn btn-sm btn-primary">
-                              <i class="fa fa-plus-square"></i>
-                              </button>
-                           </div>
+                           <div class="col-sm-3">Agrega tus colores</div>
+							   <div class="col-sm-9">
+								  <input colorpicker colorpicker-position="right" type="text" ng-model="your_model" />
+								  <button ng-click="newPalette(your_model)" type="button" class="btn btn-sm btn-primary">
+								  <i class="fa fa-plus-square"></i>
+								  </button>
+							   </div>
+						   </div>
                         </div>
-                     </div>
+				     </div>
                      <div class="row" style="margin-top:12px;">
                         <h3 style="border-bottom: 1px solid black;"><i class="fa fa-list"></i>TEXTOS<strong> DE LA CAMPAÑA</strong></h3>
 						<h4 class="col-sm-12 control-label">
@@ -111,8 +102,8 @@
 									<i class="icons-office-52">
 									</i>
                                 </a> -->
-								<span><img width="100px" height="50px" src="materiales/{{material.thumbnail}}">
-								<h3>{{material.description}}  -  {{material.width}}x{{material.height}}</h3><span>
+								<span><img width="100px" src="images/materiales/{{material.thumbnail}}">
+								<h3>{{material.description}}  -  {{material.width}}x{{material.height}}</h3></span>
 							</div>
 						</div>
                      </div>
@@ -154,40 +145,64 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
-                    <h4 class="modal-title">ESCOJE LOS<strong> MATERIALES</strong></h4>
+                    <h4 class="modal-title">SELECCIONA LOS<strong> MATERIALES</strong></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-						<div class="col-sm-12">
-							<table class="table table-hover dataTable" id="table-editable">
-								<col width="50%">
-								<col width="50%">
-								<thead>
-									<tr>
-										<th width="20px">Material</th>
-										<th width="20px"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="material in allMaterials">
-										<td>{{material.description}} - {{material.width}}px X {{material.height}}px</td>
-										<td class="text-center">
-											<div class="col-md-12">
-												<div class="form-group">
-													<input ng-model="material.selected" ng-true-value="1" ng-false-value="0" ng-change="materialSelected(material)" type="checkbox">
+					<div role="tabpanel">
+						<div class="row">
+							<div class="col-sm-12">
+
+								<ul class="nav nav-tabs" role="tablist">
+								  
+								  <li role="presentation" class="active"><a data-target="#online_1" role="tab" data-toggle="tab">on line</a></li>
+								  <li role="presentation"><a data-target="#offline_1" role="tab" data-toggle="tab">off line</a></li>
+								</ul>
+
+								
+								<div class="tab-content">
+									
+									<div role="tabpanel" class="tab-pane active" id="online_1">
+										<div ng-repeat="(index, value) in onlineGrouped" class="col-sm-12">
+											<div ng-if="index != 'undefined'"><b>{{index}}</b></div>
+											<hr>
+											<div class="col-sm-3" ng-repeat="material in value" ng-if="index != 'undefined'">
+												<div>
+													<span><img width="100px" src="images/materiales/{{material.items.thumbnail}}">
+													<h5 class="small">
+													<input class="checkbox-info" ng-model="material.items.selected" ng-true-value="1" ng-false-value="0" ng-change="materialSelected(material.items)" type="checkbox">
+													{{material.items.size_description}}  -  {{material.items.width}}x{{material.items.height}}</h5></span>
 												</div>
 											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+											<br>
+										</div>
+									</div>
+									
+									
+									<div role="tabpanel" class="tab-pane" id="offline_1">
+									
+										<div ng-repeat="(index, value) in offlineGrouped2" class="col-sm-6">
+											<span ng-if="index != 'undefined'"><b>{{value.type}}</b></span><hr><br>
+											<div class="col-sm-6"><img width="100px" src="images/materiales/{{value.thumb}}"></div>
+											<div class="col-sm-6">
+												<span ng-repeat="(index2, value2) in value.items[value.thumb]" class="small"> 
+													<br><input class="checkbox-info" ng-model="value2.items.selected" ng-true-value="1" ng-false-value="0" ng-change="materialSelected(value2.items)" type="checkbox">
+													{{value2.items.description}} {{value2.items.size_description}}  -  {{value2.items.width}}x{{value2.items.height}}</h5>
+												</span>
+											</div>
+											
+										</div>
+									
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

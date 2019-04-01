@@ -4657,11 +4657,13 @@ $app->post(
 						
 				$allPostVars = $app->request->post();
 				$req = $app->request();
-						
-				$description_p	= $req->post('description_p');
-				$width_p 		= $req->post('width_p');
-				$height_p 		= $req->post('height_p');
-				$multipage_p 	= $req->post('multipage_p');
+				
+				$type_p				= $req->post('type_p');
+				$size_description_p	= $req->post('size_description_p');
+				$description_p		= $req->post('description_p');
+				$width_p 			= $req->post('width_p');
+				$height_p 			= $req->post('height_p');
+				$multipage_p 		= $req->post('multipage_p');
 				
 				global $dbms;
 				global $host; 
@@ -4675,7 +4677,7 @@ $app->post(
 				
 				try
 				{					
-						$callBack  = $cn->query("CALL uspIns_NewMaterial ('$description_p','$width_p','$height_p', $multipage_p)")->fetchAll(PDO::FETCH_ASSOC);
+						$callBack  = $cn->query("CALL uspIns_NewMaterial ('$type_p','$size_description_p','$description_p','$width_p','$height_p', $multipage_p)")->fetchAll(PDO::FETCH_ASSOC);
 						echo json_encode($callBack);
 				}
 				
@@ -5248,6 +5250,69 @@ $app->post(
 				
 			}
 );
+
+
+$app->post(
+		'/GTemplatesThumbs',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$iduser_p = $req->post('iduser_p');
+			$page_p = $req->post('page_p');
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+			try
+			{ 
+					$data = $cn->query("call uspGet_TemplatesThumbsList('$iduser_p', '$page_p');")->fetchAll(PDO::FETCH_ASSOC);
+				
+					echo json_encode($data);
+			}
+			catch(PDOException $e) {
+					echo $e->getMessage();
+			}			
+			
+		}
+);
+
+$app->post(
+		'/GTemplatesThumbsCount',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$iduser_p = $req->post('iduser_p');
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+			try
+			{ 
+					$data = $cn->query("call uspGet_TemplatesThumbsListCOUNT('$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+				
+					echo json_encode($data);
+			}
+			catch(PDOException $e) {
+					echo $e->getMessage();
+			}			
+			
+		}
+);
+
 
 
 $app->post(

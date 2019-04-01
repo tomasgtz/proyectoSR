@@ -297,33 +297,60 @@
 								<div class="col-lg-12 portlets">
 									<div class="panel">
 										<div class="panel-header panel-controls">
-											<h3><i class="icon-object-group"></i> ESCOJE LOS <strong>MATERIALES</strong></h3>
+											<h3><i class="icon-object-group"></i> SELECCIONA LOS <strong>MATERIALES</strong></h3>
 										</div>
 										<div class="panel-content">
 											<div class="row">
 												<div class="col-sm-12">
-													<table class="table table-hover dataTable" id="table-editable">
-														<col width="50%">
-														<col width="50%">
-														<thead>
-															<tr>
-																<th width="20px">Material</th>
-																<th width="20px"></th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr ng-repeat="material in allMaterials">
-																<td>{{material.description}} - {{material.width}}px X {{material.height}}px</td>
-																<td class="text-center">
-																	<div class="col-md-12">
-																		<div class="form-group">
-																			<input ng-model="material.selected" type="checkbox">
-																		</div>
+													<!-- <div class="col-sm-3" ng-repeat="material in allMaterials">
+														<div><input ng-model="material.selected" type="checkbox">
+															<span><img width="100px" height="50px" src="materiales/{{material.thumbnail}}">
+															<h3>{{material.description}}  -  {{material.width}}x{{material.height}}</h3></span>
+														</div>
+													</div> -->
+
+													
+													<ul class="nav nav-tabs" role="tablist">
+													  <li role="presentation" class="active"><a data-target="#online_1" role="tab" data-toggle="tab">on line</a></li>
+													  <li role="presentation"><a data-target="#offline_1" role="tab" data-toggle="tab">off line</a></li>
+													</ul>
+
+													<div class="tab-content">
+														<div role="tabpanel" class="tab-pane active" id="online_1">
+															<div ng-repeat="(index, value) in onlineGrouped" class="col-sm-12">
+																<div ng-if="index != 'undefined'"><b>{{index}}</b></div>
+																<hr>
+																<div class="col-sm-3" ng-repeat="material in value" ng-if="index != 'undefined'">
+																	<div>
+																		<span><img width="100px" src="images/materiales/{{material.items.thumbnail}}">
+																		<h5 class="small">
+																		
+																		<input class="checkbox-info" ng-model="material.items.selected" ng-true-value="1" ng-false-value="0" 
+																		type="checkbox">
+																		{{material.items.size_description}}  -  {{material.items.width}}x{{material.items.height}}</h5></span>
 																	</div>
-																</td>
-															</tr>
-														</tbody>
-													</table>
+																</div>
+																<br>
+															</div>
+														</div>
+														
+														
+														<div role="tabpanel" class="tab-pane" id="offline_1">
+														
+															<div ng-repeat="(index, value) in offlineGrouped2" class="col-sm-6">
+																<span ng-if="index != 'undefined'"><b>{{value.type}}</b></span><hr><br>
+																<div class="col-sm-6"><img width="100px" src="images/materiales/{{value.thumb}}"></div>
+																<div class="col-sm-6">
+																	<span ng-repeat="(index2, value2) in value.items[value.thumb]" class="small"> 
+																		<br><input class="checkbox-info" ng-model="value2.selected" ng-true-value="1" ng-false-value="0" type="checkbox">
+																		{{value2.items.description}} {{value2.items.size_description}}  -  {{value2.items.width}}x{{value2.items.height}}</h5>
+																	</span>
+																</div>
+																
+															</div>
+														
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -452,7 +479,7 @@
 									</td>
 									<!-- <td><img src="assets/global/images/layouts/boxed.jpg" width="150px;" height="75px;"/></td> -->
 									<td class="text-center" style="cursor:pointer;" ng-click="goToEditCampaign(campaign)"><i class="fa fa-eye fa-2x"></i></td>
-									<td>{{campaign.campaign_name}}</td>
+									<td style="cursor:pointer;" ng-click="goToEditCampaign(campaign)">{{campaign.campaign_name}}</td>
 									<td>{{campaign.date_up | date}}</td>
 									<td class="text-center"><a ng-click="showDescription(campaign)" data-toggle="modal" data-target="#modal-description" class="btn btn-default btn-raised rippler rippler-default fa fa-search" style="height: 36px;line-height: 20px;font-size: 20px;"></a></td>
 									<td>{{campaign.segment_description}}</td>
@@ -472,7 +499,7 @@
     <div class="footer">
         <div class="copyright">
             <p class="pull-left sm-pull-reset">
-                <span>Copyright <span class="copyright">&copy;</span> 2016 </span>
+                <span>Copyright <span class="copyright">&copy;</span> 2019 </span>
                 <span>WIZAD</span>.
                 <span>All rights reserved. </span>
             </p>
@@ -726,29 +753,18 @@
 						<div class="col-lg-12 portlets">
 							<div class="panel">
 								<div class="panel-header panel-controls">
-									<h3><i class="icon-object-group"></i> ESCOJE LOS <strong>MATERIALES</strong></h3>
+									<h3><i class="icon-object-group"></i> SELECCIONA LOS <strong>MATERIALES</strong></h3>
 								</div>
 								<div class="panel-content">
 									<div class="row">
 										<div class="col-sm-12">
-											<table class="table table-hover dataTable" id="table-editable">
-												<col width="50%">
-												<col width="50%">
-												<thead>
-													<tr>
-														<th width="20px">Material</th>
-														<th width="20px"></th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr ng-repeat="material in allMaterials">
-														<td>{{material.description}} - {{material.width}}px X {{material.height}}px</td>
-														<td class="text-center">
-															<input ng-model="material.selected" type="checkbox" data-checkbox="icheckbox_square-blue">
-														</td>
-													</tr>
-												</tbody>
-											</table>
+											<div class="col-sm-3" ng-repeat="material in allMaterials">
+												<div>
+													<input ng-model="material.selected" type="checkbox" data-checkbox="icheckbox_square-blue">
+													<span><img width="100px" height="50px" src="materiales/{{material.thumbnail}}">
+													<h3>{{material.description}}  -  {{material.width}}x{{material.height}}</h3></span>
+												</div>
+											</div>
 										</div>
 									</div>
 									<div class="row">

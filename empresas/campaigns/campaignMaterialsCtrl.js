@@ -10,10 +10,10 @@ angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal
 ) {
 	
-  	var urlHost = 'https://wizad.mx/';
-	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	//var urlHost = 'https://localhost/wizad/';
-	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+  	//var urlHost = 'https://wizad.mx/';
+	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	var urlHost = 'https://localhost/wizad/';
+	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 	$scope.templates = [];
 	$scope.template_name = "";
@@ -99,6 +99,24 @@ angular.module('newApp')
 	var main = document.getElementById("play_board");
 	var ctx = main.getContext("2d")
 	
+	$scope.$on('openTemplate', function () {
+
+		setTimeout(function() { 
+			
+			$( "#selectmateriall > option" ).each(function() {
+				
+				if(this.value == generalService.material_id) {
+				
+					$( "#selectmateriall").val(this.value).trigger('change');
+					$scope.materialChange(this.value);
+				}
+			});
+			
+			$scope.loadTemplate({id: generalService.template_id});
+			
+			
+		}, 1000);
+    });
 
 	$scope.$watch(function() {
 		return $scope.myKey; 
@@ -347,10 +365,14 @@ angular.module('newApp')
 		$scope.alertExpiredShow  = false;
 	}
 	
-	$scope.materialChange = function(){
+	$scope.materialChange = function(selectedFromOutside){
 		
-		$scope.newMaterialChange = {};		
-		var material = $( "#selectmateriall" ).val();
+		$scope.newMaterialChange = {};
+		var material = 0;
+		if(selectedFromOutside != undefined)
+			material = selectedFromOutside;
+		else 
+			material = $( "#selectmateriall" ).val();
 		
 		for (var i in $scope.materialArray){
 			if($scope.materialArray[i].id_material === material){
@@ -462,6 +484,7 @@ angular.module('newApp')
 
 		generalService.GTemplates(params)
 		.then(function(data) {
+			console.log(data);
 			$scope.templates = data;
 		});
 	
@@ -1509,7 +1532,6 @@ angular.module('newApp')
 					$scope.loading = false;
 				})
 		} 
-
 	 }
 
 	 $scope.exportPNG = function(name) {
@@ -1529,7 +1551,6 @@ angular.module('newApp')
 		
         fabric.devicePixelRatio = 1;
 				
-		 
 		 if (returnImageData === false ) {
 			$scope.factory.canvas.setDimensions(
 				{
@@ -1558,13 +1579,17 @@ angular.module('newApp')
 				objects[i].setCoords();
 			}
 		 } else {
+			 var ratio = parseInt($scope.newMaterialChange.width) / parseInt($scope.newMaterialChange.height);
+
 			 $scope.factory.canvas.setDimensions(
 				{
-					width:  parseInt($scope.newMaterialChange.width * 0.25), 
-					height: parseInt($scope.newMaterialChange.height * 0.25)
+					width:  parseInt(300), 
+					height: parseInt(300 / ratio)
+					
 				});
 			var objects =  $scope.factory.canvas.getObjects();
-		 
+		 console.log("objects", objects);
+
 			for (var i in objects) {
 				var scaleX = objects[i].scaleX;
 				var scaleY = objects[i].scaleY;
@@ -1585,6 +1610,7 @@ angular.module('newApp')
 			}
 		 }
 		 
+		$scope.factory.canvas.renderAll();
 		$scope.factory.canvas.renderAll();
 		$scope.factory.canvas.calcOffset();
 		
@@ -2304,10 +2330,10 @@ angular.module('newApp')
 					$scope.templates = data;
 				});
 
-				if($scope.newMaterialChange.multipage == 1) {
+				//if($scope.newMaterialChange.multipage == 1) {
 
 					$scope.createThumbnail();
-				}
+				//}
 				
 			}, function(error){
 				
@@ -2318,10 +2344,10 @@ angular.module('newApp')
 		} else {
 			params.idtemplate_p = $scope.template_saved_id;
 
-			if($scope.newMaterialChange.multipage == 1) {
+			//if($scope.newMaterialChange.multipage == 1) {
 
 				$scope.createThumbnail();
-			}
+			//}
 
 			generalService.UTemplate(params)
 			.then(function(data) {

@@ -23,8 +23,11 @@ angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
 
-  		var urlHost = 'https://wizad.mx/';
-		var urlHostEmpresas = 'https://empresas.wizad.mx/';
+  		//var urlHost = 'https://wizad.mx/';
+		//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+
+		var urlHost = 'https://localhost/wizad/';
+		var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
@@ -59,6 +62,11 @@ angular.module('newApp')
 		$scope.allMaterials 	= [];
 		$scope.newMaterials		= [];
 		$scope.deletedMaterials	= [];
+		$scope.offline_materials= [];
+		$scope.online_materials = [];
+		$scope.onlineGrouped	= [];
+		$scope.offlineGrouped	= [];
+		$scope.offlineGrouped2  = [];
 
 		$scope.CampaignSelected =  {};
 		$scope.liStyle = "1px solid black";
@@ -109,6 +117,15 @@ angular.module('newApp')
 		$scope.pantoneToRemove = function (pantone){
 			$scope.pantoneDrop = pantone;
 		};
+
+		Array.prototype.groupBy = function(prop) {
+		  return this.reduce(function(groups, item) {
+			const val = item[prop]
+			groups[val] = groups[val] || []
+			groups[val].push(item)
+			return groups
+		  }, {})
+		}
 		
 		$scope.materialSelected = function (material){
 			
@@ -119,9 +136,6 @@ angular.module('newApp')
 			addMaterial.width		= material.width;
 			addMaterial.height		= material.height;
 			addMaterial.thumbnail	= material.thumbnail;
-			
-			console.log(addMaterial);
-			console.log(material);
 			
 			if(material.selected === "1"){
 							
@@ -167,10 +181,10 @@ angular.module('newApp')
 		var accepti = ".png,.jpg";
 		var acceptf = ".ttf,.otf";
 		
-		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: true , acceptedFiles: accepti });	
-		var dzFonts  = new Dropzone('#dzFonts',  { addRemoveLinks: true , acceptedFiles: acceptf });		
+		var dzImages = new Dropzone('#dzImages_c', { addRemoveLinks: true , acceptedFiles: accepti });	
+		var dzFonts  = new Dropzone('#dzFonts_c',  { addRemoveLinks: true , acceptedFiles: acceptf });		
 		
-		var dzImagesIdentidad = new Dropzone('#dzImagesIdentidadSeeC', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
+		var dzImagesIdentidad = new Dropzone('#dzImagesIdentidadSeeC_c', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
 
 		dzImages.on("success", function(file) {
 						
@@ -319,18 +333,68 @@ angular.module('newApp')
 				$scope.materialArray = data;
 				for(var i in $scope.materialArray){
 					$scope.materialArrayCopy.push($scope.materialArray[i]);
-				}	
+				}
+				
 				campaignService.GMaterials(params)
 				.then(function(data) {
 					$scope.allMaterials = data;
 					
 					for(var i in $scope.allMaterials){
+						
 						for(var j in $scope.materialArray){
+	
 							if($scope.allMaterials[i].id_material === $scope.materialArray[j].id_material){
 								$scope.allMaterials[i].selected = "1";
 							}
 						}
+
+						if( $scope.allMaterials[i].offline == '1' ) {
+							
+							var Obj = new Object();
+							Obj.type = $scope.allMaterials[i].type;
+							Obj.items = $scope.allMaterials[i];
+
+							$scope.offline_materials.push(Obj);
+
+						} else {
+
+							var Obj = new Object();
+							Obj.type = $scope.allMaterials[i].type;
+							Obj.items = $scope.allMaterials[i];
+
+							$scope.online_materials.push(Obj);
+						}
 					}
+
+					$scope.onlineGrouped  = $scope.online_materials.groupBy('type');
+					$scope.offlineGrouped = $scope.offline_materials.groupBy('type');
+					
+					for (var mat in $scope.offlineGrouped ) {
+						
+						var Obj = new Object();
+							Obj.type = mat;
+						
+						var tempArray  = [];
+						var tempArrayG = [];
+							
+						for (var k in $scope.offlineGrouped[mat] ) {
+
+							if( $scope.offlineGrouped[mat][k].items != undefined ) {
+								var Obj2 = new Object();
+								Obj2.name = $scope.offlineGrouped[mat][k].items.type;
+								Obj2.thumb = $scope.offlineGrouped[mat][k].items.thumbnail;
+								Obj.thumb = $scope.offlineGrouped[mat][k].items.thumbnail;
+								Obj2.items = $scope.offlineGrouped[mat][k].items;
+							
+								tempArray.push(Obj2);
+							}
+						}
+						
+						tempArrayG = tempArray.groupBy('thumb');
+						Obj.items = tempArrayG;
+						$scope.offlineGrouped2.push(Obj);
+					}
+
 				})
 			})	
 			
@@ -342,7 +406,7 @@ angular.module('newApp')
 					$scope.imagesArrayCopy.push($scope.imagesArray[i]);
 					var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
 					dzImages.options.addedfile.call(dzImages, mockFile);
-					console.log(urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
+					
 					dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
 					dzImages.files.push(mockFile);
 				}	
@@ -476,3 +540,4 @@ angular.module('newApp')
 		
 		
   });
+

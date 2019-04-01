@@ -1,9 +1,9 @@
 
-var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
-var host		  = 'https://empresas.wizad.mx/uploads/'
+//var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
+//var host		  = 'https://empresas.wizad.mx/uploads/'
 
-//var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
-//var host		  = 'https://localhost/wizad/empresas/uploads/';
+var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
+var host		  = 'https://localhost/wizad/empresas/uploads/';
 
 angular.module('newApp').service('userService', function($http,$q){
 	
@@ -1165,10 +1165,20 @@ angular.module('newApp').service('campaignService', function($http,$q){
 	}
 })
 
-angular.module('newApp').service('generalService', function($http,$q){
+angular.module('newApp').service('generalService', function($http,$q,$rootScope){
 	
+	var template_id;
+	var material_id;
 	
 	return { 
+
+		openTemplate : function(params) {
+			
+			this.template_id = params.idtemplate_p;
+			this.material_id = params.idmaterial_p;
+			setTimeout( function() { $rootScope.$broadcast('openTemplate'); }, 500);
+			
+		},
 	
 		saveCompanyData : function(params){
 			
@@ -2586,6 +2596,69 @@ angular.module('newApp').service('generalService', function($http,$q){
 			return promise;
 			
 		},
+
+		GTemplatesThumbs: function(params){
+			console.log("params", params);
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GTemplatesThumbs',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { iduser_p : params.iduser_p, page_p: params.page_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		GTemplatesThumbsCount: function(params){
+			console.log("params", params);
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GTemplatesThumbsCount',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { iduser_p : params.iduser_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+			
 
 		GTemplate : function(params){
 			

@@ -88,7 +88,20 @@ angular.module('newApp')
 	$scope.sortType     = ''; // set the default sort type
 	$scope.sortReverse  = false;  // set the default sort order
 	$scope.showflag = false;
-	
+	$scope.offline_materials= [];
+	$scope.online_materials = [];
+	$scope.onlineGrouped	= [];
+	$scope.offlineGrouped	= [];
+	$scope.offlineGrouped2  = [];
+
+	Array.prototype.groupBy = function(prop) {
+	  return this.reduce(function(groups, item) {
+		const val = item[prop]
+		groups[val] = groups[val] || []
+		groups[val].push(item)
+		return groups
+	  }, {})
+	}
 	
 	//ERASING CAMPAIGN
 	$scope.selectedCampaignForDelete = function (campaign){
@@ -171,8 +184,8 @@ angular.module('newApp')
 
 	var dzImagesIdentidad = new Dropzone('#dzImagesIdentidad', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
 	var dzFontsIdentidad = new Dropzone('#dzFontsIdentidad', { addRemoveLinks: true , acceptedFiles: acceptf, dictRemoveFile: 'Agregar a campaña' });
-	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-
+	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 		
 	//  BEGIN - * UI - SCOPES * 
 	
@@ -237,6 +250,62 @@ angular.module('newApp')
 		campaignService.GMaterials(params)
 		.then(function(data) {
 			$scope.allMaterials = data;
+
+			for(var i in $scope.allMaterials){
+						
+				for(var j in $scope.materialArray){
+
+					if($scope.allMaterials[i].id_material === $scope.materialArray[j].id_material){
+						$scope.allMaterials[i].selected = "1";
+					}
+				}
+
+				if( $scope.allMaterials[i].offline == '1' ) {
+					
+					var Obj = new Object();
+					Obj.type = $scope.allMaterials[i].type;
+					Obj.items = $scope.allMaterials[i];
+
+					$scope.offline_materials.push(Obj);
+
+				} else {
+
+					var Obj = new Object();
+					Obj.type = $scope.allMaterials[i].type;
+					Obj.items = $scope.allMaterials[i];
+
+					$scope.online_materials.push(Obj);
+				}
+			}
+
+			$scope.onlineGrouped  = $scope.online_materials.groupBy('type');
+			$scope.offlineGrouped = $scope.offline_materials.groupBy('type');
+			
+			for (var mat in $scope.offlineGrouped ) {
+				
+				var Obj = new Object();
+					Obj.type = mat;
+				
+				var tempArray  = [];
+				var tempArrayG = [];
+					
+				for (var k in $scope.offlineGrouped[mat] ) {
+
+					if( $scope.offlineGrouped[mat][k].items != undefined ) {
+						var Obj2 = new Object();
+						Obj2.name = $scope.offlineGrouped[mat][k].items.type;
+						Obj2.thumb = $scope.offlineGrouped[mat][k].items.thumbnail;
+						Obj.thumb = $scope.offlineGrouped[mat][k].items.thumbnail;
+						Obj2.items = $scope.offlineGrouped[mat][k].items;
+					
+						tempArray.push(Obj2);
+					}
+				}
+				
+				tempArrayG = tempArray.groupBy('thumb');
+				Obj.items = tempArrayG;
+				$scope.offlineGrouped2.push(Obj);
+			}
 		})
 		
 		campaignService.GCities(params)
@@ -603,6 +672,49 @@ angular.module('newApp')
 			paramss.title_c 		= $scope.title;
 
 			$scope.selectedMaterials	= [];
+
+			for( var i in $scope.onlineGrouped) {
+				if(i != 'undefined') {
+					for( var j in $scope.onlineGrouped[i]) {
+						var mat = $scope.onlineGrouped[i][j];
+					
+						if(typeof mat.items !== 'undefined' && typeof mat.items.selected !== 'undefined') {
+							if(mat.items.selected === "1"){	
+							
+								$scope.selectedMaterials.push(mat.items);
+							}
+						}
+					}
+				}
+			}
+
+			for( var i in $scope.offlineGrouped2) {
+				if(i != 'undefined') {
+					for( var j in $scope.offlineGrouped2[i].items) {
+						for(var k1 in $scope.offlineGrouped2[i].items[j]) {
+							if ( typeof $scope.offlineGrouped2[i].items[j][k1].selected != 'undefined') {
+								if($scope.offlineGrouped2[i].items[j][k1].selected === "1") {
+									$scope.selectedMaterials.push($scope.offlineGrouped2[i].items[j][k1].items);
+								}
+							}
+						}
+					}
+				}
+			}
+				
+
+			/*for( var i in $scope.allMaterials){
+
+				console.log("i ", i);
+				console.log($scope.allMaterials[i]);
+				return;
+				if(typeof $scope.allMaterials[i].selected !== 'undefined'){
+
+					if($scope.allMaterials[i].selected === true){					
+						$scope.selectedMaterials.push($scope.allMaterials[i]);
+					}
+				}
+			}*/
 		
 			for( var i in $scope.allMaterials){
 				if(typeof $scope.allMaterials[i].selected !== 'undefined'){

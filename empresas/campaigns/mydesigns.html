@@ -1,0 +1,57 @@
+
+<div>
+	<div class="header">
+		<h2>MIS <strong>DISE&Ntilde;OS <i class="fa fa-file-text fa-2x"></i></strong> </h2>
+		<div class="breadcrumb-wrapper">
+
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-lg-12 portlets">
+			<div class="panel">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">LISTA DE <strong> DISE&Ntilde;OS</strong></h4>
+					</div>
+					<div class="modal-body">
+
+						<div class="row" style="margin-top:12px;">
+							<h3 style="border-bottom: 1px solid black;"><i class="fa fa-file-text"></i> CREADOS<strong> PREVIAMENTE</strong></h3>
+							<h4>Dé click sobre la imagen para editarlo</h4>
+							
+							<div class="row">
+								<div class="col-md-3 col-xs-6" ng-repeat="image in images">
+								  <div class="thumb" data-toggle='modal' data-target="#myModal" ng-click="">
+									<a class="thumbnail" href="#campaign-materials" ng-click="getIndex(image)">
+									  <img class="img-responsive" ng-src="{{image.src}}" alt="invalid image url">
+									  <span class="text-content"><span>{{image.caption}}</span></span><br>
+									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>{{image.caption2}}</span></span>
+									</a>
+								  </div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<input type="button" class="btn" value="Anteriores" ng-click="prev()" ng-disabled="page == 0"> <input type="button" class="btn" value="Siguientes" ng-click="next()" ng-disabled="total < ((page * item_per_page) + item_per_page)">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+    <div class="footer">
+        <div class="copyright">
+            <p class="pull-left sm-pull-reset">
+                <span>Copyright <span class="copyright">&copy;</span> 2019 </span>
+                <span>WIZAD</span>.
+                <span>All rights reserved. </span>
+            </p>
+            <p class="pull-right sm-pull-reset">
+                <span><a href="#" class="m-r-10">SOPORTE</a> | <a href="#" class="m-l-10 m-r-10">TÉRMINOS</a> | <a href="#" class="m-l-10">POLITICA</a></span>
+            </p>
+        </div>
+    </div>
+
+</div>

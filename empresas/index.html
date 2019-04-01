@@ -53,12 +53,8 @@
             <!-- Include js files -->
         	<script src="js/jquery.min.js" type="text/javascript"></script>
         	<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-        	<!-- HTML5 canvas library - required -->
-         	<!--<script src="js/fabric.min.js" type="text/javascript"></script> -->
-        	<!-- The plugin itself - required 
-            <script src="js/FancyProductDesigner-all.min.js" type="text/javascript"></script>  -->
         <!-- FPD END -->
-           
+
     </head>
     <body ng-app="newApp" ng-class="indexClass" ng-controller="mainCtrl" ng-keydown="pressedKey($event)">
         <!--[if lt IE 7]>
@@ -122,12 +118,9 @@
                     </div>
 					
                     <ul class="nav nav-sidebar" >
-                        <li ng-class="{ active  : isActive('/')}"><a href="#/"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                        
 						<!-- <li ng-class="{ active  : isActive('/newcampaign')}"><a href="#newcampaign"><i class="fa fa-check"></i><span>Nueva Campaña</span></a></li> -->
-						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span>Campañas</span></a></li>
-						<li ng-show="currentUser.days_left > 0 && currentUser.id_company != '4' && (currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-flag"></i><span>Edita tus campañas</span></a></li>
-						<!--<li ng-show="(currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == 3 || currentUser.typenum == '4') && currentUser.free_campaign == '1' ||  currentUser.id_company == '4' " ng-class="{ active  : isActive('/free-campaign')}"><a href="#/free-campaign"><i class="fa fa-flag"></i><span>Interfaz de diseño</span></a></li>-->
-						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/new-user')}"><a href="#/new-user"><i class="fa fa-user"></i><span>Mis Usuarios</span></a></li>
+						<!--<li ng-show="(currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == 3 || currentUser.typenum == '4') && currentUser.free_campaign == '1' ||  currentUser.id_company == '4' " ng-class="{ active  : isActive('/free-campaign')}"><a href="#/free-campaign"><i class="fa fa-flag"></i><span>Interfaz de diseño</span></a></li>-->						
 						<!-- <li ng-class="{ active  : isActive('/campana')}"><a href="#/campana"><i class="fa fa-flag"></i><span>Crear campaña</span></a></li> -->
 						<!-- <li ng-class="{ active  : isActive('/pages-contact')}"><a href="#/pages-contact"><i class="fa fa-building"></i><span>Nueva Empresa</span></a></li> -->
 						<!-- <li ng-class="{ active  : isActive('/pages-contact')}"><a href="#/pages-contact"><i class="fa fa-user"></i><span>Contacto</span></a></li> -->
@@ -135,11 +128,25 @@
 						<li ng-class="{ active  : isActive('/medias-hover')}"><a href="#/medias-hover"><i class="fa fa-magic"></i><span>Diseño II</span></a></li> -->
 						<!-- <li ng-show="currentUser.typenum == '2' || currentUser.typenum == '4'" ng-class="{ active  : isActive('/ecom-pricingTable')}"><a href="#/ecom-pricingTable"><i class="fa fa-table"></i><span>Subscripciones</span></a></li> -->
 					 	<!-- <li ng-show="currentUser.typenum == '2' || currentUser.typenum == '3' || currentUser.typenum == '4'" ng-class="{ active  : isActive('/designer-mode')}"><a href="#/designer-mode"><i class="fa fa-pencil"></i><span>Diseño</span></a></li> -->
+						<!-- <li ng-show="currentUser.typenum ==  '2' || currentUser.id_company == '4'"  ng-class="{ active  : isActive('/subscription')}"><a href="#/subscription"><i class="fa fa-money"></i><span>Contratación</span></a></li> -->
+						
+						<li ng-class="{ active  : isActive('/')}"><a href="#/"><i class="icon-home"></i><span>Dashboard</span></a></li>
+						
+						<!-- diseñador -->
+						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span id="camp_title">Campañas</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/mydesigns')}"><a href="#/mydesigns"><i class="fa fa-file-text"></i><span>Mis diseños recientes</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-plus"></i><span>Nuevo diseño</span></a></li>						
+						
+						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span id="camp2_title">Campañas</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && currentUser.id_company != '4' && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-flag"></i><span>Edita tus campañas</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/new-user')}"><a href="#/new-user"><i class="fa fa-user"></i><span>Mis Usuarios</span></a></li>
+						
+						<!-- admin -->
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/historic')}"><a href="#/historic"><i class="fa fa-newspaper-o"></i><span>Historial</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/free-materials')}"><a href="#/free-materials"><i class="fa fa-share-alt"></i><span>Config. Materials</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/suggestion-box')}"><a href="#/suggestion-box"><i class="fa fa-question"></i><span>Comentarios</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '1'" ng-class="{ active  : isActive('/new-company')}"><a href="#/new-company"><i class="fa fa-building"></i><span>Alta Compañía</span></a></li>
-						<!-- <li ng-show="currentUser.typenum ==  '2' || currentUser.id_company == '4'"  ng-class="{ active  : isActive('/subscription')}"><a href="#/subscription"><i class="fa fa-money"></i><span>Contratación</span></a></li> -->
+						
 	
                     <div class="sidebar-footer clearfix">
                         <a class="pull-left footer-settings" data-target="#" data-rel="tooltip" data-placement="top" data-original-title="Settings">
@@ -151,7 +158,7 @@
                         <a class="pull-left" href="../../user-lockscreen.html" data-rel="tooltip" data-placement="top" data-original-title="Lockscreen">
                         <i class="icon-lock"></i>
                         </a>
-                        <a class="pull-left btn-effect" href="../../user-login-v1.html" data-modal="modal-1" data-rel="tooltip" data-placement="top" data-original-title="Logout">
+                        <a class="pull-left btn-effect" ng-click="logOut()" data-modal="modal-1" data-rel="tooltip" data-placement="top" data-original-title="Logout">
                         <i class="icon-power"></i>
                         </a>
                     </div>
@@ -956,6 +963,10 @@
 		<script src="assets/global/plugins/angular-bootstrap-contextmenu/contextMenu.js"></script>
 		<!-- <script src="js/fontselector/angular-fontselect.js"></script> 
 		<script src="js/fontselector/libs/webfontloader.js"></script> -->
+
+		<!-- images grid -->
+		<script src="js/angulargrid.min.js"></script>
+		<!-- images grid -->
         
         <!-- BEGIN CUSTOM ANGULARJS SCRIPTS -->
 		<script src="indexCtrl.js"></script>
@@ -985,6 +996,7 @@
 		<script src="user/profile/identityCtrl.js"></script>
 		<script src="user/SubscriptionCtrl.js"></script>
 		<script src="campaigns/myCampaignsCtrl.js"></script>
+		<script src="campaigns/myDesignsCtrl.js"></script>
 		<script src="campaigns/seeCampaignCtrl.js"></script>
 		<script src="campaigns/designerCampaignsCtrl.js"></script>
 		<script src="campaigns/campaignMaterialsCtrl.js"></script>

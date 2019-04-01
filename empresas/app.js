@@ -238,6 +238,10 @@ var MakeApp = angular
             templateUrl: 'campaigns/listing.html',
             controller: 'myCampaignsCtrl'
         })
+		.when('/mydesigns', {
+            templateUrl: 'campaigns/mydesigns.html',
+            controller: 'myDesignsCtrl'
+        })
 		.when('/edit-campaign', {
             templateUrl: 'campaigns/seeCampaign.html',
             controller: 'seeCampaignCtrl'

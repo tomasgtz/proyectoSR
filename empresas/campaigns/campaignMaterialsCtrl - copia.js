@@ -19,8 +19,7 @@ angular.module('newApp')
 		$location.path('/designer-mode');
 		// $window.location.assign('/#/designer-mode');
 	 };
-	 
-	 
+	
 	
 	 objCampaign.getCampaign()
 		.then(function(data) {
