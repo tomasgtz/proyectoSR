@@ -1,9 +1,9 @@
 
-//var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
-//var host		  = 'https://empresas.wizad.mx/uploads/'
+var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
+var host		  = 'https://empresas.wizad.mx/uploads/';
 
-var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
-var host		  = 'https://localhost/wizad/empresas/uploads/';
+//var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
+//var host		  = 'https://localhost/wizad/empresas/uploads/';
 
 angular.module('newApp').service('userService', function($http,$q){
 	

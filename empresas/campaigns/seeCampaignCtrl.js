@@ -23,11 +23,11 @@ angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
 
-  		//var urlHost = 'https://wizad.mx/';
-		//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+  		var urlHost = 'https://wizad.mx/';
+		var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
-		var urlHost = 'https://localhost/wizad/';
-		var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+		//var urlHost = 'https://localhost/wizad/';
+		//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];

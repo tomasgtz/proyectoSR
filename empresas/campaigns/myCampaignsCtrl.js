@@ -184,8 +184,8 @@ angular.module('newApp')
 
 	var dzImagesIdentidad = new Dropzone('#dzImagesIdentidad', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
 	var dzFontsIdentidad = new Dropzone('#dzFontsIdentidad', { addRemoveLinks: true , acceptedFiles: acceptf, dictRemoveFile: 'Agregar a campaña' });
-	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+	var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 		
 	//  BEGIN - * UI - SCOPES * 
 	
