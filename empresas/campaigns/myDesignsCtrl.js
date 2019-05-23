@@ -27,7 +27,7 @@ angular.module('newApp')
 		for (var i in $scope.allCampaigns) {
 			if($scope.allCampaigns[i].id_campaign == img.id_campaign) {
 				objCampaign.setCampaign($scope.allCampaigns[i]);
-				generalService.openTemplate({idtemplate_p: img.id_template, idmaterial_p: img.id_material });
+				generalService.openDesign({idudesign_p: img.id_design, idmaterial_p: img.id_material });
 				return;
 			}
 		}
@@ -60,23 +60,27 @@ angular.module('newApp')
 	
 
 	$scope.getThumbs = function() {
-		return generalService.GTemplatesThumbs({iduser_p: $scope.currentUser.id_user, page_p: $scope.page})
+		return generalService.GDesignsThumbs({iduser_p: $scope.currentUser.id_user, page_p: $scope.page})
 			.then(function(data) {				
-				$scope.templatesList = data;	
+				$scope.designsList = data;	
 				
-				for(var i in $scope.templatesList){
+				for(var i in $scope.designsList){
 
-					var pic = { 
-						id_template: $scope.templatesList[i].id,
-						id_campaign: $scope.templatesList[i].campaign_id,
-						id_material: $scope.templatesList[i].fk_material_id,
-						src: urlHostEmpresas + "images/thumbnails/" + $scope.templatesList[i].thumbnail,
-						caption: $scope.templatesList[i].name,
-						caption2: $scope.templatesList[i].campaign
-						
-					};
+					if(typeof $scope.designsList[i].id != 'undefined') {
 
-					$scope.images.push(pic);
+						var pic = { 
+							id_design: $scope.designsList[i].id,
+							id_campaign: $scope.designsList[i].campaign_id,
+							id_material: $scope.designsList[i].fk_material_id,
+							src: urlHostEmpresas + "images/thumbnails/" + $scope.designsList[i].thumbnail,
+							caption: $scope.designsList[i].name,
+							caption2: $scope.designsList[i].campaign,
+							material_description: $scope.designsList[i].material_description
+							
+						};
+
+						$scope.images.push(pic);
+					}
 
 				}	
 			});
@@ -84,7 +88,7 @@ angular.module('newApp')
 	}
 	
 	$scope.getThumbsCount = function() {
-		generalService.GTemplatesThumbsCount({iduser_p: $scope.currentUser.id_user})
+		generalService.GDesignsThumbsCount({iduser_p: $scope.currentUser.id_user})
 			.then(function(data) {		
 				$scope.total = data[0].c;
 				

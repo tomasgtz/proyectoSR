@@ -14,62 +14,64 @@
       <div class="col-lg-12 portlets">
          <div class="panel">
             <div class="panel-content">
-				<div class="row">
+				<div class="row" ng-class="{ hidden  : currentUser.typenum == '3'}">
 					<div class="col-sm-12" style="text-align:right;">
 						<button ng-click="saveChanges()" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-check"></i> Guardar cambios</button>
+						<a href="#/campaign-materials" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-briefcase"></i> Nueva Plantilla</a>
 					</div>
+					
 				</div>
              <div class="row" >
 				<div class="col-sm-12">
-					<div class="row" >
+					<!--<div class="row" >
 						<h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i>PERMISO PARA <strong> DESCARGAR</strong></h3>
 						<input ng-model="CampaignSelected.download" id="aut" type="checkbox">
 						<label for="aut" class="control-label">Autorización para descargar</label>
-					</div>
+					</div>-->
 					<div class="row" >
-						<h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i>DESCRIPCIÓN<strong> DE LA CAMPAÑA</strong></h3>
+						<h3 style="border-bottom: 1px solid black;"><i class="fa fa-briefcase"></i> DESCRIPCIÓN</h3>
 						<textarea ng-model="CampaignSelected.description" rows="4" class="form-control" required="" aria-required="true"></textarea>
 						<!-- <h3><strong>{{CampaignSelected.description}}</strong></h3> -->
 					</div>
                     <div class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA CAMPAÑA</strong></h3>
+                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i> IMÁGENES</h3>
                         <form id="dzImages_c" action="upload.php" class="dropzone" ng-dropzone"> </form>
                     </div>
                     <div class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA IDENTIDAD</strong></h3>
-                        <h4>Dé click sobre la imagen para agregarla a la campaña</h4>
+                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i> IMÁGENES DE LA IDENTIDAD</h3>
+                        <h4>Da clic sobre la imagen para agregarla a la campaña</h4>
                         <form id="dzImagesIdentidadSeeC_c" action="upload.php" class="dropzone" ng-dropzone"> </form>
                     </div>
 
-                     <div  class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-font"></i>FUENTES<strong> DE LA CAMPAÑA</strong></h3>
+                    <div class="row" style="margin-top:12px;">
+                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-font"></i> FUENTES</h3>
                         <form id="dzFonts_c" action="upload.php" class="dropzone" ng-dropzone">  </form>
-                     </div>
+                    </div>
+                    <div class="row" style="margin-top:12px;">
+                       <h3 style="border-bottom: 1px solid black;"><i class="fa fa-paint-brush"></i> PANTONES</h3>
+                        
+					   <div class="form-group">
+						  <div class="input-group">
+							 <ul class="icheck-colors">
+								<li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteArray" ng-click="pantoneToRemove(pal)" ng-style="{'background-color':pal.color}" style="border: 1px solid black;">
+								</li>
+							 </ul>
+						  </div>
+					   </div>
+
+					   <div class="row">
+							<div class="col-sm-3">Agrega tus colores</div>
+							<div class="col-sm-9">
+							  <input colorpicker colorpicker-position="right" type="text" ng-model="your_model" />
+							  <button ng-click="newPalette(your_model)" type="button" class="btn btn-sm btn-primary">
+							  <i class="fa fa-plus-square"></i>
+							  </button>
+							</div>
+					   </div>
+						
+					 </div>
                      <div class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-paint-brush"></i>PANTONES<strong> DE LA CAMPAÑA</strong></h3>
-                        <div class="col-sm-12">
-                           <div class="form-group">
-                              <div class="input-group">
-                                 <ul class="icheck-colors">
-                                    <li data-toggle="modal" data-target="#deletePantone" ng-repeat="pal in paletteArray" ng-click="pantoneToRemove(pal)" ng-style="{'background-color':pal.color}" style="border: 1px solid black;">
-                                    </li>
-                                 </ul>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-sm-3">Agrega tus colores</div>
-							   <div class="col-sm-9">
-								  <input colorpicker colorpicker-position="right" type="text" ng-model="your_model" />
-								  <button ng-click="newPalette(your_model)" type="button" class="btn btn-sm btn-primary">
-								  <i class="fa fa-plus-square"></i>
-								  </button>
-							   </div>
-						   </div>
-                        </div>
-				     </div>
-                     <div class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-list"></i>TEXTOS<strong> DE LA CAMPAÑA</strong></h3>
+                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-list"></i> TEXTOS</h3>
 						<h4 class="col-sm-12 control-label">
 							<button ng-click="newText()" type="button" class="btn btn-sm btn-primary pull-right">
 								<i class="fa fa-plus-square"></i>
@@ -90,7 +92,7 @@
                         </div>
                      </div>
                      <div class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-laptop"></i>MATERIAL<strong> DE LA CAMPAÑA</strong></h3>
+                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-laptop"></i> MATERIAL</h3>
                         <h4 class="col-sm-12 control-label">
 							<button data-toggle="modal" data-target="#modal-materials" type="button" class="btn btn-sm btn-primary pull-right">
 								<i class="fa fa-plus-square"></i>
@@ -154,8 +156,8 @@
 
 								<ul class="nav nav-tabs" role="tablist">
 								  
-								  <li role="presentation" class="active"><a data-target="#online_1" role="tab" data-toggle="tab">on line</a></li>
-								  <li role="presentation"><a data-target="#offline_1" role="tab" data-toggle="tab">off line</a></li>
+								  <li role="presentation" class="active"><a data-target="#online_1" role="tab" data-toggle="tab">Para uso digital</a></li>
+								  <li role="presentation"><a data-target="#offline_1" role="tab" data-toggle="tab">Para impresi&oacute;n</a></li>
 								</ul>
 
 								
@@ -164,7 +166,8 @@
 									<div role="tabpanel" class="tab-pane active" id="online_1">
 										<div ng-repeat="(index, value) in onlineGrouped" class="col-sm-12">
 											<div ng-if="index != 'undefined'"><b>{{index}}</b></div>
-											<hr>
+											<!--<hr> -->
+											<p>&nbsp;</p>
 											<div class="col-sm-3" ng-repeat="material in value" ng-if="index != 'undefined'">
 												<div>
 													<span><img width="100px" src="images/materiales/{{material.items.thumbnail}}">

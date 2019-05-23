@@ -401,14 +401,17 @@ angular.module('newApp')
 			campaignService.GPackCampaign(params)
 			.then(function(data) {				
 				$scope.imagesArray = data;
-				
+			
 				for(var i in $scope.imagesArray){
-					$scope.imagesArrayCopy.push($scope.imagesArray[i]);
-					var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
-					dzImages.options.addedfile.call(dzImages, mockFile);
 					
-					dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
-					dzImages.files.push(mockFile);
+					if(typeof $scope.imagesArray[i].image != 'undefined') {
+						$scope.imagesArrayCopy.push($scope.imagesArray[i]);
+						var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
+						dzImages.options.addedfile.call(dzImages, mockFile);
+						
+						dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
+						dzImages.files.push(mockFile);
+					}
 				}	
 			})
 
@@ -417,11 +420,13 @@ angular.module('newApp')
 				$scope.imagesIdentidadArray = data;	
 				
 				for(var i in $scope.imagesIdentidadArray){
-					$scope.imagesIdentidadArrayCopy.push($scope.imagesIdentidadArray[i]);
-					var mockFile = { name: $scope.imagesIdentidadArray[i].image, size: 12345 };
-					dzImagesIdentidad.options.addedfile.call(dzImagesIdentidad, mockFile);
-					dzImagesIdentidad.options.thumbnail.call(dzImagesIdentidad, mockFile, urlHostEmpresas + "/uploads/" + $scope.imagesIdentidadArray[i].image);
-					dzImagesIdentidad.files.push(mockFile);
+					if(typeof $scope.imagesIdentidadArray[i].image != 'undefined') {
+						$scope.imagesIdentidadArrayCopy.push($scope.imagesIdentidadArray[i]);
+						var mockFile = { name: $scope.imagesIdentidadArray[i].image, size: 12345 };
+						dzImagesIdentidad.options.addedfile.call(dzImagesIdentidad, mockFile);
+						dzImagesIdentidad.options.thumbnail.call(dzImagesIdentidad, mockFile, urlHostEmpresas + "/uploads/" + $scope.imagesIdentidadArray[i].image);
+						dzImagesIdentidad.files.push(mockFile);
+					}
 				}	
 			})
 			
@@ -430,10 +435,12 @@ angular.module('newApp')
 				$scope.fontArray = data;
 				
 				for(var i in $scope.fontArray){
-					$scope.fontArrayCopy.push($scope.fontArray[i]);
-					var mockFile = { name: $scope.fontArray[i].font, size: 12345 };
-					dzFonts.options.addedfile.call(dzFonts, mockFile);
-					dzFonts.files.push(mockFile);
+					if(typeof $scope.fontArray[i].font != 'undefined') {
+						$scope.fontArrayCopy.push($scope.fontArray[i]);
+						var mockFile = { name: $scope.fontArray[i].font, size: 12345 };
+						dzFonts.options.addedfile.call(dzFonts, mockFile);
+						dzFonts.files.push(mockFile);
+					}
 				}					
 			})
 		})
@@ -456,7 +463,7 @@ angular.module('newApp')
 				"description"		: "",
 				"name"				: ""
 			}
-			
+
 			params.campaign_p		= $scope.CampaignSelected.id_campaign;
 			params.newTextArray		= $scope.newTexts;
 			params.newPaletteArray	= $scope.newPalettes;

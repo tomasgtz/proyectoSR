@@ -134,11 +134,11 @@
 						
 						<!-- diseñador -->
 						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span id="camp_title">Campañas</span></a></li>
-						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/mydesigns')}"><a href="#/mydesigns"><i class="fa fa-file-text"></i><span>Mis diseños recientes</span></a></li>
-						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-plus"></i><span>Nuevo diseño</span></a></li>						
+						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-briefcase"></i><span>Plantillas</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && currentUser.typenum == '3'" ng-class="{ active  : isActive('/mydesigns')}"><a href="#/mydesigns"><i class="fa fa-file-text"></i><span>Mis diseños</span></a></li>
 						
-						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span id="camp2_title">Campañas</span></a></li>
-						<li ng-show="currentUser.days_left > 0 && currentUser.id_company != '4' && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-flag"></i><span>Edita tus campañas</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/mycampaigns')}"><a href="#/mycampaigns"><i class="fa fa-flag"></i><span id="camp2_title">Crea Campañas</span></a></li>
+						<li ng-show="currentUser.days_left > 0 && currentUser.id_company != '4' && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/design-campaign')}"><a href="#/design-campaign"><i class="fa fa-briefcase"></i><span>Personaliza una Plantilla</span></a></li>
 						<li ng-show="currentUser.days_left > 0 && (currentUser.typenum == '2' || currentUser.typenum == '4')" ng-class="{ active  : isActive('/new-user')}"><a href="#/new-user"><i class="fa fa-user"></i><span>Mis Usuarios</span></a></li>
 						
 						<!-- admin -->
@@ -864,13 +864,14 @@
         <script src="plugins/angular/angular.js"></script>
         <script src="plugins/json3/lib/json3.js"></script>
         <script src="plugins/angular-resource/angular-resource.js"></script>
-        <script src="plugins/angular-cookies/angular-cookies.js"></script>
+        
         <script src="plugins/angular-sanitize/angular-sanitize.js"></script>
         <script src="plugins/angular-animate/angular-animate.js"></script>
         <script src="plugins/angular-touch/angular-touch.js"></script>
         <script src="plugins/angular-route/angular-route.js"></script>
         <script src="plugins/angular-bootstrap/ui-bootstrap-tpls-0.12.1.js"></script>
 		<script src="plugins/angular-ng-file-input/ng-file-input.min.js"></script>
+		<script src="plugins/angular-cookies/angular-cookies.min.js"></script>
         <script src="app.js"></script>
         <script src="directives/ngViewClass.js"></script>
         <!-- END ANGULARJS SCRIPTS -->
@@ -969,6 +970,7 @@
 		<!-- images grid -->
         
         <!-- BEGIN CUSTOM ANGULARJS SCRIPTS -->
+		
 		<script src="indexCtrl.js"></script>
 		<script src="loginCtrl.js"></script>
         <script src="js/pages/dashboard.js"></script>
@@ -980,6 +982,7 @@
         <script src="js/plugins.js"></script> 
         <script src="js/quickview.js"></script>
         <script src="dashboard/dashboardCtrl.js"></script>
+		
 		<script src="mainCtrl.js"></script>
         
         
@@ -1023,7 +1026,7 @@
 		<script src="angular-dropzone.js"></script>
 		<script src="ng-table-to-csv.js"></script>
 		<script src="jspdf.min.js"></script>
-
+		
         <!-- END CUSTOM ANGULARJS SCRIPTS -->
 		
 

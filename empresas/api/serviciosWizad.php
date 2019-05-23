@@ -5217,6 +5217,38 @@ $app->post(
 			}
 );
 
+$app->post(
+		'/DDesign',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idudesign_p 		= $req->post('idudesign_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+						$callBack  = $cn->query("CALL uspDel_Design('$idudesign_p')")->fetchAll(PDO::FETCH_ASSOC);
+						echo json_encode($callBack);
+				}
+				
+				catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
 
 $app->post(
 		'/GTemplates',function() use ($app){
@@ -5240,6 +5272,39 @@ $app->post(
 				try
 				{ 
 						$data = $cn->query("call uspGet_Templates('$idcompany_p', '$idmaterial_p', '$idcampaign_p');")->fetchAll(PDO::FETCH_ASSOC);
+					
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+			}
+);
+
+$app->post(
+		'/GDesigns',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$idcompany_p	= $req->post('idcompany_p');
+			$iduser_p		= $req->post('iduser_p');
+			$idcampaign_p	= $req->post('idcampaign_p');
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{ 
+						$data = $cn->query("call uspGet_UDesigns('$idcompany_p', '$iduser_p', '$idcampaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
 						echo json_encode($data);
 				}
@@ -5284,6 +5349,37 @@ $app->post(
 );
 
 $app->post(
+		'/GDesignsThumbs',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$iduser_p = $req->post('iduser_p');
+			$page_p = $req->post('page_p');
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+			try
+			{ 
+					$data = $cn->query("call uspGet_DesignsThumbsList('$iduser_p', '$page_p');")->fetchAll(PDO::FETCH_ASSOC);
+				
+					echo json_encode($data);
+			}
+			catch(PDOException $e) {
+					echo $e->getMessage();
+			}			
+			
+		}
+);
+
+$app->post(
 		'/GTemplatesThumbsCount',function() use ($app){
 
 			$allPostVars = $app->request->post();
@@ -5303,6 +5399,36 @@ $app->post(
 			try
 			{ 
 					$data = $cn->query("call uspGet_TemplatesThumbsListCOUNT('$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+				
+					echo json_encode($data);
+			}
+			catch(PDOException $e) {
+					echo $e->getMessage();
+			}			
+			
+		}
+);
+
+$app->post(
+		'/GDesignsThumbsCount',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$iduser_p = $req->post('iduser_p');
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+			try
+			{ 
+					$data = $cn->query("call uspGet_DesignsThumbsListCOUNT('$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
 				
 					echo json_encode($data);
 			}
@@ -5335,6 +5461,38 @@ $app->post(
 				try
 				{ 
 						$data = $cn->query("call uspGet_Template('$idtemplate_p');")->fetchAll(PDO::FETCH_ASSOC);
+					
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+			}
+);
+
+
+$app->post(
+		'/GDesign',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			$idudesign_p = $req->post('idudesign_p');
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{ 
+						$data = $cn->query("call uspGet_UDesign('$idudesign_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
 						echo json_encode($data);
 				}
@@ -5412,6 +5570,70 @@ $app->post(
 
 $app->post(
 		
+		'/NewUDesign',function() use ($app){
+		
+			
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			
+			
+			$name_p = $req->post('name_p');
+			$idmaterial_p = $req->post('idmaterial_p');
+			$contents_p = $req->post('contents_p');
+			$iduser_p = $req->post('iduser_p');
+			$idcampaign_p = $req->post('idcampaign_p');
+			$idtemplategroup_p = $req->post('idtemplategroup_p');
+			$idtemplate_p = $req->post('idtemplate_p');
+			$group_id = 0;
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{
+						$data = $cn->query("call uspGet_Material ('$idmaterial_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$is_multipage = $data[0]['multipage'];
+				
+						if ($is_multipage == '1') {
+
+							if($idtemplategroup_p == '0') {
+								$data = $cn->query("call uspIns_NewDesignGroup ('$name_p','$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
+								$group_id = $data[0]['id'];
+							} else {
+								$group_id = $idtemplategroup_p;
+							}
+							
+						}
+
+						$dataT = $cn->query("call uspIns_NewUDesign ('$name_p','$idmaterial_p','$contents_p','$iduser_p','$idcampaign_p', '$idtemplate_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$design_id = $dataT[0]['id'];
+
+						if ($is_multipage == '1') {
+							$data = $cn->query("call uspIns_NewDesignDesignGroup ($group_id, $design_id);")->fetchAll(PDO::FETCH_ASSOC);
+						}
+
+						$dataT[0]['design_group_id'] = $group_id;
+						
+						echo json_encode($dataT);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+
+$app->post(
+		
 		'/UTemplate',function() use ($app){
 		
 			
@@ -5439,6 +5661,47 @@ $app->post(
 				{
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Template('$idtemplate_p','$name_p','$contents_p');")->fetchAll(PDO::FETCH_ASSOC);
+						
+						echo json_encode($data);
+				}
+				
+				catch(PDOException $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+);
+
+$app->post(
+		
+		'/UUDesign',function() use ($app){
+		
+			
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+			
+			
+			
+			$idudesign_p = $req->post('idudesign_p');
+			$name_p = $req->post('name_p');
+			$contents_p = $req->post('contents_p');
+			
+			
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				try
+				{
+						//CAMBIAR PROCEDIMIENTO
+						$data = $cn->query("call uspUpd_UDesign('$idudesign_p','$name_p','$contents_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
 						echo json_encode($data);
 				}
@@ -5504,6 +5767,59 @@ $app->post(
 );
 
 
+$app->post(
+		
+		'/DesignSaveNewThumbnail',function() use ($app) {
+
+			$path = '../images/thumbnails/';
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+
+			$idudesign_p = $req->post('idudesign_p');
+			
+			$filename = $idudesign_p . 'D_' . rand(1, 10000) . '.png';
+			
+			try {
+				
+				$img_base64 = str_replace(' ', '+', urldecode($req->post('img_data')));
+				$data = explode(',', $img_base64);
+				$img_bin = base64_decode($data[1]);
+
+				$P = fopen($path.$filename, "wb");
+				fwrite($P, $img_bin);
+				fclose($P);
+
+
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+				try
+				{
+					$data = $cn->query("call uspUpd_DesignThumbnail('$idudesign_p','$filename');")->fetchAll(PDO::FETCH_ASSOC);
+					
+					echo json_encode($data);
+				
+				} catch(PDOException $e) {
+						echo $e->getMessage();
+				}	
+
+			} catch(Exception $e) {
+				echo $e->getMessage();
+			}
+		
+		}
+);
+
+
 
 $app->post(
 		
@@ -5528,6 +5844,38 @@ $app->post(
 			try {
 				
 				$data = $cn->query("call uspGet_Thumbnails($idtemplategroup_p);")->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($data);
+			
+			} catch(PDOException $e) {
+				echo $e->getMessage();
+			}
+	
+	}
+);
+
+$app->post(
+		
+		'/getDesignSlidesThumbnails',function() use ($app){
+
+			$allPostVars = $app->request->post();
+			$req = $app->request();
+
+			$idudesigngroup_p = $req->post('idudesigngroup_p');
+			
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+			try {
+				
+				$data = $cn->query("call uspGet_DesignThumbnails($idudesigngroup_p);")->fetchAll(PDO::FETCH_ASSOC);
 				echo json_encode($data);
 			
 			} catch(PDOException $e) {
@@ -5575,6 +5923,44 @@ $app->post(
 
 );
 
+$app->post(
+		'/DDesignSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idudesign_p 		= $req->post('idudesign_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_DesignGroup('$idudesign_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspDel_DesignSlide('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					$data = $cn->query("CALL uspUpd_FixDesignSlidesOrder('$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
 
 $app->post(
 		'/GSlides',function() use ($app){
@@ -5609,6 +5995,37 @@ $app->post(
 
 
 $app->post(
+		'/GDesignSlides',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idudesigngroup_p 		= $req->post('idudesigngroup_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_DesignsOfGroup('$idudesigngroup_p')")->fetchAll(PDO::FETCH_ASSOC);
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+					echo $e->getMessage();
+				}			
+		
+			}
+
+);
+
+$app->post(
 		'/DuplicateSlide',function() use ($app){
 						
 				$allPostVars = $app->request->post();
@@ -5634,6 +6051,44 @@ $app->post(
 					$data = $cn->query("CALL uspDuplicate_Slide('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
 					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
+$app->post(
+		'/DuplicateDesignSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idudesign_p 		= $req->post('idudesign_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_DesignGroup('$idudesign_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspDuplicate_DesignSlide('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					$data = $cn->query("CALL uspUpd_FixDesignSlidesOrderAfterDuplicate('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
 					echo json_encode($data);
 				
@@ -5685,6 +6140,44 @@ $app->post(
 
 );
 
+$app->post(
+		'/IDesignSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idudesign_p 		= $req->post('idudesign_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_DesignGroup('$idudesign_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspIns_DesignSlide('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
 
 $app->post(
 		'/MSlide',function() use ($app){
@@ -5711,6 +6204,43 @@ $app->post(
 					$group_id = $data[0]['id'];
 
 					$data = $cn->query("CALL uspUpd_SlideOrder('$idtemplate_p', '$group_id', '$direction_p')")->fetchAll(PDO::FETCH_ASSOC);
+
+					echo json_encode($data);
+				
+				} catch(Exception $e) {
+						echo $e->getMessage();
+				}			
+				
+					
+			}
+
+);
+
+$app->post(
+		'/MDesignSlide',function() use ($app){
+						
+				$allPostVars = $app->request->post();
+				$req = $app->request();
+						
+				$idudesign_p 		= $req->post('idudesign_p');
+				$direction_p 		= $req->post('direction_p');
+				
+				global $dbms;
+				global $host; 
+				global $db;
+				global $user;
+				global $pass;
+				$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+				
+				$cn=new PDO($dsn, $user, $pass);
+				$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				
+				try
+				{					
+					$data = $cn->query("CALL uspGet_DesignGroup('$idudesign_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$group_id = $data[0]['id'];
+
+					$data = $cn->query("CALL uspUpd_DesignSlideOrder('$idudesign_p', '$group_id', '$direction_p')")->fetchAll(PDO::FETCH_ASSOC);
 
 					echo json_encode($data);
 				

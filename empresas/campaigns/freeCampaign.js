@@ -167,31 +167,7 @@ angular.module('newApp')
 		//*stickers*//
 		
 		
-	  $scope.images = [{
-		title: "2x1",
-		src: "images/2x1.png",
-		isUserUploaded: false
-	  }, {
-		title: "Cinepolis",
-		src: "images/cinepolis.png",
-		isUserUploaded: false
-	  }, {
-		title: "Fondo",
-		src: "images/fondo.png",
-		isUserUploaded: false
-	  }, {
-		title: "Palomitas",
-		src: "images/palomitas.png",
-		isUserUploaded: false
-	  }, {
-		title: "Personas",
-		src: "images/personascin.png",
-		isUserUploaded: false
-	  }, {
-		title: "Sala",
-		src: "images/sala.png",
-		isUserUploaded: false
-	  }];
+	  $scope.images = [];
 
 
 	  //Restore Stored Stickers

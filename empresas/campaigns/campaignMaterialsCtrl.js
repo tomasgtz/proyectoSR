@@ -15,10 +15,16 @@ angular.module('newApp')
 	//var urlHost = 'https://localhost/wizad/';
 	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
-	$scope.templates = [];
-	$scope.template_name = "";
+	$scope.templates		 = [];
+	$scope.template_name	 = "";
 	$scope.template_saved_id = 0;
 	$scope.template_group_id = 0;
+
+	$scope.designs			= [];
+	$scope.design_name		= "";
+	$scope.design_saved_id	= 0;
+	$scope.design_group_id	= 0;
+
 	$scope.icon_folder = 'Opcion4';
 	$scope.CampaignSelected =  {
 
@@ -67,19 +73,21 @@ angular.module('newApp')
 	$scope.clipToFunctionsValues = [];
 	$scope.clipToFunctionsFcs = [];
 	
-	$scope.showGrid = true;
+	$scope.showGrid = false;
 	$scope.oldshowGrid = true;
 	$scope.showPrintingLines = false;
 	$scope.oldshowPrintingLines = false;
 	
+	// crop
 	$scope.el = {};
 	$scope.object = {};
 	$scope.lastActive = {};
+	$scope.selection_object_left=0;
+	$scope.selection_object_top=0;
+	$scope.cntObj=0;
+
 	$scope.object1 = {};
 	$scope.object2 = {};
-	$scope.cntObj=0;
-	$scope.election_object_left=0;
-	$scope.selection_object_top=0;
 	
 	$scope.uploadFileWiz = "";
 	
@@ -114,6 +122,24 @@ angular.module('newApp')
 			
 			$scope.loadTemplate({id: generalService.template_id});
 			
+		}, 1000);
+    });
+
+
+	$scope.$on('openDesign', function () {
+
+		setTimeout(function() { 
+			
+			$( "#selectmateriall > option" ).each(function() {
+				
+				if(this.value == generalService.material_id) {
+				
+					$( "#selectmateriall").val(this.value).trigger('change');
+					$scope.materialChange(this.value);
+				}
+			});
+			
+			$scope.loadDesign({id: generalService.design_id});
 			
 		}, 1000);
     });
@@ -171,7 +197,7 @@ angular.module('newApp')
 					idcampaign_p: ""
 				}
 
-				params.idcompany_p = $scope.currentUser.id_company;
+				params.idcompany_p  = $scope.currentUser.id_company;
 				params.idmaterial_p = $scope.newMaterialChange.id_material ;
 				params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
 
@@ -198,16 +224,19 @@ angular.module('newApp')
 		generalService.GTemplate(params)
 			.then(function(data) {
 				
-				$scope.factory.canvas.clear();			
-				$scope.factory.canvas.loadFromJSON(data[0].contents);		
+				$scope.factory.canvas.clear();	
+				$scope.removeClipToFunctions(JSON.parse(data[0].contents));
+				$scope.factory.canvas.loadFromJSON(data[0].contents);
+
 				$scope.template_saved_id = data[0].id;
 				$scope.template_name = data[0].name;
 				$scope.template_group_id = data[0].template_group_id;
 
 				$timeout( function(){
+					$scope.restoreClipToFunctions();
 					$scope.factory.canvas.renderAll();
 					
-				}, 1000 );
+				}, 2000 );
 				$scope.loading = false;
 
 				if ($scope.newMaterialChange.multipage == 1) {
@@ -225,7 +254,48 @@ angular.module('newApp')
 	}
 
 
-	$scope.loadSlideFromThumbnail = function(template) {
+	$scope.loadDesign = function(design) {
+
+		var params = {
+			idudesign_p: ""
+		}
+		params.idudesign_p = design.id;
+
+		generalService.GDesign(params)
+			.then(function(data) {
+				
+				$scope.factory.canvas.clear();	
+				$scope.removeClipToFunctions(JSON.parse(data[0].contents));
+				$scope.factory.canvas.loadFromJSON(data[0].contents);
+
+				$scope.design_saved_id = data[0].id;
+				$scope.design_name = data[0].name;
+				$scope.design_group_id = data[0].udesign_group_id;
+				$scope.template_saved_id = data[0].template_id;
+
+				$timeout( function(){
+					$scope.restoreClipToFunctions();
+					$scope.factory.canvas.renderAll();
+					
+				}, 2000 );
+				$scope.loading = false;
+
+				if ($scope.newMaterialChange.multipage == 1) {
+				
+					$scope.getDesignThumbnails();
+				}
+
+
+			}, function(error){
+				
+				alert('Error al guardar. Mensaje de error: ' + error);
+				$scope.loading = false;
+			})
+
+	}
+
+
+	$scope.loadSlideFromThumbnail = function(item) {
 	
 		previous_showgrid = $scope.showGrid;
 	 
@@ -234,9 +304,14 @@ angular.module('newApp')
 			$scope.togglePrintingLines();
 		}
 
-		$scope.savingToDB();
-
-		$scope.loadTemplate(template);
+		if( $scope.currentUser.typenum == '3') {
+			$scope.savingToDB('design');
+			$scope.loadDesign(item);
+		} else {
+			$scope.savingToDB('template');
+			$scope.loadTemplate(item);
+		}
+		
 
 		if( $scope.newMaterialChange.offline == 1 ) {
 			$scope.showPrintingLines = false;
@@ -376,6 +451,7 @@ angular.module('newApp')
 		
 		for (var i in $scope.materialArray){
 			if($scope.materialArray[i].id_material === material){
+				
 				$scope.newMaterialChange = $scope.materialArray[i];
 				$scope.canvasWidth = $scope.materialArray[i].width;
 				$scope.canvasHeight = $scope.materialArray[i].height;
@@ -472,21 +548,43 @@ angular.module('newApp')
 		$scope.redrawRulers();
 
 		$scope.template_name = "";
-		var params = {
-			idcompany_p : "",
-			idmaterial_p: "",
-			idcampaign_p: ""
+		$scope.design_name = "";
+
+		if($scope.currentUser.typenum == '3') {
+			
+			var params = {
+				idcompany_p : "",
+				iduser_p: "",
+				idcampaign_p: ""
+			}
+
+			params.idcompany_p = $scope.currentUser.id_company;
+			params.iduser_p = $scope.currentUser.id_user;
+			params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+
+			generalService.GDesigns(params)
+			.then(function(data) {
+				$scope.designs = data;
+			});
+		
+		} else {
+		
+			var params = {
+				idcompany_p : "",
+				idmaterial_p: "",
+				idcampaign_p: ""
+			}
+
+			params.idcompany_p = $scope.currentUser.id_company;
+			params.idmaterial_p = $scope.newMaterialChange.id_material ;
+			params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+
+			generalService.GTemplates(params)
+			.then(function(data) {
+				$scope.templates = data;
+			});
 		}
-
-		params.idcompany_p = $scope.currentUser.id_company;
-		params.idmaterial_p = $scope.newMaterialChange.id_material ;
-		params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
-
-		generalService.GTemplates(params)
-		.then(function(data) {
-			console.log(data);
-			$scope.templates = data;
-		});
+		
 	
 	}
 
@@ -508,7 +606,7 @@ angular.module('newApp')
 		hBtmLineX2 = options.width - (36 / $scope.widthMultiplier);
 		hBtmLineY2 = options.height - (36 / $scope.widthMultiplier);
     
-//x1,y1,x2,y2
+		//x1,y1,x2,y2
 
 		hMarginTop = new fabric.Line([ hTopLineX1, hTopLineY1, 
 									   hTopLineX2, hTopLineY2], lineStyle);		
@@ -684,27 +782,33 @@ angular.module('newApp')
 			
 			campaignService.GPackCampaign(params)
 			.then(function(data) {
-				if(data.length>0){
-				$scope.imageArray = data;
-				for (var i in $scope.imageArray){
-					var newImg   = { title: '', src: '' , isUserUploaded: false};
-					newImg.title = $scope.imageArray[i].image;
-					newImg.src   = urlHostEmpresas + 'uploads/' + $scope.imageArray[i].image;
-					$scope.images.push(newImg);
-				}
+				if(data.length>0) {
+					$scope.imageArray = data;
+					console.log("$scope.imageArray", $scope.imageArray);
+					for (var i in $scope.imageArray){
+						if(typeof $scope.imageArray[i].image != 'undefined') {
+							var newImg   = { title: '', src: '' , isUserUploaded: false};
+							newImg.title = $scope.imageArray[i].image;
+							newImg.src   = urlHostEmpresas + 'uploads/' + $scope.imageArray[i].image;
+							$scope.images.push(newImg);
+						}
+					}
 				}
 			})
 			
 			campaignService.GPackIdentity(params)
 			.then(function(data) {
 				if(data.length>0){
-				$scope.identityImageArray = data;
-				for (var i in $scope.identityImageArray){
-					var newImg   = { title: '', src: '' , isUserUploaded: false};
-					newImg.title = $scope.identityImageArray[i].image;
-					newImg.src   = urlHostEmpresas + 'uploads/' + $scope.identityImageArray[i].image;
-					$scope.imagesIdentity.push(newImg);
-				}
+					$scope.identityImageArray = data;
+					console.log("$scope.identityImageArray", $scope.identityImageArray);
+					for (var i in $scope.identityImageArray){
+						if(typeof $scope.identityImageArray[i].image != 'undefined') {
+							var newImg   = { title: '', src: '' , isUserUploaded: false};
+							newImg.title = $scope.identityImageArray[i].image;
+							newImg.src   = urlHostEmpresas + 'uploads/' + $scope.identityImageArray[i].image;
+							$scope.imagesIdentity.push(newImg);
+						}
+					}
 				}
 			})
 			
@@ -899,31 +1003,7 @@ angular.module('newApp')
 		//*stickers*//
 		
 		
-	  $scope.images = [{
-		title: "2x1",
-		src: "images/2x1.png",
-		isUserUploaded: false
-	  }, {
-		title: "Cinepolis",
-		src: "images/cinepolis.png",
-		isUserUploaded: false
-	  }, {
-		title: "Fondo",
-		src: "images/fondo.png",
-		isUserUploaded: false
-	  }, {
-		title: "Palomitas",
-		src: "images/palomitas.png",
-		isUserUploaded: false
-	  }, {
-		title: "Personas",
-		src: "images/personascin.png",
-		isUserUploaded: false
-	  }, {
-		title: "Sala",
-		src: "images/sala.png",
-		isUserUploaded: false
-	  }];
+	  $scope.images = [];
 
 
 	  //Restore Stored Stickers
@@ -1125,36 +1205,37 @@ angular.module('newApp')
 		  $scope.canvasTarget = false;
 		  var activeObject = $scope.factory.canvas.getActiveObject();
 		  
-		  
-		  if (typeof activeObject.id == 'undefined') {
+		  if(activeObject) {
+			  if (typeof activeObject.id == 'undefined') {
+				  
+				  activeObject.id = activeObject.get('type') + $scope.getRandomSpan();
+			  }
 			  
-			  activeObject.id = activeObject.get('type') + $scope.getRandomSpan();
-		  }
-		  
-		  //console.log("asd tom crop activeObject.id = " + activeObject.get('type'));
-		  
-		  if(activeObject.id.indexOf("circle") !== -1 || activeObject.id.indexOf("triangle") !== -1
-				|| activeObject.id.indexOf("rect") !== -1 || activeObject.id.indexOf("text") !== -1
-				|| activeObject.id.indexOf("line") !== -1){
-				$scope.formSelected = true;
-				
-				if(activeObject.id.indexOf("text") !== -1){
-					$scope.showFonts = true;
+			  //console.log("asd tom crop activeObject.id = " + activeObject.get('type'));
+			  
+			  if(activeObject.id.indexOf("circle") !== -1 || activeObject.id.indexOf("triangle") !== -1
+					|| activeObject.id.indexOf("rect") !== -1 || activeObject.id.indexOf("text") !== -1
+					|| activeObject.id.indexOf("line") !== -1){
+					$scope.formSelected = true;
+					
+					if(activeObject.id.indexOf("text") !== -1){
+						$scope.showFonts = true;
+						$scope.formSelected = false;
+					}
+					else{
+						$scope.showFonts = false;
+					}
+					
+			  }else{
 					$scope.formSelected = false;
-				}
-				else{
 					$scope.showFonts = false;
-				}
-				
-		  }else{
-			    $scope.formSelected = false;
-				$scope.showFonts = false;
-		  }
-		  if(activeObject.type === "image" ){
-				$scope.imageSelected = true;
-				$scope.showFonts = false;
-		  }else{
-			    $scope.imageSelected = false;
+			  }
+			  if(activeObject.type === "image" ){
+					$scope.imageSelected = true;
+					$scope.showFonts = false;
+			  }else{
+					$scope.imageSelected = false;
+			  }
 		  }
 		}, 0);
 	  });
@@ -1270,7 +1351,7 @@ angular.module('newApp')
 			objects[i].left = tempLeft;
 			objects[i].top = tempTop;
 
-			objects[i].setCoords();
+		//	objects[i].setCoords();
 		}
 
 		$scope.factory.canvas.renderAll();
@@ -1301,17 +1382,19 @@ angular.module('newApp')
 			objects[i].left = tempLeft;
 			objects[i].top = tempTop;
 
-			objects[i].setCoords();
+		//	objects[i].setCoords();
 		}
 
 		$scope.factory.canvas.renderAll();
 		$scope.factory.canvas.calcOffset();
 		
 		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
+			console.log($scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm);
 			var pdf = new jsPDF('l','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
 			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
 			
 		} else {
+			console.log($scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm);
 			var pdf = new jsPDF('p','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
 			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
 			
@@ -1394,7 +1477,7 @@ angular.module('newApp')
 					objects[i].left = tempLeft;
 					objects[i].top = tempTop;
 
-					objects[i].setCoords();
+				//	objects[i].setCoords();
 				}
 
 				$scope.factory.canvas.renderAll();
@@ -1478,33 +1561,67 @@ angular.module('newApp')
 	 }
 
 	 $scope.addSlide = function() {
+
+		if ($scope.currentUser.typenum == '3') {
 		
-		if($scope.template_group_id !== 0) {
+			if($scope.design_group_id !== 0) {
 
-			var temp_name = $scope.template_name;
+				var temp_name = $scope.design_name;
 
-			if( $scope.newMaterialChange.offline == 1 ) {
-				$scope.showPrintingLines = true;
-				$scope.togglePrintingLines();
+				if( $scope.newMaterialChange.offline == 1 ) {
+					$scope.showPrintingLines = true;
+					$scope.togglePrintingLines();
+				}
+
+				$scope.savingToDB('design');
+
+				reallyNew();
+
+				$scope.design_name = temp_name;
+
+				if( $scope.newMaterialChange.offline == 1 ) {
+					$scope.showPrintingLines = false;
+					$scope.togglePrintingLines();
+				}
+
+				$scope.savingToDB('design');
+				
+			} else {
+				$scope.alertClass = "alert alert-danger";
+				$scope.alertShow = true;
+				$scope.message = "Primero debe guardar su diseño"; 
 			}
-
-			$scope.savingToDB();
-
-			reallyNew();
-
-			$scope.template_name = temp_name;
-
-			if( $scope.newMaterialChange.offline == 1 ) {
-				$scope.showPrintingLines = false;
-				$scope.togglePrintingLines();
-			}
-
-			$scope.savingToDB();
-			
 		} else {
-			$scope.alertClass = "alert alert-danger";
-			$scope.alertShow = true;
-			$scope.message = "Primero debe guardar como plantilla"; 
+
+			if($scope.template_group_id !== 0) {
+
+				var temp_name = $scope.template_name;
+
+				if( $scope.newMaterialChange.offline == 1 ) {
+					$scope.showPrintingLines = true;
+					$scope.togglePrintingLines();
+				}
+
+				$scope.savingToDB('template');
+
+				reallyNew();
+
+				$scope.template_name = temp_name;
+
+				if( $scope.newMaterialChange.offline == 1 ) {
+					$scope.showPrintingLines = false;
+					$scope.togglePrintingLines();
+				}
+
+				$scope.savingToDB('template');
+				
+			} else {
+				$scope.alertClass = "alert alert-danger";
+				$scope.alertShow = true;
+				$scope.message = "Primero debe guardar como plantilla"; 
+			}
+		
+		
 		}
 	 }
 
@@ -1525,6 +1642,32 @@ angular.module('newApp')
 				.then(function(data) {
 
 					$scope.getThumbnails();
+					
+				}, function(error){
+					
+					alert('Error al guardar. Mensaje de error: ' + error);
+					$scope.loading = false;
+				})
+		} 
+	 }
+
+	 $scope.createDesignThumbnail = function() {
+		
+		imgData = $scope.createPNG('', true);
+
+		if($scope.design_saved_id !== 0) {
+	
+			var params = {
+						idudesign_p : "",
+						img_data: ""
+					}
+			params.idudesign_p = $scope.design_saved_id;
+			params.img_data = imgData;
+
+			generalService.DesignSaveNewThumbnail(params)
+				.then(function(data) {
+
+					$scope.getDesignThumbnails();
 					
 				}, function(error){
 					
@@ -1559,25 +1702,28 @@ angular.module('newApp')
 				});
 
 			var objects =  $scope.factory.canvas.getObjects();
-	
-			for (var i in objects) {
-				var scaleX = objects[i].scaleX;
-				var scaleY = objects[i].scaleY;
-				var left = objects[i].left;
-				var top = objects[i].top;
+			
+		 
+				console.log("objects", objects);
+				for (var i in objects) {
+					var scaleX = objects[i].scaleX;
+					var scaleY = objects[i].scaleY;
+					var left = objects[i].left;
+					var top = objects[i].top;
 
-				var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
-				var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
-				var tempLeft = left * $scope.newMaterialChange.width_multiplier;
-				var tempTop = top * $scope.newMaterialChange.height_multiplier;
+					var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
+					var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
+					var tempLeft = left * $scope.newMaterialChange.width_multiplier;
+					var tempTop = top * $scope.newMaterialChange.height_multiplier;
 
-				objects[i].scaleX = tempScaleX;
-				objects[i].scaleY = tempScaleY;
-				objects[i].left = tempLeft;
-				objects[i].top = tempTop;
+					objects[i].scaleX = tempScaleX;
+					objects[i].scaleY = tempScaleY;
+					objects[i].left = tempLeft;
+					objects[i].top = tempTop;
 
-				objects[i].setCoords();
-			}
+				//	objects[i].setCoords();
+				}
+			
 		 } else {
 			 var ratio = parseInt($scope.newMaterialChange.width) / parseInt($scope.newMaterialChange.height);
 
@@ -1588,26 +1734,30 @@ angular.module('newApp')
 					
 				});
 			var objects =  $scope.factory.canvas.getObjects();
-		 console.log("objects", objects);
+			
+			
+		 
+				console.log("objects", objects);
 
-			for (var i in objects) {
-				var scaleX = objects[i].scaleX;
-				var scaleY = objects[i].scaleY;
-				var left = objects[i].left;
-				var top = objects[i].top;
+				for (var i in objects) {
+					var scaleX = objects[i].scaleX;
+					var scaleY = objects[i].scaleY;
+					var left = objects[i].left;
+					var top = objects[i].top;
 
-				var tempScaleX = scaleX * 0.25;
-				var tempScaleY = scaleY * 0.25;
-				var tempLeft = left * 0.25;
-				var tempTop = top * 0.25;
+					var tempScaleX = scaleX * 0.25;
+					var tempScaleY = scaleY * 0.25;
+					var tempLeft = left * 0.25;
+					var tempTop = top * 0.25;
 
-				objects[i].scaleX = tempScaleX;
-				objects[i].scaleY = tempScaleY;
-				objects[i].left = tempLeft;
-				objects[i].top = tempTop;
+					objects[i].scaleX = tempScaleX;
+					objects[i].scaleY = tempScaleY;
+					objects[i].left = tempLeft;
+					objects[i].top = tempTop;
 
-				objects[i].setCoords();
-			}
+				//	objects[i].setCoords();
+				}
+			
 		 }
 		 
 		$scope.factory.canvas.renderAll();
@@ -1635,45 +1785,50 @@ angular.module('newApp')
 		var objects =  $scope.factory.canvas.getObjects();
 
 		if (returnImageData === false ) {
-		
-			for (var i in objects) {
-				var scaleX = objects[i].scaleX;
-				var scaleY = objects[i].scaleY;
-				var left = objects[i].left;
-				var top = objects[i].top;
+			
+			
+				for (var i in objects) {
+					var scaleX = objects[i].scaleX;
+					var scaleY = objects[i].scaleY;
+					var left = objects[i].left;
+					var top = objects[i].top;
 
-				var tempScaleX = scaleX / $scope.newMaterialChange.width_multiplier;
-				var tempScaleY = scaleY / $scope.newMaterialChange.height_multiplier;
-				var tempLeft = left / $scope.newMaterialChange.width_multiplier;
-				var tempTop = top / $scope.newMaterialChange.height_multiplier;
+					var tempScaleX = scaleX / $scope.newMaterialChange.width_multiplier;
+					var tempScaleY = scaleY / $scope.newMaterialChange.height_multiplier;
+					var tempLeft = left / $scope.newMaterialChange.width_multiplier;
+					var tempTop = top / $scope.newMaterialChange.height_multiplier;
 
-				objects[i].scaleX = tempScaleX;
-				objects[i].scaleY = tempScaleY;
-				objects[i].left = tempLeft;
-				objects[i].top = tempTop;
+					objects[i].scaleX = tempScaleX;
+					objects[i].scaleY = tempScaleY;
+					objects[i].left = tempLeft;
+					objects[i].top = tempTop;
 
-				objects[i].setCoords();
-			}
+			//		objects[i].setCoords();
+				}
+			
 		} else {
 
-			for (var i in objects) {
-				var scaleX = objects[i].scaleX;
-				var scaleY = objects[i].scaleY;
-				var left = objects[i].left;
-				var top = objects[i].top;
+			
 
-				var tempScaleX = scaleX / 0.25;
-				var tempScaleY = scaleY / 0.25;
-				var tempLeft = left / 0.25;
-				var tempTop = top / 0.25;
+				for (var i in objects) {
+					var scaleX = objects[i].scaleX;
+					var scaleY = objects[i].scaleY;
+					var left = objects[i].left;
+					var top = objects[i].top;
 
-				objects[i].scaleX = tempScaleX;
-				objects[i].scaleY = tempScaleY;
-				objects[i].left = tempLeft;
-				objects[i].top = tempTop;
+					var tempScaleX = scaleX / 0.25;
+					var tempScaleY = scaleY / 0.25;
+					var tempLeft = left / 0.25;
+					var tempTop = top / 0.25;
 
-				objects[i].setCoords();
-			}
+					objects[i].scaleX = tempScaleX;
+					objects[i].scaleY = tempScaleY;
+					objects[i].left = tempLeft;
+					objects[i].top = tempTop;
+
+			//		objects[i].setCoords();
+				}
+			
 		}
 
 		$scope.factory.canvas.renderAll();
@@ -1706,6 +1861,15 @@ angular.module('newApp')
 	  $scope.getThumbnails = function() {
 
 		generalService.GThumbnails({ idtemplategroup_p: $scope.template_group_id })
+					.then(function(data) {
+						$scope.thumbnails = data;
+					})
+	  
+	  }
+
+	  $scope.getDesignThumbnails = function() {
+
+		generalService.GDesignThumbnails({ idudesigngroup_p: $scope.design_group_id })
 					.then(function(data) {
 						$scope.thumbnails = data;
 					})
@@ -2152,11 +2316,13 @@ angular.module('newApp')
 		
 		return $scope.factory.canvas.getObjects();
 	}
-		
+	
+	
 	$scope.startCrop = function(){
 		$scope.cropStarted = true;
 		
 		$scope.factory.canvas.remove($scope.el);
+
 		if($scope.factory.canvas.getActiveObject())
 		{
 			$scope.object = $scope.factory.canvas.getActiveObject();
@@ -2167,10 +2333,10 @@ angular.module('newApp')
 				//console.log('same object');
 			}
 			
-			/*if ($scope.lastActive && $scope.lastActive !== $scope.object) {
-				$scope.lastActive.clipTo = null;
-			}*/	
-			
+			if ($scope.lastActive && $scope.lastActive !== $scope.object) {
+			//	$scope.lastActive.clipTo = null;
+			}
+		
 			var random = $scope.getRandomSpan();
 			random = "rect" + random;
 			
@@ -2189,72 +2355,108 @@ angular.module('newApp')
 				hasRotatingPoint:false,
 				id: random
 			});
-		
-			$scope.el.left=$scope.factory.canvas.getActiveObject().left;
-			$scope.selection_object_left=$scope.factory.canvas.getActiveObject().left;
-			$scope.selection_object_top=$scope.factory.canvas.getActiveObject().top;
-			$scope.el.top=$scope.factory.canvas.getActiveObject().top;
-			$scope.el.width=$scope.factory.canvas.getActiveObject().width*$scope.factory.canvas.getActiveObject().scaleX;
-			$scope.el.height=$scope.factory.canvas.getActiveObject().height*$scope.factory.canvas.getActiveObject().scaleY;
 			
+			$scope.el.left				 = parseInt($scope.factory.canvas.getActiveObject().left);			
+			$scope.el.top				 = parseInt($scope.factory.canvas.getActiveObject().top);
+			$scope.el.width				 = parseInt($scope.factory.canvas.getActiveObject().width); //* $scope.factory.canvas.getActiveObject().scaleX;
+			$scope.el.height			 = parseInt($scope.factory.canvas.getActiveObject().height);// * $scope.factory.canvas.getActiveObject().scaleY;
+			$scope.el.scaleX			 = $scope.factory.canvas.getActiveObject().scaleX * 1;
+			$scope.el.scaleY			 = $scope.factory.canvas.getActiveObject().scaleY * 1;
+
+			$scope.selection_object_left = $scope.factory.canvas.getActiveObject().left;
+			$scope.selection_object_top = $scope.factory.canvas.getActiveObject().top;
 			
 			$scope.factory.canvas.add($scope.el);
 			$scope.factory.canvas.setActiveObject($scope.el);
-			for(var i=0; i<$("#layers li").size();i++) {
+
+			for(var i = 0; i < $("#layers li").size(); i++) {
 				$scope.factory.canvas.item(i).selectable= false;
 			}
-		}
-		
-		else{
-				alert("Please select an object or layer");
+
+		} else {
+			alert("Seleccione un objeto");
 		}
 	}
 		
 	$scope.crop = function(){
 		
-		$scope.cropStarted = false;
 		var left = $scope.el.left - $scope.object.left;
 		var top = $scope.el.top - $scope.object.top;
-		var scaleX = $scope.el.scaleX;
-		var scaleY = $scope.el.scaleY;
+		var scale_ratioX = $scope.el.scaleX / $scope.object.scaleX;
+		var scale_ratioY = $scope.el.scaleY / $scope.object.scaleY;
 		left *= 1;
-		top *= 1;
+		top *= 1;		
 		
-		var width = $scope.el.width * 1;
+		var width  = $scope.el.width * 1;
 		var height = $scope.el.height * 1;
+
+		$scope.object.originX = 'left';
+		$scope.object.originY = 'top';
+
+		var rect_left;
+		var rect_top;
 		
+		if(parseInt($scope.el.left) == parseInt($scope.object.left)) {
+			rect_left = -$scope.object.width / 2;
+		} else if ($scope.el.left < $scope.object.left) {
+			rect_left = (((-$scope.object.width / 2) * $scope.object.scaleX ) - ($scope.object.left - $scope.el.left)) / $scope.object.scaleX;
+		} else {
+			
+			rect_left = (((-$scope.object.width / 2) * $scope.object.scaleX )  - $scope.object.left + $scope.el.left ) / $scope.object.scaleX;
+		}
+
+		if(parseInt($scope.el.top) == parseInt($scope.object.top)) {
+			rect_top = -$scope.object.height / 2;
+		} else if ($scope.el.top < $scope.object.top) {
+			rect_top = (((-$scope.object.height / 2) * $scope.object.scaleY ) - ($scope.object.top - $scope.el.top)) / $scope.object.scaleY;
+		} else {
+			rect_top = (((-$scope.object.height / 2) * $scope.object.scaleY )  - $scope.object.top + $scope.el.top )  / $scope.object.scaleY ;
+		}
+	
+		var func = function(ctx) {
+
+			//	ctx.rect( left, pos, w, h);
+			/*
+				w and h have to be adjusted according to scales of both objects
+				si los lefts son iguales, se aplica el width del object / 2 
+				si los lefts son diferentes, se aplica 
+			*/
+
+			ctx.rect( rect_left *1 , rect_top*1, 
+				parseInt(width * scale_ratioX ), 
+				parseInt(scale_ratioY * height));
+			
+		}
+
 		$scope.clipToFunctionsValues.push(
-		
 			{
-				id: $scope.object.id,
-				width: width,
-				left: left,
-				height: height,
-				top: top,
-				scaleX: scaleX,
-				scaleY: scaleY
+				'id': $scope.object.id,
+				'left': $scope.el.left * 1,
+				'top': $scope.el.top * 1,
+				'width': $scope.el.width * 1,
+				'height': $scope.el.height * 1,
+				'scaleX': $scope.el.scaleX * 1,
+				'scaleY': $scope.el.scaleY * 1
 			}
 		
 		);
-		var func = function (ctx) {
-			
-			ctx.rect(-(width/2)+left, -(height/2)+top, parseInt(width*scaleX), parseInt(scaleY*height));
-			
-		}
 		
 		$scope.object.clipTo = func;
 		$scope.clipToFunctionsFcs.push({id: $scope.object.id, func: $scope.object.clipTo});
 		
-		for(var i=0; i<$("#layers li").size();i++) {
+		for(var i=0; i < $("#layers li").size(); i++) {
 			$scope.factory.canvas.item(i).selectable= true;
 		}
+
 		disabled = true;
 	   
 		$scope.factory.canvas.remove($scope.factory.canvas.getActiveObject());
 		$scope.lastActive = $scope.object;
 		$scope.factory.canvas.renderAll();
-		
+		$scope.cropStarted = false;
 	}
+
+	
 		
 	$scope.isDownloadable = function() {
 		
@@ -2268,7 +2470,7 @@ angular.module('newApp')
 	}
 	
 
-	$scope.savingToDB = async function() {
+	$scope.savingToDB = async function(type = 'template') {
 	
 		$scope.loading = true;
 		$scope.waitingMessage = "Guardando";
@@ -2282,105 +2484,217 @@ angular.module('newApp')
 			$scope.togglePrintingLines();
 		}
 
-		$scope.prepareClipToFunctions();
-	
-		var params = {
-				"name_p" : "",
-				"idmaterial_p"	: "",
-				"contents_p"	: "",
-				"iduser_p"	: "",
-				"idtemplategroup_p" : "",
-				"idcampaign" : ""
-			};
-		
-		params.name_p = $scope.template_name;
-		params.idmaterial_p = $scope.material;
-		params.contents_p = $scope.factory.canvas;
-		params.iduser_p = $scope.currentUser.id_user;
-		params.idtemplategroup_p = $scope.template_group_id;
-		params.idcampaign_p = $scope.CampaignSelected.id_campaign;
+		if(type == 'template') {
 
-		if($scope.template_saved_id === 0) {
+			var params = {
+					"name_p" : "",
+					"idmaterial_p"	: "",
+					"contents_p"	: "",
+					"iduser_p"	: "",
+					"idtemplategroup_p" : "",
+					"idcampaign" : ""
+				};
 			
-			generalService.NewTemplate(params)
-			.then(function(data) {
-				
-				$scope.template_saved_id = data[0].id;
-				$scope.template_group_id = data[0].template_group_id;
-				
-				$scope.fixClipToFunctions();
-				$scope.loading = false;
-				
-				$scope.showGrid = !$scope.oldshowGrid;
-				$scope.toggleGrid();
+			params.name_p = $scope.template_name;
+			params.idmaterial_p = $scope.material;
+			params.contents_p = $scope.factory.canvas;
+			params.iduser_p = $scope.currentUser.id_user;
+			params.idtemplategroup_p = $scope.template_group_id;
+			params.idcampaign_p = $scope.CampaignSelected.id_campaign;
 
-				// reload list of templates
-				var params = {
-					idcompany_p : "",
-					idmaterial_p: "",
-					idcampaign_p: ""
-				}
+			if($scope.template_saved_id === 0) {
 
-				params.idcompany_p = $scope.currentUser.id_company;
-				params.idmaterial_p = $scope.newMaterialChange.id_material ;
-				params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
-
-				generalService.GTemplates(params)
+				$scope.prepareClipToFunctions();
+				
+				generalService.NewTemplate(params)
 				.then(function(data) {
-					$scope.templates = data;
-				});
+					
+					$scope.template_saved_id = data[0].id;
+					$scope.template_group_id = data[0].template_group_id;
+					
+					$scope.fixClipToFunctions();
+					$scope.loading = false;
+					
+					$scope.showGrid = !$scope.oldshowGrid;
+					$scope.toggleGrid();
+
+					// reload list of templates
+					var params = {
+						idcompany_p : "",
+						idmaterial_p: "",
+						idcampaign_p: ""
+					}
+
+					params.idcompany_p = $scope.currentUser.id_company;
+					params.idmaterial_p = $scope.newMaterialChange.id_material ;
+					params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+
+					generalService.GTemplates(params)
+					.then(function(data) {
+						$scope.templates = data;
+					});
+
+					//if($scope.newMaterialChange.multipage == 1) {
+
+						$scope.createThumbnail();
+					//}
+					
+				}, function(error){
+					
+					alert('Error al guardar. Mensaje de error: ' + error);
+					$scope.loading = false;
+				})
+			
+			} else {
+				params.idtemplate_p = $scope.template_saved_id;
 
 				//if($scope.newMaterialChange.multipage == 1) {
 
 					$scope.createThumbnail();
+					
 				//}
 				
-			}, function(error){
-				
-				alert('Error al guardar. Mensaje de error: ' + error);
-				$scope.loading = false;
-			})
-		
-		} else {
+				$scope.prepareClipToFunctions();
+
+				generalService.UTemplate(params)
+				.then(function(data) {
+						
+					$scope.fixClipToFunctions();
+					$scope.loading = false;
+					
+					$scope.showGrid = !$scope.oldshowGrid;
+					$scope.toggleGrid();
+
+					// reload list of templates
+					var params = {
+						idcompany_p : "",
+						idmaterial_p: "",
+						idcampaign_p: ""
+					}
+
+					params.idcompany_p = $scope.currentUser.id_company;
+					params.idmaterial_p = $scope.newMaterialChange.id_material ;
+					params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+
+					generalService.GTemplates(params)
+					.then(function(data) {
+						$scope.templates = data;
+					});
+
+					
+				}, function(error){
+					
+					alert('Error al guardar. Mensaje de error: ' + error);
+					$scope.loading = false;
+				})
+
+			}
+		} else if (type == 'design') {
+
+			var params = {
+					"name_p" : "",
+					"idmaterial_p"	: "",
+					"contents_p"	: "",
+					"iduser_p"	: "",
+					"idtemplategroup_p" : "",
+					"idcampaign" : "",
+					"idtemplate_p" : ""
+				};
+			
+			params.name_p = $scope.design_name;
+			params.idmaterial_p = $scope.material;
+			params.contents_p = $scope.factory.canvas;
+			params.iduser_p = $scope.currentUser.id_user;
+			params.idtemplategroup_p = $scope.design_group_id;
+			params.idcampaign_p = $scope.CampaignSelected.id_campaign;
 			params.idtemplate_p = $scope.template_saved_id;
 
-			//if($scope.newMaterialChange.multipage == 1) {
+			if($scope.design_saved_id === 0) {
 
-				$scope.createThumbnail();
-			//}
-
-			generalService.UTemplate(params)
-			.then(function(data) {
-					
-				$scope.fixClipToFunctions();
-				$scope.loading = false;
+				$scope.prepareClipToFunctions();
 				
-				$scope.showGrid = !$scope.oldshowGrid;
-				$scope.toggleGrid();
-
-				// reload list of templates
-				var params = {
-					idcompany_p : "",
-					idmaterial_p: "",
-					idcampaign_p: ""
-				}
-
-				params.idcompany_p = $scope.currentUser.id_company;
-				params.idmaterial_p = $scope.newMaterialChange.id_material ;
-				params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
-
-				generalService.GTemplates(params)
+				generalService.NewUDesign(params)
 				.then(function(data) {
-					$scope.templates = data;
-				});
+					
+					$scope.design_saved_id = data[0].id;
+					$scope.design_group_id = data[0].design_group_id;
+					
+					$scope.fixClipToFunctions();
+					$scope.loading = false;
+					
+					$scope.showGrid = !$scope.oldshowGrid;
+					$scope.toggleGrid();
 
-				
-			}, function(error){
-				
-				alert('Error al guardar. Mensaje de error: ' + error);
-				$scope.loading = false;
-			})
+					// reload list of designs
+					var params = {
+						idcompany_p : "",
+						idmaterial_p: "",
+						idcampaign_p: ""
+					}
 
+					params.idcompany_p = $scope.currentUser.id_company;
+					params.idmaterial_p = $scope.newMaterialChange.id_material ;
+					params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+
+					generalService.GDesigns(params)
+					.then(function(data) {
+						$scope.designs = data;
+					});
+
+					//if($scope.newMaterialChange.multipage == 1) {
+
+						$scope.createDesignThumbnail();
+					//}
+					
+				}, function(error){
+					
+					alert('Error al guardar. Mensaje de error: ' + error);
+					$scope.loading = false;
+				})
+			
+			} else {
+				params.idudesign_p = $scope.design_saved_id;
+
+				//if($scope.newMaterialChange.multipage == 1) {
+
+					$scope.createDesignThumbnail();
+					
+				//}
+				
+				$scope.prepareClipToFunctions();
+
+				generalService.UUDesign(params)
+				.then(function(data) {
+						
+					$scope.fixClipToFunctions();
+					$scope.loading = false;
+					
+					$scope.showGrid = !$scope.oldshowGrid;
+					$scope.toggleGrid();
+
+					// reload list of designs
+					var params = {
+						idcompany_p : "",
+						idmaterial_p: "",
+						idcampaign_p: ""
+					}
+
+					params.idcompany_p = $scope.currentUser.id_company;
+					params.idmaterial_p = $scope.newMaterialChange.id_material ;
+					params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+
+					generalService.GDesigns(params)
+					.then(function(data) {
+						$scope.designs = data;
+					});
+
+					
+				}, function(error){
+					
+					alert('Error al guardar. Mensaje de error: ' + error);
+					$scope.loading = false;
+				})
+			}
 		}
 
 		if ( $scope.newMaterialChange.offline == 1 ) {
@@ -2389,7 +2703,7 @@ angular.module('newApp')
 		}
 
 	}
-
+	/*
 	$scope.saving = function() {
 		$scope.loading = true;
 		$scope.waitingMessage = "Guardando";
@@ -2420,19 +2734,17 @@ angular.module('newApp')
 			alert('Error al guardar. Mensaje de error: ' + error);
 			$scope.loading = false;
 		})
-		
-		//console.log("asd tom guardando " + content);
-	}
+
+	}*/
 	
-	
-	
+	/*
 	$scope.opening = function() {
 		
 		$timeout(function(){
 			$('#openWiz').trigger("click");
 		}, 200);
 		
-	}
+	}*/
 	
 	$scope.prepareClipToFunctions = function() {
 		
@@ -2453,9 +2765,7 @@ angular.module('newApp')
 			
 			objId = $scope.clipToFunctionsFcs[i].id;
 			obj = $scope.findObjectWithPropertyValue($scope.factory.canvas, 'id', objId);
-			
 			obj.clipTo = $scope.clipToFunctionsFcs[i].func;
-			
 			
 		}
 	}
@@ -2465,8 +2775,13 @@ angular.module('newApp')
 		for(i = 0; i < data.objects.length; i++) {
 						
 			if( data.objects[i].clipTo && data.objects[i].clipTo !== "" ) {
+
+				if(typeof data.objects[i].clipTo == 'object') {
+					var props = data.objects[i].clipTo;
+				} else {
+					var props = JSON.parse(data.objects[i].clipTo);
+				}
 				
-				var props = JSON.parse(data.objects[i].clipTo);
 				
 				clipToF = {id: props.id, 
 						   func: data.objects[i].clipTo};
@@ -2487,14 +2802,20 @@ angular.module('newApp')
 			
 			objId = $scope.clipToFunctions[i].id;
 			obj = $scope.findObjectWithPropertyValue($scope.factory.canvas, 'id', objId);
-			props = JSON.parse($scope.clipToFunctions[i].func);
+
+			if(typeof $scope.clipToFunctions[i].func == 'object') {
+				props = $scope.clipToFunctions[i].func;
+			} else {
+				props = JSON.parse($scope.clipToFunctions[i].func);
+			}
 			
+			obj.clipTo = null;
 			$scope.factory.canvas.setActiveObject(obj);
 			$scope.startCrop();
 			$scope.el.width = props.width;
-			$scope.el.left = props.left + obj.left;
+			$scope.el.left = props.left;
 			$scope.el.height = props.height;
-			$scope.el.top = props.top + obj.top;
+			$scope.el.top = props.top;
 			$scope.el.scaleX = props.scaleX;
 			$scope.el.scaleY = props.scaleY;
 			$scope.crop();
@@ -2503,6 +2824,7 @@ angular.module('newApp')
 		
 	}
 	
+	/*
 	$scope.loadingFileIntoCanvas = function(file) {
 		$scope.loading = true;
 		$scope.clipToFunctions = [];
@@ -2554,10 +2876,10 @@ angular.module('newApp')
 			
 			
 		})
-	}
+	}*/
 	
 	$scope.creatingNewFile = function() {
-		var message = "Al limpiar el diseño se perderán los cambios realizados hasta el momento. ¿Desea continuar?";
+		var message = "Se perderán los cambios realizados hasta el momento. ¿Desea continuar?";
 		var modalHtml = '<div class="modal-body">' + message + '</div>';
 		modalHtml += '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">Aceptar</button><button class="btn btn-warning" ng-click="cancel()">Cancelar</button></div>';
 
@@ -2585,8 +2907,14 @@ angular.module('newApp')
 		
 		$scope.showGrid = !grid;
 		$scope.toggleGrid();
-		$scope.template_saved_id = 0;
+
+		if($scope.currentUser.typenum == '2' || $scope.currentUser.typenum == '4') {
+			$scope.template_saved_id = 0;
+		}
+
 		$scope.template_name = "";
+		$scope.design_saved_id = 0;
+		$scope.design_name = "";
 	}
 	
 	var ModalInstanceCtrl = function($scope, $modalInstance) {
@@ -2603,19 +2931,19 @@ angular.module('newApp')
 	// liberia https://github.com/Templarian/ui.bootstrap.contextMenu
 	$scope.slideOptions = [
           ['Borrar', function ($itemScope) {
-              $scope.deleteSlide($itemScope.image.id);
+				$scope.deleteSlide($itemScope.image.id);
           }],
           ['Duplicar', function ($itemScope) {
-              $scope.duplicateSlide($itemScope.image.id);
+				$scope.duplicateSlide($itemScope.image.id);
           }],
 		  ['Insertar', function ($itemScope) {
-              $scope.insertSlide($itemScope.image.id);
+				$scope.insertSlide($itemScope.image.id);
           }],
 		  ['Mover <<', function ($itemScope) {
-              $scope.moveSlide($itemScope.image.id, 'left');
+				$scope.moveSlide($itemScope.image.id, 'left');
           }],
 		  ['Mover >>', function ($itemScope) {
-              $scope.moveSlide($itemScope.image.id, 'right');
+				$scope.moveSlide($itemScope.image.id, 'right');
           }]
       ];
 
@@ -2632,17 +2960,31 @@ angular.module('newApp')
 
 		modalInstance.result.then(function() {
 
-			var params = {
-				idtemplate_p : ""
+			//designer
+			if ($scope.currentUser.typenum == '3') {
+
+				var params = { idudesign_p : ""	}
+
+				params.idudesign_p = template_id;
+				
+				generalService.DDesignSlide(params)
+				.then(function(data) {
+					$scope.getDesignThumbnails();
+
+				})
+
+			} else {
+
+				var params = { idtemplate_p : "" }
+
+				params.idtemplate_p = template_id;
+				
+				generalService.DSlide(params)
+				.then(function(data) {
+					$scope.getThumbnails();
+
+				})
 			}
-
-			params.idtemplate_p = template_id;
-			
-			generalService.DSlide(params)
-			.then(function(data) {
-				$scope.getThumbnails();
-
-			})
 			
 			
 		});
@@ -2651,9 +2993,19 @@ angular.module('newApp')
 
 	$scope.duplicateSlide = function(template_id) {
 	
-		var params = {
-				idtemplate_p : ""
-			}
+		//designer
+		if ($scope.currentUser.typenum == '3') {
+			var params = { idudesign_p : "" }
+
+			params.idudesign_p = template_id;
+			
+			generalService.DuplicateDesignSlide(params)
+			.then(function(data) {
+				$scope.getDesignThumbnails();
+
+			})
+		} else {
+			var params = { idtemplate_p : "" }
 
 			params.idtemplate_p = template_id;
 			
@@ -2662,36 +3014,63 @@ angular.module('newApp')
 				$scope.getThumbnails();
 
 			})
+		}
 	}
-
 
 
 	$scope.insertSlide = function(template_id) {
 	
-		var params = { idtemplate_p : "" }
+		//designer
+		if ($scope.currentUser.typenum == '3') {
+			var params = { idudesign_p : "" }
 
-		params.idtemplate_p = template_id;
-		
-		generalService.ISlide(params)
-		.then(function(data) {
-			$scope.getThumbnails();
+			params.idudesign_p = template_id;
+			
+			generalService.IDesignSlide(params)
+			.then(function(data) {
+				$scope.getDesignThumbnails();
 
-		})
+			})
+		} else {
+			var params = { idtemplate_p : "" }
+
+			params.idtemplate_p = template_id;
+			
+			generalService.ISlide(params)
+			.then(function(data) {
+				$scope.getThumbnails();
+
+			})
+		}
 	}
 
 
 	$scope.moveSlide = function (template_id, direction) {
-	
-		var params = { idtemplate_p : "" }
-
-		params.idtemplate_p = template_id;
-		params.direction_p = direction;
 		
-		generalService.MSlide(params)
-		.then(function(data) {
-			$scope.getThumbnails();
+		//designer
+		if ($scope.currentUser.typenum == '3') {
+			var params = { idudesign_p : "" }
 
-		})
+			params.idudesign_p = template_id;
+			params.direction_p = direction;
+			
+			generalService.MDesignSlide(params)
+			.then(function(data) {
+				$scope.getDesignThumbnails();
+
+			})
+		} else {
+			var params = { idtemplate_p : "" }
+
+			params.idtemplate_p = template_id;
+			params.direction_p = direction;
+			
+			generalService.MSlide(params)
+			.then(function(data) {
+				$scope.getThumbnails();
+
+			})
+		}
 	
 	}
 	

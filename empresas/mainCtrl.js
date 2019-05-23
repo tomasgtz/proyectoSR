@@ -1169,6 +1169,7 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 	
 	var template_id;
 	var material_id;
+	var design_id;
 	
 	return { 
 
@@ -1177,6 +1178,14 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			this.template_id = params.idtemplate_p;
 			this.material_id = params.idmaterial_p;
 			setTimeout( function() { $rootScope.$broadcast('openTemplate'); }, 500);
+			
+		},
+
+		openDesign : function(params) {
+
+			this.material_id = params.idmaterial_p;
+			this.design_id = params.idudesign_p;
+			setTimeout( function() { $rootScope.$broadcast('openDesign'); }, 500);
 			
 		},
 	
@@ -2502,6 +2511,37 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 		},
 
+		GDesignThumbnails : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'getDesignSlidesThumbnails',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesigngroup_p : params.idudesigngroup_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(err){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
 
 		SaveNewThumbnail: function(params){
 			
@@ -2520,6 +2560,38 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				return str.join("&");
 			},
 			data: { idtemplate_p : params.idtemplate_p, img_data : params.img_data}
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		DesignSaveNewThumbnail: function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'DesignSaveNewThumbnail',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesign_p : params.idudesign_p, img_data : params.img_data}
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -2597,8 +2669,39 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 		},
 
+		GDesigns : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GDesigns',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idcompany_p : params.idcompany_p, iduser_p : params.iduser_p, idcampaign_p: params.idcampaign_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
 		GTemplatesThumbs: function(params){
-			console.log("params", params);
+			
 			var defered = $q.defer();
 			var promise = defered.promise;
 						
@@ -2628,8 +2731,39 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 		},
 
+		GDesignsThumbs: function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GDesignsThumbs',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { iduser_p : params.iduser_p, page_p: params.page_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},		
+
 		GTemplatesThumbsCount: function(params){
-			console.log("params", params);
+
 			var defered = $q.defer();
 			var promise = defered.promise;
 						
@@ -2656,7 +2790,36 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				defered.reject(err)
 			})
 			return promise;
-			
+		},
+
+		GDesignsThumbsCount: function(params){
+
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'GDesignsThumbsCount',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { iduser_p : params.iduser_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
 		},
 			
 
@@ -2690,6 +2853,38 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			return promise;
 			
 		},
+
+
+		GDesign : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+						
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'GDesign',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { idudesign_p : params.idudesign_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
 		
 		NewTemplate : function(params){
 			var defered = $q.defer();
@@ -2703,7 +2898,15 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				return new Uint8Array( out );
 			}
 
-			var content = JSON.stringify(params.contents_p);
+			var content = params.contents_p.toJSON(['id']);
+			content = JSON.stringify(content);
+
+			// fix to stringify correctly the clipTo property
+			content = content.replace('clipTo":"','clipTo":');
+			content = content.replace('}","backgroundColor', '},"backgroundColor');
+
+
+			//var content = JSON.stringify(params.contents_p);
 			var data = encode( content );
 			var data = content;
 			
@@ -2733,6 +2936,60 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 			return promise;
 		},
+
+
+		NewUDesign : function(params){
+			var defered = $q.defer();
+			var promise = defered.promise;
+			
+			function encode( s ) {
+				var out = [];
+				for ( var i = 0; i < s.length; i++ ) {
+					out[i] = s.charCodeAt(i);
+				}
+				return new Uint8Array( out );
+			}
+
+			var content = params.contents_p.toJSON(['id']);
+			content = JSON.stringify(content);
+
+			// fix to stringify correctly the clipTo property
+			content = content.replace('clipTo":"','clipTo":');
+			content = content.replace('}","backgroundColor', '},"backgroundColor');
+
+
+			//var content = JSON.stringify(params.contents_p);
+			var data = encode( content );
+			var data = content;
+			
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'NewUDesign',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+						str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					
+					return str.join("&");
+				},
+				data: { name_p : params.name_p,		idmaterial_p : params.idmaterial_p,			 contents_p: data, 
+					   iduser_p: params.iduser_p,   idtemplategroup_p: params.idtemplategroup_p, idcampaign_p : params.idcampaign_p, 
+					   idtemplate_p : params.idtemplate_p
+				}
+
+				}).success(function(data) {
+					if(data[0] !== undefined){
+					
+					}
+				
+					defered.resolve(data);		
+				}).error(function(data){
+					defered.reject(err)
+			})
+			
+			return promise;
+		},
 		
 		UTemplate : function(params){
 			
@@ -2749,8 +3006,13 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				}
 				return new Uint8Array( out );
 			}
+			var content = params.contents_p.toJSON(['id']);
+			content = JSON.stringify(content);
 
-			var content = JSON.stringify(params.contents_p);
+			// fix to stringify correctly the clipTo property
+			content = content.replace('clipTo":"','clipTo":');
+			content = content.replace('}","backgroundColor', '},"backgroundColor');
+			
 			var data = encode( content );
 			var contents_p = content;
 
@@ -2765,6 +3027,58 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				return str.join("&");
 			},
 			data: { idtemplate_p : idtemplate_p, name_p : name_p, contents_p: contents_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+
+		UUDesign : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idudesign_p 	= params.idudesign_p;
+			var name_p 			= params.name_p;
+
+			function encode( s ) {
+				var out = [];
+				for ( var i = 0; i < s.length; i++ ) {
+					out[i] = s.charCodeAt(i);
+				}
+				return new Uint8Array( out );
+			}
+			var content = params.contents_p.toJSON(['id']);
+			content = JSON.stringify(content);
+
+			// fix to stringify correctly the clipTo property
+			content = content.replace('clipTo":"','clipTo":');
+			content = content.replace('}","backgroundColor', '},"backgroundColor');
+			
+			var data = encode( content );
+			var contents_p = content;
+
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'UUDesign',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesign_p : idudesign_p, name_p : name_p, contents_p: contents_p }
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -2846,6 +3160,39 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 		},
 
+		DDesignSlide : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idudesign_p 				= params.idudesign_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'DDesignSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesign_p : idudesign_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
 
 	  DuplicateSlide : function(params) {
 	  
@@ -2865,6 +3212,39 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				return str.join("&");
 			},
 			data: { idtemplate_p : idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+	  
+	  },
+
+	  DuplicateDesignSlide : function(params) {
+	  
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idudesign_p 				= params.idudesign_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'DuplicateDesignSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesign_p : idudesign_p }
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -2912,8 +3292,41 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			return promise;
 	  
 	  },
+
+	  IDesignSlide : function(params) {
+	  
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idudesign_p 				= params.idudesign_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'IDesignSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesign_p : idudesign_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+	  
+	  },
 	
-	  MSlide: function(params) {
+	MSlide: function(params) {
 	
 		var defered 		= $q.defer();
 		var promise 		= defered.promise;
@@ -2943,8 +3356,44 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			.error(function(data){
 				defered.reject(err)
 			})
+		
+		return promise;
+	},
+
+	MDesignSlide: function(params) {
+	
+		var defered 		= $q.defer();
+		var promise 		= defered.promise;
+		
+		var idudesign_p 				= params.idudesign_p;	
+		var direction_p					= params.direction_p;
+		
+		$http({
+			method: 'POST',
+			url: webServiceUrl + 'MDesignSlide',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idudesign_p : idudesign_p, direction_p : direction_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
 		return promise;
 	}
+	
+
 	}
 })
 
@@ -2990,12 +3439,46 @@ angular.module('newApp').factory('Excel',function($window){
 	};
 })
 
+angular.module('newApp').service("userPersistenceService", function($cookies, $cookieStore) {
+	
+	var user = "";
+
+	return { 
+
+		setCookieData: function(user2) {
+			user = user2;
+			//user2.image = null;
+			//user2.logo = null;
+			$cookieStore.put("user", user2);
+			console.log(user);
+		},
+		getCookieData: function() {
+			user = $cookieStore.get("user");
+			return user;
+		},
+		clearCookieData: function() {
+			user = "";
+			$cookieStore.remove("user");
+		}
+
+	}
+
+});
+
 angular.module('newApp').controller('mainCtrl',
-    ['$scope', 'applicationService', 'quickViewService', 'builderService', 'pluginsService', '$location', 'userService', 'generalService',
-        function ($scope, applicationService, quickViewService, builderService, pluginsService, $location, userService, generalService) {
-    
+    ['$scope', '$cookies', '$cookieStore', 'applicationService', 'quickViewService', 'builderService', 'pluginsService', '$location', 'userService', 'generalService', 'userPersistenceService', 
+        function ($scope, $cookies, $cookieStore, applicationService, quickViewService, builderService, pluginsService, $location, userService, generalService, userPersistenceService) {
 			
-			$scope.showLoggin = true;
+			var temp = userPersistenceService.getCookieData();
+			console.log(temp);
+			if(temp && temp != '' && typeof temp == 'object') {
+				$scope.showLoggin = false;
+				$scope.currentUser = temp;
+			} else {
+				$scope.showLoggin = true;
+			}
+
+			
 			$scope.indexClass = "sidebar-condensed account2";
 			$scope.username = "";
 			$scope.password = "";
@@ -3223,7 +3706,7 @@ angular.module('newApp').controller('mainCtrl',
 			
 			
 			
-			$scope.tryLoggin = function(){
+			$scope.tryLoggin = function() {
 				if($scope.username === "" || $scope.password === ""){
 					$scope.message = "Su usuario o contraseña es inválido.";
 					$scope.alertClass = "alert alert-warning";
@@ -3244,9 +3727,7 @@ angular.module('newApp').controller('mainCtrl',
 							$scope.alertClass = "alert alert-warning";
 							$scope.alertShow = true;
 														
-						}
-							
-						else{							
+						} else {							
 							
 							// var payload = {
 								// "user_p" : "",
@@ -3282,6 +3763,9 @@ angular.module('newApp').controller('mainCtrl',
 								.then(function(data) {
 
 								});
+
+								userPersistenceService.setCookieData($scope.currentUser);
+
 								$scope.alertShow = false;
 								$scope.showLoggin = false;
 								$scope.indexClass = "fixed-topbar fixed-sidebar theme-sdtl color-default";
@@ -3305,6 +3789,7 @@ angular.module('newApp').controller('mainCtrl',
 			}
 			
 			$scope.logOut = function(){
+				userPersistenceService.clearCookieData();
 				$scope.showLoggin = true;
 				$scope.indexClass = "sidebar-condensed account2";
 				$scope.username = "";

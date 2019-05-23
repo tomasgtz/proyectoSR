@@ -1,6 +1,8 @@
 ﻿<div>
 		<div class="header">
-			<h2>MIS <strong>CAMPAÑAS <i class="fa fa-flag fa-2x"></i></strong> </h2>
+			<!-- diseñador -->
+			<h3 ng-if="currentUser.typenum == '3'"><strong>CAMPAÑAS <i class="fa fa-flag fa-2x"></i></strong></h3>
+			<h3 ng-if="currentUser.typenum == '2' || currentUser.typenum == '4'">CREA UNA <strong>CAMPAÑA <i class="fa fa-flag fa-2x"></i></strong> </h3>
 			<div class="breadcrumb-wrapper">
 				<!-- <ol class="breadcrumb">
 					<li>
@@ -31,7 +33,6 @@
 							</div>
 						</div>
 						<div class="modal-body">
-							<p>Definición de la campaña.</p>
 							<div class="row" ng-show="wizardSteps === 1">
 								<div class="col-md-6">
 									<div class="form-group">
@@ -105,7 +106,8 @@
 								<div class="col-xlg-12 col-lg-12">
 									<div class="panel">
 										<div class="panel-header">
-											<h3><i class="icon-globe-alt"></i> <strong>CONFIGURACIÓN</strong> TEXTOS</h3>
+											<!--<h3><i class="icon-globe-alt"></i> <strong>CONFIGURACIÓN</strong> TEXTOS</h3> -->
+											<p><i class="icon-globe-alt"></i> Agrega una frase</p>
 										</div>
 										<div class="panel-content">
 											<div class="row">
@@ -159,7 +161,8 @@
 								<div class="col-lg-12 portlets">
 									<div class="panel">
 										<div class="panel-header panel-controls">
-											<h3><i class="icon-cloud-upload"></i> CONFIGURACIÓN <strong>IMÁGENES</strong></h3>
+											<p><i class="icon-cloud-upload"></i> Agrega imágenes</p>
+											<!-- <h3><i class="icon-cloud-upload"></i> CONFIGURACIÓN <strong>IMÁGENES</strong></h3> -->
 										</div>
 										<div class="panel-content">
 											<div class="row">
@@ -180,8 +183,9 @@
 												</div>
 											</div>
 											<div class="row" style="margin-top:12px;" ng-hide="hideDzImagesIdentidad === true"> 
-						                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA IDENTIDAD</strong></h3>
-						                        <h4>Dé click sobre la imagen para agregarla a la campaña</h4>
+						                        <!-- <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>IMÁGENES<strong> DE LA IDENTIDAD</strong></h3> -->
+												<p><i class="icon-cloud-upload"></i> Agrega imágenes de la sección de Identidad</p>
+						                        <p>Dé click a la imagen para agregarla</p>
 						                        <form id="dzImagesIdentidad" action="upload.php" class="dropzone" 
 						                           ng-dropzone">
 						                        </form>
@@ -202,7 +206,8 @@
 								<div class="col-lg-12 portlets">
 									<div class="panel">
 										<div class="panel-header panel-controls">
-											<h3><i class="icon-cloud-upload"></i> CONFIGURACIÓN <strong>PALETTE</strong></h3>
+											<!-- <h3><i class="icon-cloud-upload"></i> CONFIGURACIÓN <strong>PALETTE</strong></h3> -->
+											<p><i class="icon-cloud-upload"></i> Agrega colores a tu paleta</p>
 										</div>
 										<div class="panel-content">
 											<div class="row">
@@ -218,7 +223,7 @@
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-sm-3">Agrega tus colores. Aseg&uacute;rate de agregar al menos dos, uno para el color de letra y el otro para lo dem&aacute;s.
+												<div class="col-sm-3">Agrega al menos dos colores.
 												</div>
 												<div class="col-sm-9">
 													<input colorpicker colorpicker-position="bottom" type="text" ng-model="your_model" />
@@ -262,7 +267,8 @@
 								<div class="col-lg-12 portlets">
 									<div class="panel">
 										<div class="panel-header panel-controls">
-											<h3><i class="icon-cloud-upload"></i> CONFIGURACIÓN <strong>TIPOGRAFÍAS</strong></h3>
+											<!-- <h3><i class="icon-cloud-upload"></i> CONFIGURACIÓN <strong>TIPOGRAFÍAS</strong></h3> -->
+											<p><i class="icon-cloud-upload"></i> Agrega tipografías</p>
 										</div>
 										<div class="panel-content">
 											<div class="row">
@@ -274,14 +280,18 @@
 													</form>
 												</div>
 											</div>
+										
+											<div class="row" style="margin-top:12px;" ng-hide="hideDzFontsIdentidad === true"> 
+												<div class="col-sm-12">
+													<!-- <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>FUENTES<strong> DE LA IDENTIDAD</strong></h3>
+													<h4>Dé click sobre la fuente para agregarla a la campaña</h4> -->
+													<p><i class="fa fa-picture-o"></i> Agrega tipografías de la sección de Identidad</p>
+													<form id="dzFontsIdentidad" action="upload.php" class="dropzone" 
+													   ng-dropzone">
+													</form>
+												</div>
+											</div>
 										</div>
-										<div class="row" style="margin-top:12px;" ng-hide="hideDzFontsIdentidad === true"> 
-					                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i>FUENTES<strong> DE LA IDENTIDAD</strong></h3>
-					                        <h4>Dé click sobre la fuente para agregarla a la campaña</h4>
-					                        <form id="dzFontsIdentidad" action="upload.php" class="dropzone" 
-					                           ng-dropzone">
-					                        </form>
-					                    </div>
 									</div>
 									<div class="row">
 										<div class="col-md-12">
@@ -297,7 +307,8 @@
 								<div class="col-lg-12 portlets">
 									<div class="panel">
 										<div class="panel-header panel-controls">
-											<h3><i class="icon-object-group"></i> SELECCIONA LOS <strong>MATERIALES</strong></h3>
+											<!--<h3><i class="icon-object-group"></i> SELECCIONA LOS <strong>MATERIALES</strong></h3>-->
+											<p><i class="fa fa-picture-o"></i> Selecciona los materiales que Integran tu campaña</p>
 										</div>
 										<div class="panel-content">
 											<div class="row">
@@ -311,15 +322,16 @@
 
 													
 													<ul class="nav nav-tabs" role="tablist">
-													  <li role="presentation" class="active"><a data-target="#online_1" role="tab" data-toggle="tab">on line</a></li>
-													  <li role="presentation"><a data-target="#offline_1" role="tab" data-toggle="tab">off line</a></li>
+													  <li role="presentation" class="active"><a data-target="#online_1" role="tab" data-toggle="tab">Para uso digital</a></li>
+													  <li role="presentation"><a data-target="#offline_1" role="tab" data-toggle="tab">Para impresi&oacute;n</a></li>
 													</ul>
 
 													<div class="tab-content">
 														<div role="tabpanel" class="tab-pane active" id="online_1">
 															<div ng-repeat="(index, value) in onlineGrouped" class="col-sm-12">
 																<div ng-if="index != 'undefined'"><b>{{index}}</b></div>
-																<hr>
+																<!-- <hr> -->
+																<p>&nbsp;</p>
 																<div class="col-sm-3" ng-repeat="material in value" ng-if="index != 'undefined'">
 																	<div>
 																		<span><img width="100px" src="images/materiales/{{material.items.thumbnail}}">
@@ -430,8 +442,8 @@
 							<col width="10%">
 							<thead>
 								<tr>
-									<th></th>
-									<th style="" width="10px">Detalle</th>
+									<th ng-class="{ hidden  : currentUser.typenum == '3'}"></th>
+									<!-- <th style="" width="10px">Detalle</th> -->
 									<th width="10px">
 										<a style="cursor:pointer;" ng-click="sortType = 'campaign_name'; sortReverse = !sortReverse">
 											Título
@@ -473,13 +485,13 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="campaign in allCampaigns | orderBy:sortType:sortReverse | filter:searchValue" >
-									<td>
+									<td ng-class="{ hidden  : currentUser.typenum == '3'}">
 										<i ng-click="selectedCampaignForDelete(campaign)" data-toggle="modal" data-target="#deleteCampaign"
 										class="fa fa-minus-circle fa-2x" style="cursor:pointer; color:#4e120c;"></i>
 									</td>
-									<!-- <td><img src="assets/global/images/layouts/boxed.jpg" width="150px;" height="75px;"/></td> -->
-									<td class="text-center" style="cursor:pointer;" ng-click="goToEditCampaign(campaign)"><i class="fa fa-eye fa-2x"></i></td>
-									<td style="cursor:pointer;" ng-click="goToEditCampaign(campaign)">{{campaign.campaign_name}}</td>
+									<!-- <td><img src="assets/global/images/layouts/boxed.jpg" width="150px;" height="75px;"/></td> 
+									<<td class="text-center" style="cursor:pointer;" ng-click="goToEditCampaign(campaign)"><i class="fa fa-eye fa-2x"></i></td>-->
+									<td style="cursor:pointer;" ng-click="goToEditCampaign(campaign)"><a>{{campaign.campaign_name}}</a></td>
 									<td>{{campaign.date_up | date}}</td>
 									<td class="text-center"><a ng-click="showDescription(campaign)" data-toggle="modal" data-target="#modal-description" class="btn btn-default btn-raised rippler rippler-default fa fa-search" style="height: 36px;line-height: 20px;font-size: 20px;"></a></td>
 									<td>{{campaign.segment_description}}</td>

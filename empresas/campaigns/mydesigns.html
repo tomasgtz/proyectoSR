@@ -25,8 +25,12 @@
 								  <div class="thumb" data-toggle='modal' data-target="#myModal" ng-if="image.src != 'undefined'">
 									<a class="thumbnail" href="#campaign-materials" ng-click="getIndex(image)">
 									  <img class="img-responsive" ng-src="{{image.src}}" alt="invalid image url">
-									  <span class="text-content"><span>{{image.caption}}</span></span><br>
-									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>{{image.caption2}}</span></span>
+									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>DISEÑO: </span></span>
+									  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption}}</span></span><br>
+									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>CAMPAÑA: </span></span>
+									  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption2}}</span></span><br>
+									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>MATERIAL: </span></span>
+									  <span class="text-content" style="font-size:0.7em; "><span>{{image.material_description}}</span></span><br>
 									</a>
 								  </div>
 								</div>

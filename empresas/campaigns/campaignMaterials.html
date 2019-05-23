@@ -1,7 +1,8 @@
      
 <div class="header">
 	<div class="row">
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO <strong>DE LA CAMPAÑA</strong>:</div>
+		<div ng-if="currentUser.typenum == '3'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO:</div>
+		<div ng-if="currentUser.typenum == '2' || currentUser.typenum == '4'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO <strong>DE LA PLANTILLA</strong>:</div>
 		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-model="CampaignSelected">{{CampaignSelected.name}}</div>
 	</div>
 	<div class="breadcrumb-wrapper">
@@ -20,7 +21,7 @@
 	<div class="row panel" style="padding-top:5px;">
 		<div class="col-sm-6 form-group">
 			<div class="col-sm-3">
-				<label for="field-2" class="control-label">Escoger material:</label>
+				<label for="field-2" class="control-label">Selecciona material:</label>
 			</div>
 			<div class="col-sm-6" style="z-index: 0;">
 					<select class="form-control" ng-change="materialChange(material)" id="selectmateriall" name="singleSelect" ng-model="material" style="width:200px;">
@@ -35,7 +36,7 @@
 	    <div class="row panel" ng-show="showCanvasMaterialSelected">
 			<div class="col-sm-12">
 				<div class="panel with-nav-tabs panel-default edit_utils_container">
-					<div class="panel-body">		
+					<div class="panel-body">
 						<div class="col-sm-1" style="min-height: 100px; max-height: 100px; min-height: 715px; max-width: 55px;">
 							<ul class="nav navbar-nav fixtop" >	
 								<li> 
@@ -57,7 +58,10 @@
 								<!-- <li>
 									<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="saving()"><img title="Descargar archivo" src="images/utils/{{icon_folder}}/save32x32.png" style="width:48px; height:48px"></button>
 								</li> -->
-								<li>
+								<li ng-if="currentUser.typenum == '3'"><!-- diseñador -->
+									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-design" data-toggle="modal"><img title="Guardar Diseño" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
+								</li>
+								<li ng-if="currentUser.typenum == '2' || currentUser.typenum == '4'"><!-- admin -->
 									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-template" data-toggle="modal"><img title="Guardar como Plantilla" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
 								</li>
 								<li>
@@ -396,6 +400,30 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="modal fade" id="save-design" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+						<h4 class="modal-title">NOMBRE DEL<strong> DISEÑO</strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-3 text-center">	
+								<input ng-model="design_name" style="width:120px;" type="text" >
+							</div>
+							<div class="col-sm-3 text-center">	
+								<button ng-click="savingToDB('design')" style="width:120px;" type="button" class="btn btn-success btn-embossed" data-dismiss="modal">Guardar</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 
 		<div class="modal fade" id="modal-open-template" tabindex="-1" role="dialog" aria-hidden="true">
@@ -483,7 +511,7 @@
 										<div class="form-group">
 											<div class="input-group">
 												<ul class="icheck-colors">
-													<li ng-click="changeCanvasColor(pal)" ng-repeat="pal in paletteArray"  ng-style="{'background-color':pal.color}" style="border: 2px solid black;">
+													<li ng-click="changeCanvasColor(pal)" ng-repeat="pal in paletteArray"  ng-style="{'background-color':pal.color}" style="border: 2px solid black; margin: 2px;">
 													</li>
 												</ul>
 											</div>
