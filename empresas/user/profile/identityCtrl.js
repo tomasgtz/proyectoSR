@@ -123,13 +123,10 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 					}
 				}
 				
-				// console.log($scope.materialArray);
-				// console.log($scope.newMaterials);		
+		
 				// var index = $scope.materialArray.indexOf(addMaterial);
-				// console.log(index);				
 				// $scope.materialArray.splice(index, 1);
 				// index = $scope.newMaterials.indexOf(addMaterial);	
-				// console.log(index);						
 				// $scope.newMaterials.splice(index, 1);
 				
 			}
@@ -245,7 +242,7 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 		var accepti = ".png,.jpg";
 		var acceptf = ".otf, .ttf";
 		
-		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: false , acceptedFiles: accepti });	
+		var dzImages = new Dropzone('#dzImages', { addRemoveLinks: true , acceptedFiles: accepti });	
 		var dzFonts  = new Dropzone('#dzFonts',  { addRemoveLinks: true , acceptedFiles: acceptf });		
 		
 		if($scope.currentUser.typenum == 1 || $scope.currentUser.typenum == 3) {
@@ -270,8 +267,8 @@ angular.module('newApp').controller('identityCtrl', function ($scope, campaignSe
 			console.log(file);
 			for(var i in $scope.imagesArrayCopy){
 				
-				var newPack 	= { id_cgpack: 0, image: '' };
-				newPack.id_cgpack	= $scope.imagesArrayCopy[i].id_cgpack;
+				var newPack 	= { id_pack: 0, image: '' };
+				newPack.id_pack	= $scope.imagesArrayCopy[i].id_pack;
 				newPack.image		= $scope.imagesArrayCopy[i].image;
 					
 				if(file.name === $scope.imagesArrayCopy[i].image){

@@ -421,7 +421,7 @@
 								<i ng-click="reload()" style="cursor:pointer;" class="fa fa-refresh fa-2x"></i><br/><span ng-show="showflag" style="font-size:18px;" class="label label-default">Se actualizó la información de las campañas.</span>
 							</div>
 							<div class="col-sm-10" style="text-align:right;">
-								<button ng-click="viewNewCampaigns()" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-plus"></i> Nueva Campaña</button>
+								<button ng-click="viewNewCampaigns()" class="btn btn-embossed btn-primary m-r-20" ng-if="currentUser.typenum == '2'"><i class="fa fa-plus"></i> Nueva Campaña</button>
 							</div>
 						</div>
 						<div class="row text-left">

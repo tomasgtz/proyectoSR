@@ -38,6 +38,9 @@ angular.module('newApp')
 		}
 	$scope.currentFont = "";
 	$scope.currentFontSize = "";
+	$scope.currentFontAlign = "";
+
+	$scope.activeObject = null;
 	
 	$scope.objectsC = [];
 	$scope.factory = {};
@@ -158,7 +161,6 @@ angular.module('newApp')
 	generalService.GFonts()
 	.then(function(data) {
 		$scope.fontsUploaded = data;
-		//console.log("asd tom carga todas las fuentes, de la campaña y de la compañia ");
 
 	})
 
@@ -225,6 +227,9 @@ angular.module('newApp')
 			.then(function(data) {
 				
 				$scope.factory.canvas.clear();	
+
+				data[0].contents = data[0].contents.replace(/\n/g, "\\n");
+				data[0].contents = data[0].contents.replace(/\r/g, "\\r");
 				$scope.removeClipToFunctions(JSON.parse(data[0].contents));
 				$scope.factory.canvas.loadFromJSON(data[0].contents);
 
@@ -351,7 +356,6 @@ angular.module('newApp')
   
 	$scope.modifyFont = function(){
 			
-		//console.log("asd tom21 aplica la font " + $scope.myFontStack);
 		var activeObject = $scope.factory.canvas.getActiveObject();
 		activeObject.fontFamily = $scope.myFontStack;
 		$scope.factory.canvas.renderAll();
@@ -513,7 +517,6 @@ angular.module('newApp')
 		const hc_width = parseInt($scope.newMaterialChange.width_small) + 20 + 10;
 		const hc_height = parseInt($scope.newMaterialChange.height_small) + 20 + 10;
 		
-		//console.log("asd tom23 establece ancho de hero_container = " + hc_width);
 		
 		$("#hero_container").css("width", hc_width +"px");
 		$("#hero_container").css("height", hc_height +"px");
@@ -766,10 +769,7 @@ angular.module('newApp')
 			$scope.CampaignSelected.date_update = data.date_update;
 			$scope.CampaignSelected.status 		= data.status;	
 			$scope.CampaignSelected.autorization = data.download;		
-		
-			//console.log("asd tom9 carga datos de campaña description= " + $scope.CampaignSelected.description);			
-			//console.log("asd tom9 carga datos de campaña autorization= " + $scope.CampaignSelected.autorization);				
-			//console.log("asd tom9 carga datos de campaña name= " + $scope.CampaignSelected.name);				
+					
 
 			var params = {
 				"campaign_p" : ""
@@ -824,7 +824,6 @@ angular.module('newApp')
 			campaignService.GFontsCampaign(params)
 			.then(function(data) {
 				$scope.fontArray = data;
-				//console.log("asd tom18 carga fuentes de la campaña " + $scope.fontArray);
 				
 				$scope.fontsDropdown = [];
 		
@@ -847,7 +846,6 @@ angular.module('newApp')
 			})
 			
 			$scope.applyFont2 = function(font){
-				//console.log("asd tom22 applyfont " + font.name);
 				
 				var activeObject = $scope.factory.canvas.getActiveObject();
 				var style = { };
@@ -860,43 +858,23 @@ angular.module('newApp')
 					style["fontFamily"] = font.name;
 					activeObject.setSelectionStyles(style);
 				} else {
-					activeObject.fontFamily = font.name;
+					activeObject.set({
+						fontFamily : font.name
+					});
+
+				
 				}
 				$scope.factory.canvas.renderAll();
 		
 			}
 			
-			/*$scope.unApplyFont2 = function() {
-				
-				var activeObject = $scope.factory.canvas.getActiveObject();
-				var style = { };
-				
-				if (activeObject.setSelectionStyles && activeObject.isEditing) {
-					
-					style["fontFamily"] = $scope.currentFont;
-					activeObject.setSelectionStyles(style);
-				} else {
-					activeObject.fontFamily = $scope.currentFont;
-				}
-				
-				$scope.factory.canvas.renderAll();
-			}*/
-			
-			/*$scope.unApplyFontSize2 = function() {
-				
-				var activeObject = $scope.factory.canvas.getActiveObject();
-				activeObject.fontSize = $scope.currentFontSize;
-				$scope.factory.canvas.renderAll();
-			}*/
-			
+
 			$scope.applyFontSize22 = function(size) {
 				
 				var activeObject = $scope.factory.canvas.getActiveObject();
 				var style = { };
 				
 				$scope.currentFontSize = activeObject.fontSize;
-				
-				//console.log("asd tom22 apply size " + size + " " + activeObject.fontFamily + " family 1 = " + $scope.fontsDropdown[0].name);
 				
 				if( typeof activeObject.fontFamily == 'undefined' || activeObject.fontFamily == "" || activeObject.fontFamily == "Allerta+Stencil") {
 					
@@ -905,19 +883,98 @@ angular.module('newApp')
 				
 				if (activeObject.setSelectionStyles && activeObject.isEditing) {
 					
-					style["fontSize"] = size;
+					style["fontSize"] = size - 4;
 					activeObject.setSelectionStyles(style);
 				} else {
-					activeObject.fontSize = size;
+
+					activeObject.set({
+						fontSize : size - 4
+					});
+
 				}
 				
 				$scope.factory.canvas.renderAll();
 				$scope.factory.canvas.renderAll();
-		
 			
 			}
+
+
+			$scope.changeTextAlign = function(alignment) {
+				var activeObject = $scope.factory.canvas.getActiveObject();
+				var style = {};
+				
+				$scope.currentFontAlign = alignment;
+
+				if( typeof activeObject.fontFamily == 'undefined' || activeObject.fontFamily == "" || activeObject.fontFamily == "Allerta+Stencil") {
+					
+					activeObject.set({
+						fontFamily : $scope.fontsDropdown[0].name
+					});
+				}
+				
+				activeObject.textAlign = alignment;
+				$scope.factory.canvas.renderAll();
+			}
+
+			$scope.changeTextLineHeight = function(line_height) {
+				var activeObject = $scope.factory.canvas.getActiveObject();
+				var style = {};
+
+				if( typeof activeObject.fontFamily == 'undefined' || activeObject.fontFamily == "" || activeObject.fontFamily == "Allerta+Stencil") {
+					
+					activeObject.fontFamily = $scope.fontsDropdown[0].name;
+				}
+				
+				activeObject.lineHeight = line_height;
+				$scope.factory.canvas.renderAll();
+			}
+
+			$scope.convertToArcText = function() {
+				var activeObject = $scope.factory.canvas.getActiveObject();
+				$scope.activeObject = activeObject;
+
+				if( typeof activeObject.fontFamily == 'undefined' || activeObject.fontFamily == "" || activeObject.fontFamily == "Allerta+Stencil") {
+					
+					activeObject.fontFamily = $scope.fontsDropdown[0].name;
+				}
+
+				if(activeObject.id.substring(0, 7) == 'arctext') {
+
+					activeObject.set({
+						diameter : +$('#ttc_diameter').val(),
+						kerning  : +$('#ttc_kerning').val(),
+						flipped  : $('#ttc_flip').is(':checked')
+							});
+
+
+					$scope.factory.canvas.renderAll();
+				} else {
+					
+					var random = $scope.getRandomSpan();
+					random = "arctext" + random;
+
+					var arcText = new fabric.CurvedText(activeObject.text, {
+						id: random,
+						fontSize: activeObject.fontSize,
+						fontFamily: activeObject.fontFamily,
+						left: activeObject.left,
+						top: activeObject.top,
+						diameter: +$('#ttc_diameter').val(),
+						kerning: +$('#ttc_kerning').val(),
+						flipped: $('#ttc_flip').is(':checked')
+					});
+
+					$scope.factory.canvas.remove(activeObject);
+					$scope.factory.canvas.add(arcText);
+					$scope.factory.canvas.setActiveObject(arcText);
+					$scope.factory.canvas.renderAll();
+					
+				}
+				
+				
 			
-			
+			}
+
 			campaignService.GMaterialsCampaign(params)
 			.then(function(data) {
 				$scope.materialArray = data;
@@ -930,7 +987,6 @@ angular.module('newApp')
 			.then(function(data) {
 				if(data.length>0){
 					$scope.phrasesArray = data;
-					//console.log("asd tom11 carga textos " + $scope.phrasesArray);
 					for (var i in $scope.phrasesArray){
 						var newPhrase   = { id_cgtext: '', date_up: '', date_update: '', fk_campaign: '', status: '', text: ''};
 						
@@ -1211,8 +1267,6 @@ angular.module('newApp')
 				  activeObject.id = activeObject.get('type') + $scope.getRandomSpan();
 			  }
 			  
-			  //console.log("asd tom crop activeObject.id = " + activeObject.get('type'));
-			  
 			  if(activeObject.id.indexOf("circle") !== -1 || activeObject.id.indexOf("triangle") !== -1
 					|| activeObject.id.indexOf("rect") !== -1 || activeObject.id.indexOf("text") !== -1
 					|| activeObject.id.indexOf("line") !== -1){
@@ -1261,13 +1315,32 @@ angular.module('newApp')
 					activeObject.setFill(pal.color);
 				}
 				
-				
+			} else if(activeObject.type === "curved-text") {
+				activeObject.set({
+					fill : pal.color
+				});
 			}
 			// $scope.formSelected = false;
 			// $scope.factory.canvas.deactivateAll().renderAll();
 			// activeObject.setColor(pal.color);
 			$scope.factory.canvas.renderAll();
 	  }
+
+	$scope.applyOpacity = function(obj){
+		var activeObject = $scope.factory.canvas.getActiveObject();
+		var style = {};
+
+		if (activeObject.setSelectionStyles && activeObject.isEditing) {	
+			style["opacity"] = obj.myopacity;
+			activeObject.setSelectionStyles(style);
+		} else {
+			activeObject.set({
+				opacity: obj.myopacity
+			});
+		}
+
+		$scope.factory.canvas.renderAll();
+	}
 	  
 	  var download = function download(url, name) {
 
@@ -2078,17 +2151,13 @@ angular.module('newApp')
 		
 		$scope.addText = function (textParam) {
 			 
-			//console.log("asd tom13 agregando texto al canvas textParam = " + textParam);
 			var random = $scope.getRandomSpan();
 			random = "text" + random;
 			var bkColor = $scope.factory.canvas.backgroundColor;
 	
-			//console.log("asd tom13 agregando texto al canvas backgroundColor =" + bkColor);
-			
 			var presetColor = 0;
 			var fontColor = "#000000";
 			var paletteSize = $scope.paletteArray.length;
-			//console.log("asd tom15 paletteSize = " + paletteSize);
 			
 			if (paletteSize == 1) {
 				

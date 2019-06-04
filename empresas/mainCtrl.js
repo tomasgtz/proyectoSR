@@ -115,7 +115,8 @@ angular.module('newApp').service('userService', function($http,$q){
 			return promise;
 			
 		}
-	
+
+		
 	}
 
 })
@@ -3469,14 +3470,16 @@ angular.module('newApp').controller('mainCtrl',
     ['$scope', '$cookies', '$cookieStore', 'applicationService', 'quickViewService', 'builderService', 'pluginsService', '$location', 'userService', 'generalService', 'userPersistenceService', 
         function ($scope, $cookies, $cookieStore, applicationService, quickViewService, builderService, pluginsService, $location, userService, generalService, userPersistenceService) {
 			
-			var temp = userPersistenceService.getCookieData();
+			/*var temp = userPersistenceService.getCookieData();
 			console.log(temp);
 			if(temp && temp != '' && typeof temp == 'object') {
 				$scope.showLoggin = false;
 				$scope.currentUser = temp;
 			} else {
 				$scope.showLoggin = true;
-			}
+			}*/
+
+			$scope.showLoggin = true;
 
 			
 			$scope.indexClass = "sidebar-condensed account2";
@@ -3789,7 +3792,7 @@ angular.module('newApp').controller('mainCtrl',
 			}
 			
 			$scope.logOut = function(){
-				userPersistenceService.clearCookieData();
+				//userPersistenceService.clearCookieData();
 				$scope.showLoggin = true;
 				$scope.indexClass = "sidebar-condensed account2";
 				$scope.username = "";

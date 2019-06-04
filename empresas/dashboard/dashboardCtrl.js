@@ -8,7 +8,7 @@
  * Controller of the newappApp
  */
 angular.module('newApp')
-  .controller('dashboardCtrl', ['$scope', 'userService', 'applicationService', 'pluginsService' , 'generalService', 'campaignService', 'Excel', '$timeout', function ($scope, userService, applicationService, pluginsService, generalService, campaignService, Excel, $timeout) {
+  .controller('dashboardCtrl', ['$scope', 'userService', 'applicationService', 'pluginsService' , 'generalService', 'campaignService', 'Excel', '$timeout', '$location', function ($scope, userService, applicationService, pluginsService, generalService, campaignService, Excel, $timeout, $location) {
 		
 		$scope.activeTab = true;
 		$scope.visitCount = 0;
@@ -131,8 +131,17 @@ angular.module('newApp')
 				
 		userService.currentUser()
 		.then(function(data) {
-			if (data.id_user === undefined){
+			if (data.id_user === undefined || data.id_user === ""){
+				//$location.path('/');
+				
+				//userPersistenceService.clearCookieData();
+				$scope.showLoggin = true;
+				$scope.indexClass = "sidebar-condensed account2";
+				$scope.username = "";
+				$scope.password = "";
+				$scope.alertShow = false;
 				$location.path('/');
+			
 			}else{
 				$scope.currentUser = data;
 				if($scope.currentUser.days_left < 0){

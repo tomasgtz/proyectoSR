@@ -1,7 +1,7 @@
 
 <div>
 	<div class="header">
-		<h2><strong>PLANTILLAS <i class="fa fa-briefcase fa-2x"></i></strong> </h2>
+		<h3><strong>PLANTILLAS <i class="fa fa-briefcase fa-2x"></i></strong> </h3>
 		<div class="breadcrumb-wrapper">
 
 		</div>
@@ -22,27 +22,32 @@
 					<div class="modal-body">
 
 						<div class="row" style="margin-top:12px;">
-							<h3 style="border-bottom: 1px solid black;"><i class="fa fa-file-text"></i> DEFINIDAS<strong> PREVIAMENTE</strong></h3>
-							<h4>Dé click sobre la imagen para editarla</h4>
-							
-							<div class="row">
-								<div class="col-md-3 col-xs-6" ng-repeat="image in images">
-								  <div class="thumb" data-toggle='modal' data-target="#myModal" ng-if="image.src != 'undefined'">
-									<a class="thumbnail" href="#campaign-materials" ng-click="getIndex(image)">
-									  <img class="img-responsive" ng-src="{{image.src}}" alt="invalid image url">
-									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>PLANTILLA: </span></span>
-									  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption}}</span></span><br>
-									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>CAMPAÑA: </span></span>
-									  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption2}}</span></span><br>
-									  <span class="text-content" style="font-size:0.7em; color:gray" ><span>MATERIAL: </span></span>
-									  <span class="text-content" style="font-size:0.7em; "><span>{{image.material_description}}</span></span><br>
-									</a>
-								  </div>
-								</div>
+							<div class="col-sm-6 text-left" >
+								<h4>Dé click sobre la imagen para editarla</h4>
 							</div>
 						</div>
+
 						<div class="row">
-							<input type="button" class="btn" value="Anteriores" ng-click="prev()" ng-disabled="page == 0"> <input type="button" class="btn" value="Siguientes" ng-click="next()" ng-disabled="total < ((page * item_per_page) + item_per_page)">
+							<div class="col-md-3 col-xs-6" ng-repeat="image in images">
+							  <div class="thumb" data-toggle='modal' data-target="#myModal" ng-if="image.src != 'undefined'">
+								<a class="thumbnail" href="#campaign-materials" ng-click="getIndex(image)">
+								  <img class="img-responsive" ng-src="{{image.src}}" alt="invalid image url">
+								  <span class="text-content" style="font-size:0.7em; color:gray" ><span>PLANTILLA: </span></span>
+								  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption}}</span></span><br>
+								  <span class="text-content" style="font-size:0.7em; color:gray" ><span>CAMPAÑA: </span></span>
+								  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption2}}</span></span><br>
+								  <span class="text-content" style="font-size:0.7em; color:gray" ><span>MATERIAL: </span></span>
+								  <span class="text-content" style="font-size:0.7em; "><span>{{image.material_description}}</span></span><br>
+								</a>
+							  </div>
+							</div>
+						</div>
+					
+						<div class="row">
+							<div class="col-md-3 col-xs-6">
+								<input type="button" class="btn" value="Anteriores" ng-click="prev()" ng-disabled="page == 0"> 
+								<input type="button" class="btn" value="Siguientes" ng-click="next()" ng-disabled="total < ((page * item_per_page) + item_per_page)">
+							</div>
 						</div>
 					</div>
 				</div>

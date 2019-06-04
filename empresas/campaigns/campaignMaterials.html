@@ -544,13 +544,14 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-12">
-								<h2 style="margin-top: 40px;" class="c-primary m-b-30">Formato</h2>
+								<h2 style="margin-top: 70px;" class="c-primary m-b-30">Formato</h2>
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="row" ng-if="formSelected || showFonts" style="margin-bottom: -10px;">
 											<div class="col-sm-12">
 												<div class="form-group">
 													<div class="input-group">
+														<label>Cambiar color</label>
 														<ul class="icheck-colors">
 															<li ng-click="changeFormColor(pal)" ng-repeat="pal in paletteArray"  ng-style="{'background-color':pal.color}" style="border: 2px solid black;">
 															</li>
@@ -564,21 +565,69 @@
 														<p>{{alertExpiredMessage}}</p>
 													</div>
 												</div>
-												<!--<input colorpicker colorpicker-position="bottom" type="text" ng-model="your_model" style="width: 90px;" />
-												<button ng-click="newPalette(your_model)" type="button" class="btn btn-sm btn-primary">
-												<i class="fa fa-plus-square"></i>
-												</button>-->
 											</div>
 										</div>
-										
-										<!-- <div class="text-center"> 
-											<button ng-if="showFonts" data-dismiss="modal" data-toggle="modal" data-target="#apply-fonts" class="btn btn-embossed btn-warning m-r-20" style="width:180px; background-color: #44BBFF; margin-top: 8px; margin-left: 10px;">Aplicar Tipografías</button>
-										</div> -->
+										<div class="row" ng-if="showFonts" style="margin-bottom: -10px;">
+											<div class="col-sm-12">
+												<div class="form-group">
+													<div class="btn-group">
+														<button type="button" class="btn btn-primary">Alineaci&oacute;n</button>
+														<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+															<span class="caret"></span>
+														</button>
+														<ul class="dropdown-menu" role="menu" style='height:180px; overflow: scroll;'>
+															<li ng-click="changeTextAlign('left')" ng-mouseover="changeTextAlign('left')" ><h3>Izquierda</h3></li>
+															<li ng-click="changeTextAlign('center')" ng-mouseover="changeTextAlign('center')"><h3>Centrado</h3></li>
+															<li ng-click="changeTextAlign('right')" ng-mouseover="changeTextAlign('right')"><h3>Derecha</h3></li>
+															<li ng-click="changeTextAlign('justify')" ng-mouseover="changeTextAlign('justify')"><h3>Justificado</h3></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row" ng-if="showFonts" style="margin-bottom: -10px;">
+											<div class="col-sm-12">
+												<div class="form-group">
+													<div class="btn-group">
+														<button type="button" class="btn btn-primary">Interlineado</button>
+														<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+															<span class="caret"></span>
+														</button>
+														<ul class="dropdown-menu" role="menu" style='height:180px; overflow: scroll;'>
+															<li ng-click="changeTextLineHeight('1')" ng-mouseover="changeTextLineHeight('1')" ><h3>Sencillo</h3></li>
+															<li ng-click="changeTextLineHeight('1.5')" ng-mouseover="changeTextLineHeight('1.5')"><h3>1.5 l&iacute;neas</h3></li>
+															<li ng-click="changeTextLineHeight('2')" ng-mouseover="changeTextLineHeight('2')"><h3>Doble</h3></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row" ng-if="showFonts" style="margin-bottom: -10px;">
+											<div class="col-sm-12">
+												<div class="form-group">
+													<div class="btn-group">
+														<button type="button" class="btn btn-primary" ng-click="convertToArcText()">Convertir texto en curva</button><br>
+														<label>Diameter</label>
+														<input type="range" id="ttc_diameter" min="100" max="2500" value="250" step="1" ng-change="convertToArcText()" ng-model="mydiameter"><br>
+														<label>Curvatura</label>
+														<input type="range" id="ttc_kerning" min="-10" max="10" value="0" step="1" ng-change="convertToArcText()" ng-model="mykerning"><br>
+														<label>Invertido</label>
+														<input type="checkbox" id="ttc_flip" value="1" ng-change="convertToArcText()" ng-model="myflip"><br>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row" ng-if="formSelected" style="margin-bottom: -10px;">
+											<div class="col-sm-12">
+												<div class="form-group">
+													<div class="btn-group">
+														<label>Opacidad</label>
+														<input type="range" id="opacity" min="0" max="1" value="0.5" step="0.1" ng-change="applyOpacity(this)" ng-model="myopacity"><br>														
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="text-center" style="margin-top:15px; margin-bottom:15px;">
-											<!-- <select class="form-control"  id="selectFont" name="singleSelect" ng-model="material" style="width:200px;">
-												<option ng-repeat="font in fontsUploaded" value="{{font.font}}">{{font.font}}</option>
-											</select> -->
-											
 											<div class="container" ng-show="showFonts">
 												<div class="btn-group">
 													<button type="button" class="btn btn-primary">Fuente</button>
@@ -598,19 +647,13 @@
 														<li ng-repeat="fontsize in fontsSizeDropdown" ng-click="applyFontSize22(fontsize)" ng-mouseover="applyFontSize22(fontsize)"  ng-mouseleave="unApplyFontSize2()"><h3>{{fontsize}}</h3></li>
 													</ul>
 												</div>
-												
 											</div>
-
-											<!--<jd-fontselect stack="myFontStack"/>-->
 											<br>
 										</div>
-										<!-- <div class="text-center"> 
-											<h2 style="font-family: {{myFontStack}};">Ejemplo de la fuente</h2>
-											<button ng-click="modifyFont()" type="button" class="btn btn-primary btn-success" data-dismiss="modal">Aplicar Tipografía</button>
-										</div> -->
+									
 										<div class="text-center">
 											<div class="btn-group">
-											  <button style="width:180px; margin-top:20px; margin-left: 10px;    margin-bottom: 8px;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+											  <button style="width:180px; margin-top:20px; margin-left: 10px; margin-bottom: 8px;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											  <i class="fa fa-ellipsis-horizontal"></i> Posición <i class="fa fa-angle-down"></i>
 											  </button>
 											  <ul class="dropdown-menu">
@@ -629,9 +672,6 @@
 											  </ul>
 											</div>	
 										</div>
-										<!-- <div class="text-center"> 
-											<button ng-if="showFonts" data-dismiss="modal" data-toggle="modal" data-target="#modal-fonts" class="btn btn-embossed btn-warning m-r-20" style="width:180px; background-color: #44BBFF; margin-top: 8px; margin-left: 10px;">Subir Tipografías</button>
-										</div> -->
 									</div>
 								</div>
 								<button style="margin-top:30px;" type="button"  data-dismiss="modal" class="btn btn-default btn-block">Cerrar</button>
