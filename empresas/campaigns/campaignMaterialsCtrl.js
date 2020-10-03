@@ -10,9 +10,9 @@ angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal
 ) {
 	
-  	var urlHost = 'https://wizad.mx/';
+  	//var urlHost = 'https://wizad.mx/';
 	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	//var urlHost = 'https://localhost/wizad/';
+	var urlHost = 'https://localhost/wizad/';
 	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 	$scope.templates		 = [];
@@ -106,9 +106,20 @@ angular.module('newApp')
 	$scope.imgDataToExportPDF = [];
     /* vars for PPTs */
 	
+	$scope.imageSelectedObj = null;
+	$scope.removeColorFilters = [];
 	
 	var main = document.getElementById("play_board");
-	var ctx = main.getContext("2d")
+	var ctx = main.getContext("2d");
+	
+	/* undo, redo */
+	// current unsaved state
+	$scope.CanvasState = null;
+	// past states
+	$scope.Undo = [];
+	// reverted states
+	$scope.Redo = [];
+	/* undo, redo */
 	
 	$scope.$on('openTemplate', function () {
 
@@ -228,8 +239,8 @@ angular.module('newApp')
 				
 				$scope.factory.canvas.clear();	
 
-				data[0].contents = data[0].contents.replace(/\n/g, "\\n");
-				data[0].contents = data[0].contents.replace(/\r/g, "\\r");
+				data[0].contents = $scope.fixLN(data[0].contents);
+
 				$scope.removeClipToFunctions(JSON.parse(data[0].contents));
 				$scope.factory.canvas.loadFromJSON(data[0].contents);
 
@@ -258,6 +269,14 @@ angular.module('newApp')
 
 	}
 
+	$scope.fixLN = function(data) { 
+	
+		data = data.replace(/\n/g, "\\n");
+		data = data.replace(/\r/g, "\\r");
+
+		return data;
+	}
+
 
 	$scope.loadDesign = function(design) {
 
@@ -270,6 +289,9 @@ angular.module('newApp')
 			.then(function(data) {
 				
 				$scope.factory.canvas.clear();	
+				
+				data[0].contents = $scope.fixLN(data[0].contents);
+
 				$scope.removeClipToFunctions(JSON.parse(data[0].contents));
 				$scope.factory.canvas.loadFromJSON(data[0].contents);
 
@@ -784,7 +806,7 @@ angular.module('newApp')
 			.then(function(data) {
 				if(data.length>0) {
 					$scope.imageArray = data;
-					console.log("$scope.imageArray", $scope.imageArray);
+					
 					for (var i in $scope.imageArray){
 						if(typeof $scope.imageArray[i].image != 'undefined') {
 							var newImg   = { title: '', src: '' , isUserUploaded: false};
@@ -800,7 +822,7 @@ angular.module('newApp')
 			.then(function(data) {
 				if(data.length>0){
 					$scope.identityImageArray = data;
-					console.log("$scope.identityImageArray", $scope.identityImageArray);
+					
 					for (var i in $scope.identityImageArray){
 						if(typeof $scope.identityImageArray[i].image != 'undefined') {
 							var newImg   = { title: '', src: '' , isUserUploaded: false};
@@ -1009,6 +1031,65 @@ angular.module('newApp')
 			$scope.zoomActivated = true;
 		}
 	}
+
+	$scope.replayRedo = function() {
+
+		$scope.Undo.push($scope.CanvasState);
+		$scope.CanvasState = $scope.Redo.pop();
+	      
+		var on = $('#undo');
+		var off = $('#redo');
+	    
+	    on.prop('disabled', true);
+	    off.prop('disabled', true);
+
+		$scope.factory.canvas.clear();
+		$scope.factory.canvas.loadFromJSON($scope.CanvasState, function() {
+			$scope.factory.canvas.renderAll();
+			$scope.factory.canvas.renderAll();
+			  
+			on.prop('disabled', false);
+			
+			if ($scope.Undo.length) {
+			   off.prop('disabled', false);
+			}
+		});
+	}
+
+	$scope.replayUndo = function(){
+
+		$scope.Redo.push($scope.CanvasState);
+		$scope.CanvasState = $scope.Undo.pop();
+	   
+		var on = $('#redo');
+		var off = $('#undo');
+	   
+		on.prop('disabled', true);
+		off.prop('disabled', true);
+	   
+		$scope.factory.canvas.clear();
+		$scope.factory.canvas.loadFromJSON($scope.CanvasState, function() {
+			$scope.factory.canvas.renderAll();
+			$scope.factory.canvas.renderAll();
+		 
+			on.prop('disabled', false);
+			if ($scope.Undo.length) {
+				off.prop('disabled', false);
+			}
+	   });
+	}
+
+	$scope.saveToHistory = function() {
+		$scope.Redo = [];
+	    $('#redo').prop('disabled', true);
+	   // initial call won't have a $scope.CanvasState
+	   if ($scope.CanvasState) {
+		 $scope.Undo.push($scope.CanvasState);
+		 $('#undo').prop('disabled', false);
+	   }
+	   $scope.CanvasState = JSON.stringify($scope.factory.canvas);
+	   console.log($scope.CanvasState);
+	}
 	
 	
 	$scope.factory.canvas.on({
@@ -1023,6 +1104,7 @@ angular.module('newApp')
 	  },
 	  'object:modified': function objectModified(e) {
 		$scope.$broadcast('objectModified', e);
+		$scope.saveToHistory();
 	  },
 	  'object:added': function objectAdded(e) {
 		$scope.$broadcast('objectAdded', e);
@@ -1431,7 +1513,7 @@ angular.module('newApp')
 		$scope.factory.canvas.calcOffset();
 		
 		var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
-		console.log("img ind", imgData);
+		
 		
 		//AFTER DOWNLOAD RETURN TO NORMAL STATE
 		
@@ -1462,12 +1544,12 @@ angular.module('newApp')
 		$scope.factory.canvas.calcOffset();
 		
 		if(parseInt($scope.savingCanvasWidth) > parseInt($scope.savingCanvasHeight)) {
-			console.log($scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm);
+			
 			var pdf = new jsPDF('l','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
 			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
 			
 		} else {
-			console.log($scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm);
+			
 			var pdf = new jsPDF('p','cm', [$scope.newMaterialChange.height_cm, $scope.newMaterialChange.width_cm]);
 			pdf.addImage(imgData, 'JPEG', 0, 0, $scope.newMaterialChange.width_cm, $scope.newMaterialChange.height_cm);
 			
@@ -1777,7 +1859,7 @@ angular.module('newApp')
 			var objects =  $scope.factory.canvas.getObjects();
 			
 		 
-				console.log("objects", objects);
+				
 				for (var i in objects) {
 					var scaleX = objects[i].scaleX;
 					var scaleY = objects[i].scaleY;
@@ -1808,9 +1890,9 @@ angular.module('newApp')
 				});
 			var objects =  $scope.factory.canvas.getObjects();
 			
-			
-		 
-				console.log("objects", objects);
+				
+
+				var scaleFactor = 0.9;
 
 				for (var i in objects) {
 					var scaleX = objects[i].scaleX;
@@ -1818,10 +1900,10 @@ angular.module('newApp')
 					var left = objects[i].left;
 					var top = objects[i].top;
 
-					var tempScaleX = scaleX * 0.25;
-					var tempScaleY = scaleY * 0.25;
-					var tempLeft = left * 0.25;
-					var tempTop = top * 0.25;
+					var tempScaleX = scaleX * scaleFactor;
+					var tempScaleY = scaleY * scaleFactor;
+					var tempLeft = left * scaleFactor;
+					var tempTop = top * scaleFactor;
 
 					objects[i].scaleX = tempScaleX;
 					objects[i].scaleY = tempScaleY;
@@ -1842,7 +1924,7 @@ angular.module('newApp')
 			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
 		}
 		catch(err) {
-			console.log(err);
+			
 			$scope.alertClass = "alert alert-danger";
 			$scope.alertShow = true;
 			$scope.message = "Error: al crear imagen"; 
@@ -1881,18 +1963,16 @@ angular.module('newApp')
 			
 		} else {
 
-			
-
 				for (var i in objects) {
 					var scaleX = objects[i].scaleX;
 					var scaleY = objects[i].scaleY;
 					var left = objects[i].left;
 					var top = objects[i].top;
 
-					var tempScaleX = scaleX / 0.25;
-					var tempScaleY = scaleY / 0.25;
-					var tempLeft = left / 0.25;
-					var tempTop = top / 0.25;
+					var tempScaleX = scaleX / scaleFactor;
+					var tempScaleY = scaleY / scaleFactor;
+					var tempLeft = left / scaleFactor;
+					var tempTop = top / scaleFactor;
 
 					objects[i].scaleX = tempScaleX;
 					objects[i].scaleY = tempScaleY;
@@ -2110,7 +2190,7 @@ angular.module('newApp')
 		
 		$scope.zoomIn = function(point) {
             if ($scope.zoomLevel < $scope.zoomLevelMax) {
-                $scope.zoomLevel++;
+                $scope.zoomLevel += 0.2;
                 $scope.factory.canvas.zoomToPoint(point, Math.pow(2, $scope.zoomLevel));
                 $scope.keepPositionInBounds($scope.factory.canvas);
             }
@@ -2118,7 +2198,7 @@ angular.module('newApp')
 		
         $scope.zoomOut = function(point) {
             if ($scope.zoomLevel > $scope.zoomLevelMin) {
-                $scope.zoomLevel--;
+                $scope.zoomLevel -= 0.2;
                 $scope.factory.canvas.zoomToPoint(point, Math.pow(2, $scope.zoomLevel));
                 $scope.keepPositionInBounds($scope.factory.canvas);
             }
@@ -3141,6 +3221,48 @@ angular.module('newApp')
 			})
 		}
 	
+	}
+
+	$scope.setImageToEdit = function () {
+		$scope.imageSelectedObj = $scope.factory.canvas.getActiveObject();
+	}
+
+	$scope.removeColor = function () {
+		
+		var f = fabric.Image.filters;
+		var userColor = $('#userRemoveColor').val();
+		var userDistance = $('#userDistance').val()
+		
+		var filter = new f.RemoveColor({
+			distance: userDistance,
+			color: userColor});
+
+		$scope.imageSelectedObj.filters = [];
+
+		$scope.removeColorFilters.forEach(fil => {
+
+			if(fil.id == $scope.imageSelectedObj.id)
+				$scope.imageSelectedObj.filters.push(fil.filter);
+		});
+		
+		$scope.imageSelectedObj.filters.push(filter);
+		$scope.imageSelectedObj.applyFilters($scope.factory.canvas.renderAll.bind($scope.factory.canvas));
+			
+		$scope.factory.canvas.renderAll();
+		  
+	}
+
+	$scope.applyRemoveColor = function () {
+		
+		var f = fabric.Image.filters;
+		var userColor = $('#userRemoveColor').val();
+		var userDistance = $('#userDistance').val()
+		
+		var filter = new f.RemoveColor({
+			distance: userDistance,
+			color: userColor});
+		
+		$scope.removeColorFilters.push({id: $scope.imageSelectedObj.id, filter: filter});
 	}
 	
   });

@@ -184,8 +184,8 @@ angular.module('newApp')
 
 	var dzImagesIdentidad = new Dropzone('#dzImagesIdentidad', { addRemoveLinks: true , acceptedFiles: accepti, dictRemoveFile: 'Agregar a campaña' });
 	var dzFontsIdentidad = new Dropzone('#dzFontsIdentidad', { addRemoveLinks: true , acceptedFiles: acceptf, dictRemoveFile: 'Agregar a campaña' });
-	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 		
 	//  BEGIN - * UI - SCOPES * 
 	
@@ -320,16 +320,22 @@ angular.module('newApp')
 
 
 		generalService.getPackCompany({idcompany_p:$scope.currentUser.id_company})
-		.then(function(data) {				
+		.then(function(data) {		
+			
 			$scope.imagesIdentidadArray = data;	
 			
 			for(var i in $scope.imagesIdentidadArray){
+				
+				if ($scope.imagesIdentidadArray[i].image != undefined)
+				{
+					var mockFile = { name: $scope.imagesIdentidadArray[i].image, size: 12345 };
+					dzImagesIdentidad.options.addedfile.call(dzImagesIdentidad, mockFile);
+					dzImagesIdentidad.options.thumbnail.call(dzImagesIdentidad, mockFile, urlHostEmpresas + "/uploads/" + $scope.imagesIdentidadArray[i].image);
+					dzImagesIdentidad.files.push(mockFile);
+				}
+			}
 
-				var mockFile = { name: $scope.imagesIdentidadArray[i].image, size: 12345 };
-				dzImagesIdentidad.options.addedfile.call(dzImagesIdentidad, mockFile);
-				dzImagesIdentidad.options.thumbnail.call(dzImagesIdentidad, mockFile, urlHostEmpresas + "/uploads/" + $scope.imagesIdentidadArray[i].image);
-				dzImagesIdentidad.files.push(mockFile);
-			}	
+			console.log(dzImagesIdentidad);
 		})
 
 		generalService.getFontsCompany({idcompany_p:$scope.currentUser.id_company})
@@ -337,9 +343,12 @@ angular.module('newApp')
 				$scope.fontsIdentidadArray = data;	
 				for(var i in $scope.fontsIdentidadArray){
 					
-					var mockFile = { name: $scope.fontsIdentidadArray[i].font, size: 12345 };
-					dzFontsIdentidad.options.addedfile.call(dzFontsIdentidad, mockFile);
-					dzFontsIdentidad.files.push(mockFile);
+					if ($scope.fontsIdentidadArray[i].font != undefined)
+					{
+						var mockFile = { name: $scope.fontsIdentidadArray[i].font, size: 12345 };
+						dzFontsIdentidad.options.addedfile.call(dzFontsIdentidad, mockFile);
+						dzFontsIdentidad.files.push(mockFile);
+					}
 				}					
 			})
 
@@ -382,7 +391,7 @@ angular.module('newApp')
 
 		dzFontsIdentidad.on("removedfile", function(file) {
 						
-			console.log(file);
+			
 
 			var newFont 	= { id_font: 0, font: '' };
 			newFont.id_font = $scope.fontsUploaded.length+1;
@@ -460,7 +469,7 @@ angular.module('newApp')
 		}
 		
 		$scope.newPalette = function(newColor){
-			console.log(newColor);
+			
 			if(typeof newColor != 'undefined') {
 				var newPaletteO = { id_palette: 0, color: '' };
 				newPaletteO.id_palette = $scope.paletteConfig.length+1;
@@ -705,8 +714,7 @@ angular.module('newApp')
 
 			/*for( var i in $scope.allMaterials){
 
-				console.log("i ", i);
-				console.log($scope.allMaterials[i]);
+				
 				return;
 				if(typeof $scope.allMaterials[i].selected !== 'undefined'){
 
@@ -759,7 +767,8 @@ angular.module('newApp')
 			//paramss.segment_c 		= $( "#selectsegment" ).val();
 			paramss.segment_c 		= $scope.segment;
 			paramss.city_c 			= $( "#selectcity" ).val();
-			paramss.age_c 			= $( "#selectage" ).val();
+			//paramss.age_c 			= $( "#selectage" ).val();
+			paramss.age_c 			= 0;
 			
 			campaignService.SaveNewCampaign(paramss)
 			.then(function(data) {

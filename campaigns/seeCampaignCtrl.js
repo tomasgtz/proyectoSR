@@ -89,8 +89,7 @@ angular.module('newApp')
 		
 		$scope.erasePalette = function(){	
 			var existOnOriginal = $scope.paletteArrayCopy.indexOf($scope.pantoneDrop);
-			console.log(existOnOriginal);
-			console.log($scope.pantoneDrop);
+			
 			if(existOnOriginal>-1){
 				$scope.deletedPalettes.push($scope.pantoneDrop);		
 			}			
@@ -114,8 +113,7 @@ angular.module('newApp')
 			addMaterial.height		= material.height;
 			addMaterial.thumbnail	= material.thumbnail;
 			
-			console.log(addMaterial);
-			console.log(material);
+			
 			
 			if(material.selected === "1"){
 							
@@ -169,11 +167,11 @@ angular.module('newApp')
 			var newPack 	= { id_cgpack: 0, image: '' };
 			newPack.id_cgpack = $scope.imagesArray.length+2150;
 			newPack.image 	= file.name;
-			console.log(newPack);
+			
 			
 			$scope.imagesArray.push(newPack);
 			$scope.newImages.push(newPack);
-			console.log($scope.newImages);
+			
 			
 		});
 		dzImages.on("removedfile", function(file) {
@@ -215,11 +213,11 @@ angular.module('newApp')
 			var newFont 		= { id_cgfont: 0, font: '' };
 			newFont.id_cgfont 	= $scope.imagesArray.length+2150;
 			newFont.font 		= file.name;
-			console.log(newFont);
+			
 			
 			$scope.fontArray.push(newFont);
 			$scope.newFonts.push(newFont);
-			console.log($scope.newFonts);
+			
 			
 		});
 		dzFonts.on("removedfile", function(file) {
@@ -251,8 +249,7 @@ angular.module('newApp')
 				}
 			
 			}
-			console.log($scope.deletedFonts);
-			console.log($scope.newFonts);
+			
 			
 		});
 		/* Dropzone functions */
@@ -292,13 +289,13 @@ angular.module('newApp')
 				campaignService.GMaterials(params)
 				.then(function(data) {
 					$scope.allMaterials = data;
-					console.log("All materials");
+					
 					for(var i in $scope.allMaterials){
 						for(var j in $scope.materialArray){
 							if($scope.allMaterials[i].id_material === $scope.materialArray[j].id_material){
 								$scope.allMaterials[i].selected = "1";
-								console.log("Checked" + " " + i);
-								console.log($scope.allMaterials[i].selected);
+								
+								
 							}
 						}
 					}
@@ -360,7 +357,7 @@ angular.module('newApp')
 			
 			campaignService.SaveCampaignUpdate(params)
 			.then(function(data) {
-				console.log("Success");
+				
 				if(data[0].returnMessage === "SUCCESS"){
 					$scope.message = "Se guardo la campaña exitosamente.";
 					$scope.alertClass = "alert alert-success";

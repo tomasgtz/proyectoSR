@@ -120,7 +120,7 @@ angular.module('newApp')
 		}
 		
 		$scope.showDescription = function (company){
-			console.log(company);
+			
 			$scope.address = company.address;
 			$scope.city = company.city;
 			$scope.state = company.state;
@@ -228,7 +228,7 @@ angular.module('newApp')
 				return;
 			}
 			
-			console.log("SaveUsers");
+			
 			var paramss = {
 				"users" : ""
 			}

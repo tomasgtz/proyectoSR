@@ -1014,7 +1014,7 @@ function simulateHistory () {
 		 * @param e - the event that triggered the history update
 		 */
 		window.onpopstate = function (e) {
-			console.log('@updateHistory', PAGE, e);
+			
 			if (e.state !== undefined && e.state !== null && e.state.page !== undefined) {
 				memberClick(e.state.page);
 			} else {

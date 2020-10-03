@@ -21,7 +21,8 @@ angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign) {
 
-  		var urlHostEmpresas = 'https://empresas.wizad.mx/';
+  		//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+		var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
@@ -89,8 +90,7 @@ angular.module('newApp')
 		
 		$scope.erasePalette = function(){	
 			var existOnOriginal = $scope.paletteArrayCopy.indexOf($scope.pantoneDrop);
-			console.log(existOnOriginal);
-			console.log($scope.pantoneDrop);
+			
 			if(existOnOriginal>-1){
 				$scope.deletedPalettes.push($scope.pantoneDrop);		
 			}			
@@ -114,8 +114,7 @@ angular.module('newApp')
 			addMaterial.height		= material.height;
 			addMaterial.thumbnail	= material.thumbnail;
 			
-			console.log(addMaterial);
-			console.log(material);
+		
 			
 			if(material.selected === "1"){
 							
@@ -169,11 +168,9 @@ angular.module('newApp')
 			var newPack 	= { id_cgpack: 0, image: '' };
 			newPack.id_cgpack = $scope.imagesArray.length+2150;
 			newPack.image 	= file.name;
-			console.log(newPack);
 			
 			$scope.imagesArray.push(newPack);
 			$scope.newImages.push(newPack);
-			console.log($scope.newImages);
 			
 		});
 		dzImages.on("removedfile", function(file) {
@@ -205,8 +202,7 @@ angular.module('newApp')
 				}
 			
 			}
-			console.log($scope.deletedImages);
-			console.log($scope.newImages);
+	
 			
 		});
 		

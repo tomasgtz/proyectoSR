@@ -3,7 +3,8 @@
 
 angular.module('newApp').controller('identityCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
 		
-		var urlHostEmpresas = 'https://empresas.wizad.mx/';
+		//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+		var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 		
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];

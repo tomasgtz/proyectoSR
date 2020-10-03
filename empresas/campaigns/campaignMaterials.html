@@ -38,7 +38,13 @@
 				<div class="panel with-nav-tabs panel-default edit_utils_container">
 					<div class="panel-body">
 						<div class="col-sm-1" style="min-height: 100px; max-height: 100px; min-height: 715px; max-width: 55px;">
-							<ul class="nav navbar-nav fixtop" >	
+							<ul class="nav navbar-nav fixtop" >
+								<li> 
+									<button id="redo" ng-click="replayRedo()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="RE DO" src="images/utils/{{icon_folder}}/redo32x32.png" ></button>
+								</li>
+								<li> 
+									<button id="undo" ng-click="replayUndo()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="UN DO" src="images/utils/{{icon_folder}}/undo32x32.png" ></button>
+								</li>
 								<li> 
 									<!-- <button ng-if="factory.canvas.getZoom()<4" style="width: 58px; padding: 0; background-color: #5DB6E6;" ng-click="addZoom()" class="btn btn-embossed btn-primary m-r-10">+Zoom</button>
 									<button ng-if="factory.canvas.getZoom() != 1" style="width: 58px; padding: 0; background-color: #5DB6E6;" ng-click="lessZoom()" class="btn btn-embossed btn-primary m-r-10">-Zoom</button> -->
@@ -46,46 +52,46 @@
 									<button ng-if="zoomActivated" ng-click="ZoomStatus()" style="width: 130px; padding: 0;" class="btn btn-embossed btn-warning m-r-10">Desactivar Zoom</button>-->
 								</li>
 								<li>
-									<button style="z-index:200; "  class="btn btn-xs btn-default" ng-click="creatingNewFile()"><img title="Nuevo" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/new32x32.png"></button>
+									<button style="z-index:200; "  class="btn btn-xs btn-default" ng-click="creatingNewFile()"><img title="Nuevo" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/new32x32.png"></button>
 								</li>
 								<!-- <li>
-									<button style="z-index:200; "  class="btn btn-xs btn-default" ng-click="opening()"><img title="Abrir archivo" src="images/utils/{{icon_folder}}/open32x32.png" style="width:48px; height:48px"></button>
+									<button style="z-index:200; "  class="btn btn-xs btn-default" ng-click="opening()"><img title="Abrir archivo" src="images/utils/{{icon_folder}}/open32x32.png" style="width:32px; height:32px"></button>
 									<form enctype="multipart/form-data" id="loadWiz" action="uploadWiz.php" method="post"><input id="openWiz" name="wizFile" type="file" style="display: none" ng-model="uploadFileWiz" ng-change="sendingFile()"/></form>
 								</li>-->
 								<li>
-									<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal-open-template"><img title="Abrir Plantilla" src="images/utils/{{icon_folder}}/openDB32x32.png" style="width:48px; height:48px"></button>
+									<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal-open-template"><img title="Abrir Plantilla" src="images/utils/{{icon_folder}}/openDB32x32.png" style="width:32px; height:32px"></button>
 								</li>
 								<!-- <li>
-									<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="saving()"><img title="Descargar archivo" src="images/utils/{{icon_folder}}/save32x32.png" style="width:48px; height:48px"></button>
+									<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="saving()"><img title="Descargar archivo" src="images/utils/{{icon_folder}}/save32x32.png" style="width:32px; height:32px"></button>
 								</li> -->
 								<li ng-if="currentUser.typenum == '3'"><!-- diseñador -->
-									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-design" data-toggle="modal"><img title="Guardar Diseño" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
+									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-design" data-toggle="modal"><img title="Guardar Diseño" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
 								</li>
 								<li ng-if="currentUser.typenum == '2' || currentUser.typenum == '4'"><!-- admin -->
-									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-template" data-toggle="modal"><img title="Guardar como Plantilla" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
+									<button style="z-index:200; " class="btn btn-xs btn-default" data-target="#save-template" data-toggle="modal"><img title="Guardar como Plantilla" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/saveDB32x32.png"></button>
 								</li>
 								<li>
-									<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-formats" ng-show="isDownloadable()"><img title="Exportar PDF/PNG" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/descargar32x32.png"></button>
+									<button style="z-index:200; " class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-formats" ng-show="isDownloadable()"><img title="Exportar PDF/PNG" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/descargar32x32.png"></button>
 								</li>
 						
 								<li> 
-									<button data-toggle="modal" data-target="#modal-canvasoptions" ng-click="canvasIsTargeted()" class="btn btn-xs btn-default"><img title="Configurar lienzo" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/lienzo32x32.png" ></button>
+									<button data-toggle="modal" data-target="#modal-canvasoptions" ng-click="canvasIsTargeted()" class="btn btn-xs btn-default"><img title="Configurar lienzo" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/lienzo32x32.png" ></button>
 								</li>
 								<li> 
-									<button data-toggle="modal" data-target="#modal-images" class="btn btn-xs btn-default"><img style="width:48px; height:48px" title="Galeria" src="images/utils/{{icon_folder}}/gallery32x32.png" ></button>
+									<button data-toggle="modal" data-target="#modal-images" class="btn btn-xs btn-default"><img style="width:32px; height:32px" title="Galeria" src="images/utils/{{icon_folder}}/gallery32x32.png" ></button>
 								</li>
 								<li> 
-									<button ng-click="addText()" class="btn btn-xs btn-default"> <img style="width:48px; height:48px" title="Agregar texto" src="images/utils/{{icon_folder}}/pencil32x32.png" ></button>
+									<button ng-click="addText()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="Agregar texto" src="images/utils/{{icon_folder}}/pencil32x32.png" ></button>
 								</li>
 								<li> 
-									<button data-toggle="modal" data-target="#modal-phrases" ng-click="addPhrase()" class="btn btn-xs btn-default"><img title="Lista de textos" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/textlist32x32.png" ></button>
+									<button data-toggle="modal" data-target="#modal-phrases" ng-click="addPhrase()" class="btn btn-xs btn-default"><img title="Lista de textos" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/textlist32x32.png" ></button>
 								</li>
 								<li>
-									<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="toggleGrid()"><img style="width:48px; height:48px" title="Mostrar / Ocultar cuadricula" src="images/utils/{{icon_folder}}/grid32x32.png"></button>
+									<button style="z-index:200; " class="btn btn-xs btn-default" ng-click="toggleGrid()"><img style="width:32px; height:32px" title="Mostrar / Ocultar cuadricula" src="images/utils/{{icon_folder}}/grid32x32.png"></button>
 								</li>
 								<li>
 									<div class="btn-group fixBtnGroup">
-									<button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" style="height: 48px"><img style="width:48px; height:48px" title="Insertar forma" src="images/utils/{{icon_folder}}/shapes32x32.png" ></button>
+									<button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" style="height: 48px"><img style="width:32px; height:32px" title="Insertar forma" src="images/utils/{{icon_folder}}/shapes32x32.png" ></button>
 									<ul class="dropdown-menu">
 										<li>
 										<button ng-click="addTriangle()" class="btn btn-xs btn-default"> 
@@ -105,17 +111,20 @@
 									</div>		
 								</li>
 								<li> 
-									<button  ng-show="!cropStarted && (formSelected || imageSelected)" class="btn btn-xs btn-embossed btn-blue"  ng-click="startCrop()"><img title="Recortar" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/crop32x32.png" ></button>
-									<button ng-show="cropStarted" class="btn btn-xs btn-default m-r-10"  ng-click="crop()"><img style="width:48px; height:48px" title="Aplicar recorte" src="images/utils/{{icon_folder}}/applycrop32x32.png" ></button>
+									<button  ng-show="!cropStarted && (formSelected || imageSelected)" class="btn btn-xs btn-embossed btn-blue"  ng-click="startCrop()"><img title="Recortar" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/crop32x32.png" ></button>
+									<button ng-show="cropStarted" class="btn btn-xs btn-default m-r-10"  ng-click="crop()"><img style="width:32px; height:32px" title="Aplicar recorte" src="images/utils/{{icon_folder}}/applycrop32x32.png" ></button>
 								</li>
 								<li> 
-									<button ng-show="showFonts" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img title="Fuente" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/font32x32.png" ></button>
+									<button ng-show="showFonts" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img title="Fuente" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/font32x32.png" ></button>
 								</li>
 								<li> 
-									<button ng-show="formSelected" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img title="Configurar formato" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/color32x32.png" ></button>
+									<button ng-show="formSelected" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img title="Configurar formato" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/color32x32.png" ></button>
 								</li>
 								<li>
-									<button data-dismiss="modal" style="padding: 1px 1px 1px 1px; " ng-show="isObjectSelected" ng-click="deleteSelectedObject()" class="btn btn-xs btn-danger"><img title="Eliminar" style="width:48px; height:48px" src="images/utils/{{icon_folder}}/delete_red32x32.png" ></button>
+									<button data-dismiss="modal" style="padding: 1px 1px 1px 1px; " ng-show="isObjectSelected" ng-click="deleteSelectedObject()" class="btn btn-xs btn-danger"><img title="Eliminar" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/delete_red32x32.png" ></button>
+								</li>
+								<li>
+									<button data-toggle="modal" data-target="#modal-removecolorsoptions" ng-click="setImageToEdit()" class="btn btn-xs btn-default" style="width:32px; height:32px; padding: 1px 1px 1px 1px; " ng-show="isObjectSelected"><img title="Quitar color" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/eraser32x32.png" ></button>
 								</li>
 								
 							</ul>
@@ -187,12 +196,12 @@
 		</div>
 		<div class="modal fade modal-slideright" id="modal-images" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog" style="width:300px;">
-				<div id="mContent" class="modal-content">
+				<div id="mContent" class="modal-content" style="overflow-y: auto;">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
 						<h4 class="modal-title">SELECCIONA UNA<strong> IMAGEN</strong></h4>
 					</div>
-					<div class="modal-body">
+					<div class="modal-body" style="overflow-y: auto;">
 						<div class="row" >
 							<div class="text-right">
 								<div class="btn-group">
@@ -225,7 +234,7 @@
 							</div> -->
 						</div>
 					</div>
-					<div class="modal-footer">
+					<div class="modal-footer" style="overflow-y: auto;">
 						<button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
@@ -538,6 +547,59 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="modal fade modal-slideright" id="modal-removecolorsoptions" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h2 class="c-primary m-b-30">Eliminar color</h2>
+								<div class="row" ng-if="imageSelected">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-2">Color:</div>
+												<div class="col-sm-10">
+												  <input id="userRemoveColor" ng-model="userRemoveColor" colorpicker colorpicker-position="bottom" type="text" ng-change="removeColor()" />
+												</div>
+											</div>
+											<div class="row">
+												<div class="fpd-label" data-defaulttext="Sensibilidad">Sensibilidad</div>
+												<div class="fpd-slider-group fpd-clearfix">
+													<div class="fpd-range-wrapper">
+														 <input id="userDistance" ng-model="userDistance" class="fpd-slider-range" type="range" value="0.02" step="0.01" min="0" max="1" ng-change="removeColor()" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6" >
+												<button type="button" class="btn btn-primary" ng-click="applyRemoveColor()">Guardar</button>
+											</div>
+											<div class="col-sm-6 alert" ng-class="alertExpiredClass" ng-show="alertExpiredShow">
+												<a class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+												<h4 class="alert-title">¡Alerta!</h4>
+												<p>{{alertExpiredMessage}}</p>
+											</div>
+										</div>
+										<!-- <input colorpicker colorpicker-position="bottom" type="text" ng-model="your_model" style="width: 90px;" />
+										<button ng-click="newPalette(your_model)" type="button" class="btn btn-sm btn-primary">
+										<i class="fa fa-plus-square"></i>
+										</button> 
+										<button ng-if="canvasTarget" style="width: 130px;" ng-click="setTransparent()" class="btn btn-embossed btn-default m-r-10"> Transparente</button>
+										<button ng-if="canvasTarget" style="width: 130px;" ng-click="clearCanvas()" class="btn btn-embossed btn-default m-r-10"> Limpiar</button> -->
+									</div>
+								</div>
+								<button type="button" data-dismiss="modal" class="btn btn-default btn-block">Cerrar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 		<div class="modal fade modal-slideright" id="modal-formato" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog" style="max-width: 380px;">
 				<div class="modal-content">

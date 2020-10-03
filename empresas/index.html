@@ -77,7 +77,7 @@
             <div class="sidebar">
                 <div class="logopanel">
                     <h1>
-                        <img src="assets/global/images/logo/wizad.png" height="40px" width="185px">
+                        <img src="assets/global/images/logo/wizad_new.png" height="40px" width="185px">
                     </h1>
                 </div>
                 <div class="sidebar-inner">
@@ -750,49 +750,47 @@
 		</section>
        
 		<section ng-show="showLoggin">
-			<div class="container" id="login-block">
-				<i class="user-img icons-faces-users-03"></i>
+			<div class="container" id="login-block" style="height: 200px; position: relative;">
+				<div style="top: 50%; position: absolute;">
 				<div class="account-info">
-					
-					<h3>TU ADMINISTRADOR DE CAMPAÑAS ¡HOY!</h3> 
-					<ul>
-						<li><i class="icon-magic-wand"></i> Diseña tus campañas</li>
-						<li><i class="icon-layers"></i> Descarga tus campañas</li>
-						<li><i class="icon-arrow-right"></i> Administra tu equipo</li>
-						<li><i class="icon-drop"></i> Administra tus materiales</li>
-					</ul>
+					<img src="images/login.png" class="login" width="350px">
 				</div>
 				<div class="account-form">
 					<form class="form-signin" role="form" ng-show="loginType === 1">
-						<h3><strong>INICIA SESIÓN</strong> a tu cuenta</h3>
+						<h3 style="text-transform:none;"><strong>¿Tienes cuenta? Inicia sesi&oacute;n</strong><br>y empieza a hacer campa&ntilde;as </h3>
 						<!-- <div style="font-family: deca;"> WIZAD MARKETING CAMPAIGNS </div>
 						<div style="font-family: Wolf in the City;"> HeyPromo </div> -->
 						<div class="append-icon">
-							<input ng-model="username" type="text" name="name" id="name" class="form-control form-white username" placeholder="Usuario" required>
 							<i class="icon-user"></i>
+							<input ng-model="username" type="text" name="name" id="name" class="form-control form-white username" placeholder="Usuario" required>
 						</div>
 						<div class="append-icon m-b-20">
-							<input ng-model="password" type="password" name="password" class="form-control form-white password" placeholder="Contraseña" required>
 							<i class="icon-lock"></i>
+							<input ng-model="password" type="password" name="password" class="form-control form-white password" placeholder="Contraseña" required>
+							
 						</div>
 						<!-- class="alert alert-success" -->
 						<div ng-class="alertClass" ng-show="alertShow">
 							<h4 class="alert-title">¡Alerta!</h4>
 							<p>{{message}}</p>
 						</div>
-						<div class="row text-right">
-							<button ng-click="tryLoggin()" class="btn btn-lg btn-dark btn-rounded ladda-button" data-style="expand-left">Entrar</button>
+						<div class="row text-center">
+							<button ng-click="tryLoggin()" class="btn login_btn btn-lg btn-dark btn-rounded" data-style="expand-left">LOGIN</button>
+							<br><a href="#" ng-click="recoverPassword()" style="margin-left: -80px; font-size:11px; color:#555555;">Recupera tu contrase&ntilde;a</a><br>
+							<br><br>
+							<h3 style="text-transform:none;"><strong>&iquest;No tienes?</strong></h3>
+							<button ng-click="registerNow()" type="button" class="btn-fb btn btn-lg btn-rounded">REGÍSTRATE</button>
 						</div><!-- <span class="forgot-password"><a id="password" href="account-forgot-password.html">Recuperar contraseña</a></span> -->
-						<div class="form-footer">
-							<div class="social-btn">
+						 <!-- <div class="form-footer">
+							<div class="social-btn"> -->
 								<!-- <i class="fa fa-facebook pull-left"></i> --><!-- <i class="fa fa-twitter pull-left"></i> -->
-								<button ng-click="registerNow()" type="button" class="btn-fb btn btn-lg btn-block btn-square">¡REGÍSTRATE!</button>
-								<button ng-click="recoverPassword()" type="button" class="btn btn-lg btn-block btn-blue btn-square">RECUPERAR CONTRASEÑA</button>
-							</div>
+								
+
+							<!-- </div> -->
 							<!-- <div class="clearfix">
 								<p class="new-here"><a href="user-signup-v2.html">¡REGISTRATE!</a></p>
 							</div> -->
-						</div>
+						<!--</div> -->
 					</form>
 					<form class="form-signin" role="form" ng-show="loginType === 2">
 						<h3><strong>RECUPERAR</strong> mi contraseña</h3>
@@ -852,7 +850,7 @@
 						</div>
 					</form>
 				</div>
-		
+				</div>
 			</div>
 			<!-- END LOCKSCREEN BOX -->
 			<p class="account-copyright">

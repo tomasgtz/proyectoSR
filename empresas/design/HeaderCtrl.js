@@ -262,7 +262,7 @@ angular.module('newApp')
 		$timeout(function () {
 		  $scope.isObjectSelected = true;
 		  var activeObject = $scope.factory.canvas.getActiveObject();
-		  console.log(activeObject);
+		  
 		  if(activeObject.type === "circle" || activeObject.type === "triangle" 
 				|| activeObject.type === "rect" || activeObject.type === "i-text"
 				|| activeObject.type === "line"){
@@ -286,7 +286,7 @@ angular.module('newApp')
 	  
 	  $scope.changeFormColor = function(pal){
 			var activeObject = $scope.factory.canvas.getActiveObject();
-			console.log(activeObject.type);
+			
 			if(activeObject.type === "circle" || activeObject.type === "triangle" 
 				|| activeObject.type === "rect" || activeObject.type === "i-text"){
 				activeObject.setFill(pal.color);	

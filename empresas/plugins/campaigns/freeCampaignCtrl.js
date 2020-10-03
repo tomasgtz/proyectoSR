@@ -101,12 +101,11 @@ angular.module('newApp')
 			$scope.materialArray[i].style="";
 		}
 		
-		console.log($scope.currentUser.id_company);
-		console.log(material.free);
+		
 		$scope.factory.canvas.clear();
 		if($scope.currentUser.id_company === "4" && material.free == 0){
 			
-			console.log("Marca de Agua");
+			
 			var myImg = 'materiales/'+material.thumbnail;
 			fabric.Image.fromURL(myImg, function(oImg) {
 				var l = Math.random() * (500 - 0) + 0;
@@ -230,8 +229,7 @@ angular.module('newApp')
 			}
 		}
 		
-		console.log($scope.currentUser.id_company);
-		console.log(material.free);
+		
 		$scope.factory.canvas.clear();
 		if($scope.currentUser.id_company === "4" && material.free == 0){
 			
@@ -371,9 +369,7 @@ angular.module('newApp')
 		};
 		$scope.images.push(image);
 		// ImagesFactory.savePhotoImage(image);
-		console.log($scope.images);
-		console.log("preview");
-		console.log($scope.previewImages);
+	
 		// UtilsFactory.resetUsedFileStorageSpace(); //Reset the $rootScope file storage for header data update
 		$scope.previewImages = [];
 		var sticker = {

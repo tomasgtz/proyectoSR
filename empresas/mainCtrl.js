@@ -1,9 +1,9 @@
 
-var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
-var host		  = 'https://empresas.wizad.mx/uploads/';
+//var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
+//var host		  = 'https://empresas.wizad.mx/uploads/';
 
-//var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
-//var host		  = 'https://localhost/wizad/empresas/uploads/';
+var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
+var host		  = 'https://localhost/wizad/empresas/uploads/';
 
 angular.module('newApp').service('userService', function($http,$q){
 	
@@ -1947,8 +1947,7 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 			var defered = $q.defer();
 			var promise = defered.promise;
-			console.log("enviando params");
-			console.log(params);
+			
 			$http({
 			method: 'POST',
 			url: webServiceUrl + 'UUserGeneralData',
@@ -2640,7 +2639,7 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 		},
 
 		GTemplates : function(params){
-			console.log("params", params);
+			
 			var defered = $q.defer();
 			var promise = defered.promise;
 						
@@ -3451,7 +3450,6 @@ angular.module('newApp').service("userPersistenceService", function($cookies, $c
 			//user2.image = null;
 			//user2.logo = null;
 			$cookieStore.put("user", user2);
-			console.log(user);
 		},
 		getCookieData: function() {
 			user = $cookieStore.get("user");
@@ -3637,7 +3635,7 @@ angular.module('newApp').controller('mainCtrl',
 			}
 			
 			$scope.recoverPasswordS = function(){
-				console.log("test");
+				
 				$scope.alertRecoverShow  = false;
 				var params = {
 					"email_p" : ""

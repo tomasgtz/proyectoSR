@@ -133,7 +133,6 @@ angular.module('newApp')
 			// var y = 1;	
 			// $scope.factory.canvas.renderAll();
 			
-		console.log($scope.myFontStack);
 		var activeObject = $scope.factory.canvas.getActiveObject();
 		activeObject.fontFamily = $scope.myFontStack;
 		$scope.factory.canvas.renderAll();
@@ -157,7 +156,7 @@ angular.module('newApp')
 			// var y = 1;	
 			// $scope.factory.canvas.renderAll();
 	    var fontSizeStack = $( "#selectfontsize" ).val();
-		console.log(fontSizeStack);
+		
 		var activeObject = $scope.factory.canvas.getActiveObject();
 		activeObject.fontSize = parseInt(fontSizeStack);
 		$scope.factory.canvas.renderAll();
@@ -483,7 +482,7 @@ angular.module('newApp')
 	  'mouse:move': function MouseMoving(e) {
 		// $scope.$broadcast('mouseMoving', e);
 		if ($scope.zoomActivated){
-			console.log(e);
+			
 			zoomCtx.fillStyle = "white";
 			//zoomCtx.clearRect(0,0, zoom.width, zoom.height);
 			//zoomCtx.fillStyle = "transparent";
@@ -492,7 +491,7 @@ angular.module('newApp')
 			  var posY = pointer.y;
 			zoomCtx.fillRect(0,0, zoom.width, zoom.height);
 			zoomCtx.drawImage(main, e.e.offsetX, e.e.offsetY, 200, 100, 0,0, 400, 200);
-			console.log(zoom.style);
+			
 			zoom.style.top = e.e.offsetY + 10 + "px"
 			zoom.style.left = e.e.offsetX + 10 + "px"
 			zoom.style.display = "block";
@@ -605,9 +604,7 @@ angular.module('newApp')
 		
 		$scope.images.push(image);
 		// ImagesFactory.savePhotoImage(image);
-		console.log($scope.images);
-		console.log("preview");
-		console.log($scope.previewImages);
+		
 		// UtilsFactory.resetUsedFileStorageSpace(); //Reset the $rootScope file storage for header data update
 		$scope.previewImages = [];
 		var sticker = {
@@ -767,12 +764,10 @@ angular.module('newApp')
 	  $scope.exportPDF = function(name) {
 		 $scope.factory.canvas.deactivateAll().renderAll();
 		 $scope.factory.canvas.setZoom(1);
-		 console.log($scope.factory.canvas);
-		 console.log($scope.newMaterialChange);
+		 
 		 $scope.savingCanvasWidth = $scope.factory.canvas.width;
 		 $scope.savingCanvasHeight = $scope.factory.canvas.height;
-		 console.log($scope.savingCanvasWidth);
-		 console.log($scope.savingCanvasHeight);
+		 
 		 $scope.factory.canvas.setDimensions({width: parseInt($scope.newMaterialChange.width), height: parseInt($scope.newMaterialChange.height)});
 		 var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
 		 // download($scope.factory.canvas.toDataURL({       format: 'png'   }), 'wizad_design.png');

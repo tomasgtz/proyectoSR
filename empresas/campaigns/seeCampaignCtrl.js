@@ -23,11 +23,11 @@ angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
 
-  		var urlHost = 'https://wizad.mx/';
-		var urlHostEmpresas = 'https://empresas.wizad.mx/';
+  		//var urlHost = 'https://wizad.mx/';
+		//var urlHostEmpresas = 'https://empresas.wizad.mx/';
 
-		//var urlHost = 'https://localhost/wizad/';
-		//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+		var urlHost = 'https://localhost/wizad/';
+		var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
@@ -103,8 +103,7 @@ angular.module('newApp')
 		
 		$scope.erasePalette = function(){	
 			var existOnOriginal = $scope.paletteArrayCopy.indexOf($scope.pantoneDrop);
-			console.log(existOnOriginal);
-			console.log($scope.pantoneDrop);
+			
 			if(existOnOriginal>-1){
 				$scope.deletedPalettes.push($scope.pantoneDrop);		
 			}			
@@ -252,11 +251,11 @@ angular.module('newApp')
 			var newFont 		= { id_cgfont: 0, font: '' };
 			newFont.id_cgfont 	= $scope.imagesArray.length+2150;
 			newFont.font 		= file.name;
-			console.log(newFont);
+			
 			
 			$scope.fontArray.push(newFont);
 			$scope.newFonts.push(newFont);
-			console.log($scope.newFonts);
+			
 			
 		});
 		dzFonts.on("removedfile", function(file) {
@@ -288,8 +287,7 @@ angular.module('newApp')
 				}
 			
 			}
-			console.log($scope.deletedFonts);
-			console.log($scope.newFonts);
+		
 			
 		});
 		/* Dropzone functions */
@@ -521,7 +519,7 @@ angular.module('newApp')
 			
 			campaignService.SaveCampaignUpdate(params)
 			.then(function(data) {
-				console.log("Success");
+				
 				if(data[0].returnMessage === "SUCCESS"){
 					$scope.message = "Se guardo la campaña exitosamente.";
 					$scope.alertClass = "alert alert-success";

@@ -11,7 +11,8 @@
 angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope, CanvasFactory, ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location) {
 
-  	var urlHostEmpresas = 'https://empresas.wizad.mx/';
+  	//var urlHostEmpresas = 'https://empresas.wizad.mx/';
+	var urlHostEmpresas = 'https://localhost/wizad/empresas/';
 
 	$scope.CampaignSelected =  {
 
@@ -113,12 +114,11 @@ angular.module('newApp')
 			}
 		}
 		
-		console.log($scope.currentUser.id_company);
-		console.log(material.free);
+		
 		$scope.factory.canvas.clear();
 		if($scope.currentUser.id_company === "4" && material.free == 0){
 			
-			console.log("Marca de Agua");
+			
 			var myImg = 'materiales/'+material.thumbnail;
 			fabric.Image.fromURL(myImg, function(oImg) {
 				var l = Math.random() * (500 - 0) + 0;
@@ -134,7 +134,6 @@ angular.module('newApp')
 			
 		}
 		
-		console.log($scope.canvasHeight);
 		$scope.showCanvasMaterialSelected = true;
 		material.style="1px solid black";
 		// $scope.factory.canvas.setWidth($scope.canvasWidth);
@@ -144,7 +143,7 @@ angular.module('newApp')
 		// $scope.factory.canvas.style.width  = $scope.canvasWidth + 'px';
 		// $scope.factory.canvas.style.height = $scope.canvasHeight + 'px';
 		// $('#play_board').attr({width:parseInt($scope.canvasWidth),height:parseInt($scope.canvasHeight)}).css({width:$scope.canvasWidth + 'px',height:$scope.canvasHeight + 'px'});
-		console.log(parseInt($scope.canvasHeight));
+		
 		$scope.factory.canvas.setDimensions({width: parseInt($scope.canvasWidth), height: parseInt($scope.canvasHeight)});
 		
 		if(parseInt($scope.canvasWidth) > 1000){

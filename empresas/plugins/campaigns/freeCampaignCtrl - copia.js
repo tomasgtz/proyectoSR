@@ -290,9 +290,7 @@ angular.module('newApp')
 		};
 		$scope.images.push(image);
 		// ImagesFactory.savePhotoImage(image);
-		console.log($scope.images);
-		console.log("preview");
-		console.log($scope.previewImages);
+	
 		// UtilsFactory.resetUsedFileStorageSpace(); //Reset the $rootScope file storage for header data update
 		$scope.previewImages = [];
 		var sticker = {

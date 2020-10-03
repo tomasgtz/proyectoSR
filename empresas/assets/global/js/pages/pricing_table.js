@@ -264,7 +264,7 @@ function addPlan(){
 function addItem(element){
     var duplicateItem = element.parent().find('.description .p-item:first-child').clone();
     duplicateItem.find('.plan-item').text('New Item');
-    console.log(duplicateItem);
+    
     element.parent().find('.description').prepend(duplicateItem);
 }
 
