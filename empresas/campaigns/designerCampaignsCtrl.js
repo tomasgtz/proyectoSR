@@ -366,8 +366,8 @@ angular.module('newApp')
 angular.module('newApp')
   .controller('designerCampaignsCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $location, objCampaign, generalService) {
 	
-	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+	var urlHostEmpresas = __env.urlHostEmpresas;
+
 	$scope.images = [];
 	$scope.showCaption = true;
 	$scope.header = "Image Gallery";

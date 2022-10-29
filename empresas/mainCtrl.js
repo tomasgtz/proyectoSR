@@ -1,12 +1,12 @@
 
-//var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
-//var host		  = 'https://empresas.wizad.mx/uploads/';
-
-var webServiceUrl = 'https://localhost/wizad/empresas/api/serviciosWizad.php/';
-var host		  = 'https://localhost/wizad/empresas/uploads/';
-
 angular.module('newApp').service('userService', function($http,$q){
-	
+
+	//var webServiceUrl = 'https://empresas.wizad.mx/api/serviciosWizad.php/';
+	//var host		  = 'https://empresas.wizad.mx/uploads/';
+
+	var webServiceUrl = __env.urlHostEmpresas + 'api/serviciosWizad.php/';
+	var host		  = __env.urlHostEmpresas + 'uploads/';
+
 	var UserContext = {
 				"id_user" 			: "",
 				"name" 				: "",
@@ -114,6 +114,10 @@ angular.module('newApp').service('userService', function($http,$q){
 			defered.resolve(UserContext);
 			return promise;
 			
+		},
+
+		setCurrentUserFromCookie : function(userData) {
+			UserContext = userData;
 		}
 
 		
@@ -123,6 +127,9 @@ angular.module('newApp').service('userService', function($http,$q){
 
 
 angular.module('newApp').service('campaignService', function($http,$q){
+
+	var webServiceUrl = __env.urlHostEmpresas + 'api/serviciosWizad.php/';
+	var host = __env.urlHost;
 
 	return{
 		
@@ -345,7 +352,7 @@ angular.module('newApp').service('campaignService', function($http,$q){
 			
 			var defered = $q.defer();
 			var promise = defered.promise;
-						
+
 			$http({
 			method: 'POST',
 			url: webServiceUrl + 'GPackCampaign',
@@ -356,7 +363,8 @@ angular.module('newApp').service('campaignService', function($http,$q){
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 				return str.join("&");
 			},
-			data: { campaign_p : params.campaign_p}
+			data: { campaign_p : params.campaign_p,
+				    category_p : params.category_p}
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -1171,6 +1179,7 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 	var template_id;
 	var material_id;
 	var design_id;
+	var webServiceUrl = __env.urlHostEmpresas + 'api/serviciosWizad.php/';
 	
 	return { 
 
@@ -2085,6 +2094,37 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 				return str.join("&");
 			},
 			data: { idcompany_p : params.idcompany_p}
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
+		getPermissionsCompany : function(params){
+			
+			var defered = $q.defer();
+			var promise = defered.promise;
+			
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'GPermissionsCompany',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+						str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { idcompany_p : params.idcompany_p}
 			})
 			.success(function(data) {
 				if(data[0] !== undefined){
@@ -3324,76 +3364,135 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			})
 			return promise;
 	  
-	  },
+	  	},
 	
-	MSlide: function(params) {
-	
-		var defered 		= $q.defer();
-		var promise 		= defered.promise;
+		MSlide: function(params) {
 		
-		var idtemplate_p 				= params.idtemplate_p;	
-		var direction_p					= params.direction_p;
-		
-		$http({
-			method: 'POST',
-			url: webServiceUrl + 'MSlide',
-			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-			transformRequest: function(obj) {
-				var str = [];
-				for(var p in obj)
-				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-				return str.join("&");
-			},
-			data: { idtemplate_p : idtemplate_p, direction_p : direction_p }
-			})
-			.success(function(data) {
-				if(data[0] !== undefined){
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 				= params.idtemplate_p;	
+			var direction_p					= params.direction_p;
+			
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'MSlide',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { idtemplate_p : idtemplate_p, direction_p : direction_p }
+				})
+				.success(function(data) {
+					if(data[0] !== undefined){
+						
+					}
 					
-				}
-				
-				defered.resolve(data);		
-			})
-			.error(function(data){
-				defered.reject(err)
-			})
-		
-		return promise;
-	},
+					defered.resolve(data);		
+				})
+				.error(function(data){
+					defered.reject(err)
+				})
+			
+			return promise;
+		},
 
-	MDesignSlide: function(params) {
-	
-		var defered 		= $q.defer();
-		var promise 		= defered.promise;
+		MDesignSlide: function(params) {
 		
-		var idudesign_p 				= params.idudesign_p;	
-		var direction_p					= params.direction_p;
-		
-		$http({
-			method: 'POST',
-			url: webServiceUrl + 'MDesignSlide',
-			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-			transformRequest: function(obj) {
-				var str = [];
-				for(var p in obj)
-				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-				return str.join("&");
-			},
-			data: { idudesign_p : idudesign_p, direction_p : direction_p }
-			})
-			.success(function(data) {
-				if(data[0] !== undefined){
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idudesign_p 				= params.idudesign_p;	
+			var direction_p					= params.direction_p;
+			
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'MDesignSlide',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { idudesign_p : idudesign_p, direction_p : direction_p }
+				})
+				.success(function(data) {
+					if(data[0] !== undefined){
+						
+					}
 					
-				}
-				
-				defered.resolve(data);		
-			})
-			.error(function(data){
-				defered.reject(err)
-			})
-		return promise;
-	}
-	
+					defered.resolve(data);		
+				})
+				.error(function(data){
+					defered.reject(err)
+				})
+			return promise;
+		},
 
+		SaveImageToDisk: function(params) {
+
+			var defered = $q.defer();
+			var promise = defered.promise;
+
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'SaveImageToDisk',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { img_data : params.img_data }
+				})
+				.success(function(data) {
+					if(data[0] !== undefined){
+						
+					}
+					
+					defered.resolve(data);		
+				})
+				.error(function(data){
+					defered.reject(err)
+				})
+			return promise;
+		},
+
+		ShareByEmail: function(params) {
+
+			var defered = $q.defer();
+			var promise = defered.promise;
+
+			$http({
+				method: 'POST',
+				url: webServiceUrl + 'ShareByEmail',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				transformRequest: function(obj) {
+					var str = [];
+					for(var p in obj)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+					return str.join("&");
+				},
+				data: { to_p : params.to_p, link_p : params.link_p, x : params.x  }
+				})
+				.success(function(data) {
+					if(data[0] !== undefined){
+						
+					}
+					
+					defered.resolve(data);		
+				})
+				.error(function(data){
+					defered.reject(err)
+				})
+			return promise;
+		}
+	
 	}
 })
 
@@ -3447,12 +3546,23 @@ angular.module('newApp').service("userPersistenceService", function($cookies, $c
 
 		setCookieData: function(user2) {
 			user = user2;
-			//user2.image = null;
-			//user2.logo = null;
+
+			localStorage.setItem('image', user2.image);
+			localStorage.setItem('logo', user2.logo);
+
+			user2.image = null;
+			user2.logo = null;
+			
 			$cookieStore.put("user", user2);
 		},
 		getCookieData: function() {
 			user = $cookieStore.get("user");
+			
+			if(user) {
+				user.image = localStorage.getItem('image');
+				user.logo = localStorage.getItem('logo');	
+			}
+			
 			return user;
 		},
 		clearCookieData: function() {
@@ -3468,23 +3578,12 @@ angular.module('newApp').controller('mainCtrl',
     ['$scope', '$cookies', '$cookieStore', 'applicationService', 'quickViewService', 'builderService', 'pluginsService', '$location', 'userService', 'generalService', 'userPersistenceService', 
         function ($scope, $cookies, $cookieStore, applicationService, quickViewService, builderService, pluginsService, $location, userService, generalService, userPersistenceService) {
 			
-			/*var temp = userPersistenceService.getCookieData();
-			console.log(temp);
-			if(temp && temp != '' && typeof temp == 'object') {
-				$scope.showLoggin = false;
-				$scope.currentUser = temp;
-			} else {
-				$scope.showLoggin = true;
-			}*/
-
-			$scope.showLoggin = true;
-
-			
 			$scope.indexClass = "sidebar-condensed account2";
 			$scope.username = "";
 			$scope.password = "";
 			$scope.alertShow = false;
 			$scope.alertRecoverShow = false;
+			$scope.showLoggin = true;
 			$scope.loginType = 1;
 			$scope.recoverEmail = "";
 			$scope.rEmail = "";
@@ -3492,6 +3591,7 @@ angular.module('newApp').controller('mainCtrl',
 			$scope.rCasa = "";
 			$scope.rMobile = "";
 			$scope.fontArray = [];
+			$scope.companyPermissions = [];
 			
 			var yourFontName = "deca";
 			var yourFontURL  = "/uploads/stonehen.ttf";
@@ -3504,6 +3604,62 @@ angular.module('newApp').controller('mainCtrl',
 			"));
 
 			document.head.appendChild(newStyle);
+
+			$scope.setLocation = function() {
+				
+				if($scope.currentUser.typenum === '1') {
+
+					$location.path('/admin-dashboard');
+
+				} else if($scope.currentUser.typenum === '2') {
+
+					$location.path('/');
+
+				} else if($scope.currentUser.typenum === '3') {
+
+					$location.path('/design-dashboard');
+
+				} else if($scope.currentUser.typenum === '4') {
+
+					$location.path('/designi-dashboard');
+
+				}
+			}
+
+			$scope.setCompanyPermissions = function() {
+				var params = {
+					"idcompany_p" : ""
+					}
+				
+				params.idcompany_p = $scope.currentUser.id_company;
+
+				generalService.getPermissionsCompany( params )
+				.then(function(data) {
+					
+					if( data.length > 1 ) {
+						
+						for( var p in data ) {
+
+							$scope[data[p].functionality]  = data[p].action == 'allow' ? 'true' : 'false';
+						
+						}
+					}
+				});
+			}
+
+			var storedUser = userPersistenceService.getCookieData();
+			
+			if(storedUser && storedUser != '' && typeof storedUser == 'object') {
+				$scope.showLoggin = false;
+				$scope.currentUser = storedUser;
+				userService.setCurrentUserFromCookie(storedUser);
+				$scope.indexClass = "fixed-topbar fixed-sidebar theme-sdtl color-default";
+
+				$scope.setLocation();
+						
+				$scope.setCompanyPermissions();
+			}
+			
 			
 			$scope.pressedKey = function(keyObj) {
 				$scope.myKey = {"key": keyObj.key};
@@ -3539,11 +3695,11 @@ angular.module('newApp').controller('mainCtrl',
 				}
 				
 			})
+
 			
 			generalService.NewVisit()
 			.then(function(data) {	
 			})
-			
 			
 			
 			$scope.logIn = function(){
@@ -3706,7 +3862,6 @@ angular.module('newApp').controller('mainCtrl',
 			
 			
 			
-			
 			$scope.tryLoggin = function() {
 				if($scope.username === "" || $scope.password === ""){
 					$scope.message = "Su usuario o contraseña es inválido.";
@@ -3728,28 +3883,12 @@ angular.module('newApp').controller('mainCtrl',
 							$scope.alertClass = "alert alert-warning";
 							$scope.alertShow = true;
 														
-						} else {							
-							
-							// var payload = {
-								// "user_p" : "",
-								// "message_p" : "",
-								// "campaign_p" : ""
-							// }
-							
-							// payload.user_p		= data[0].id_user;
-							// payload.message_p	= "Inició sesión";
-							// payload.campaign_p	= 0;
-							
-							// userService.AddHistory(payload)
-							// .then(function(data) {
-								// console.log(data);
-							// })
+						} else {
 							
 							userService.currentUser()
 							.then(function(data) {
 								$scope.currentUser = data;
-														
-								
+
 								var payload = {
 								"user_p" : "",
 								"message_p" : "",
@@ -3765,32 +3904,26 @@ angular.module('newApp').controller('mainCtrl',
 
 								});
 
-								userPersistenceService.setCookieData($scope.currentUser);
+							 	userPersistenceService.setCookieData(Object.assign({}, $scope.currentUser));
 
 								$scope.alertShow = false;
 								$scope.showLoggin = false;
 								$scope.indexClass = "fixed-topbar fixed-sidebar theme-sdtl color-default";
 
-								if($scope.currentUser.typenum === '1'){
-									$location.path('/admin-dashboard');
-								}
-								if($scope.currentUser.typenum === '2'){
-									$location.path('/');
-								}
-								if($scope.currentUser.typenum === '3'){
-									$location.path('/design-dashboard');
-								}	
-								if($scope.currentUser.typenum === '4'){
-									$location.path('/designi-dashboard');
-								}								
+								$scope.setLocation();
+								
+								$scope.setCompanyPermissions();
+
 							});
+							
 						}		
 					})
 				}		
 			}
 			
 			$scope.logOut = function(){
-				//userPersistenceService.clearCookieData();
+				userPersistenceService.clearCookieData();
+				localStorage.clear();
 				$scope.showLoggin = true;
 				$scope.indexClass = "sidebar-condensed account2";
 				$scope.username = "";
@@ -3798,6 +3931,9 @@ angular.module('newApp').controller('mainCtrl',
 				$scope.alertShow = false;
 				$location.path('/');
 			}
+
+
+			
 
 }]);
 

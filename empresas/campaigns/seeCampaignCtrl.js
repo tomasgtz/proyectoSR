@@ -23,11 +23,8 @@ angular.module('newApp')
 
   .controller('seeCampaignCtrl', function ($scope, campaignService, userService, applicationService, pluginsService, $log, objCampaign, generalService) {
 
-  		//var urlHost = 'https://wizad.mx/';
-		//var urlHostEmpresas = 'https://empresas.wizad.mx/';
-
-		var urlHost = 'https://localhost/wizad/';
-		var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+		var urlHost = __env.urlHost;
+		var urlHostEmpresas = __env.urlHostEmpresas;
 
 		$scope.imagesArray 		= [];
 		$scope.imagesArrayCopy	= [];
@@ -70,6 +67,9 @@ angular.module('newApp')
 
 		$scope.CampaignSelected =  {};
 		$scope.liStyle = "1px solid black";
+
+		$scope.img_cat = 'logos';
+		$scope.reloading_images = false;
 		
 		$scope.newText = function(){
 			var newTextO    = { id_config: 0, text_config: '' };			
@@ -187,47 +187,48 @@ angular.module('newApp')
 
 		dzImages.on("success", function(file) {
 						
-			var newPack 	= { id_cgpack: 0, image: '' };
+			var newPack 	= { id_cgpack: 0, image: '', category: '' };
 			newPack.id_cgpack = $scope.imagesArray.length+2150;
-			newPack.image 	= file.name;
+			newPack.image 	  = file.name;
+			newPack.category  = $scope.img_cat;
 			
 			$scope.imagesArray.push(newPack);
 			$scope.newImages.push(newPack);
 			
 		});
+
 		dzImages.on("removedfile", function(file) {
 			
-			for(var i in $scope.imagesArrayCopy){
+			if($scope.reloading_images === true)
+				return;
+
+			for(var i in $scope.imagesArrayCopy) {
 				
 				var newPack 	= { id_cgpack: 0, image: '' };
 				newPack.id_cgpack	= $scope.imagesArrayCopy[i].id_cgpack;
 				newPack.image		= $scope.imagesArrayCopy[i].image;
 					
-				if(file.name === $scope.imagesArrayCopy[i].image){
-										
-					$scope.deletedImages.push(newPack);
+				if(file.name === $scope.imagesArrayCopy[i].image) {
 							
+					$scope.deletedImages.push(newPack);
+					break;
 				}
 			}				
 			
-			for(var i in $scope.newImages){
+			for(var i in $scope.newImages) {
 			
 				var newPack 	= { id_cgpack: 0, image: '' };
 				newPack.id_cgpack	= $scope.newImages[i].id_cgpack;
 				newPack.image		= $scope.newImages[i].image;
 				
-				if(file.name === $scope.newImages[i].image){
+				if(file.name === $scope.newImages[i].image) {
 					
 					var index = $scope.newImages.indexOf(newPack);				
 					$scope.newImages.splice(index, 1);
-					
+					break;
 				}
-			
 			}
-
-			
 		});
-
 
 		dzImagesIdentidad.on("removedfile", function(file) {
 			var newPack 	= { id_cgpack: 0, image: '' };
@@ -306,7 +307,8 @@ angular.module('newApp')
 			}
 			
 			var params = {
-				"campaign_p" : ""
+				"campaign_p" : "",
+				"category_p" : $scope.img_cat
 			}
 			params.campaign_p = $scope.CampaignSelected.id_campaign;
 			
@@ -396,22 +398,7 @@ angular.module('newApp')
 				})
 			})	
 			
-			campaignService.GPackCampaign(params)
-			.then(function(data) {				
-				$scope.imagesArray = data;
-			
-				for(var i in $scope.imagesArray){
-					
-					if(typeof $scope.imagesArray[i].image != 'undefined') {
-						$scope.imagesArrayCopy.push($scope.imagesArray[i]);
-						var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
-						dzImages.options.addedfile.call(dzImages, mockFile);
-						
-						dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
-						dzImages.files.push(mockFile);
-					}
-				}	
-			})
+			$scope.loadImages();
 
 			generalService.getPackCompany({idcompany_p:$scope.CampaignSelected.fk_company})
 			.then(function(data) {				
@@ -534,6 +521,9 @@ angular.module('newApp')
 					$scope.telhome 	  = "";
 					$scope.telmobile  = "";
 					$scope.optionCity = 0;
+
+					$scope.newImages		= [];
+					$scope.deletedImages	= [];
 				}else{
 					$scope.message = "Error al guardar la campaña, favor de intentar más tarde.";
 					$scope.alertClass = "alert alert-warning";
@@ -542,7 +532,47 @@ angular.module('newApp')
 			})
 			
 		}
+
+		$scope.setImgCat = function(img_cat) {
+
+			$scope.reloading_images = true;
+			var btn = $('.btn.btn-primary.img_category').removeClass('btn btn-primary img_category').addClass('btn btn-secondary img_category');
+			$('#' + img_cat).removeClass('btn btn-secondary img_category').addClass('btn btn-primary img_category');
+			$scope.img_cat = img_cat;
+
+			$scope.loadImages();
+
+			$scope.reloading_images = false;
+		}
 		
+		$scope.loadImages = function() {
+
+			$scope.imagesArray = [];
+
+			dzImages.removeAllFiles();
+
+			var params = {
+				"campaign_p" : $scope.CampaignSelected.id_campaign,
+				"category_p" : $scope.img_cat
+			}
+
+			campaignService.GPackCampaign(params)
+			.then(function(data) {				
+				$scope.imagesArray = data;
+			
+				for(var i in $scope.imagesArray){
+					
+					if(typeof $scope.imagesArray[i].image != 'undefined') {
+						$scope.imagesArrayCopy.push($scope.imagesArray[i]);
+						var mockFile = { name: $scope.imagesArray[i].image, size: 12345 };
+						dzImages.options.addedfile.call(dzImages, mockFile);
+						
+						dzImages.options.thumbnail.call(dzImages, mockFile, urlHostEmpresas + 'uploads/' + $scope.imagesArray[i].image);
+						dzImages.files.push(mockFile);
+					}
+				}
+			})
+		}
 		
   });
 

@@ -6748,7 +6748,8 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
   width: 133px;
 }
 .account2 {
-  background: #1f3649;
+background: #ffffff;
+/*  background: #1f3649;
   background: -moz-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
   background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #1f3649), color-stop(44%, #17253d), color-stop(100%, #040d11));
   background: -webkit-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
@@ -6756,7 +6757,7 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
   background: -ms-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
   background: radial-gradient(ellipse at center, #1f3649 0%, #17253d 44%, #040d11 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@account-color-dark', endColorstr='#040d11', GradientType=1);
-}
+*/}
 .account2 .form-password {
   display: none;
 }
@@ -6808,10 +6809,6 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
 }
 .account2 .account-form .forgot-password {
   padding-top: 4px;
-}
-.account2 .form-signin input[type="password"] {
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
 }
 .account2 .form-signin h3 {
   font-family: 'Lato';
@@ -6923,20 +6920,23 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
 .account.no-terms .form-signup .terms {
   display: none;
 }
+
+
 @media screen and (max-width: 600px) {
   .account-copyright {
     position: relative;
     margin-top: 40px;
   }
 }
-.account2 .form-signin input[type="text"],
-.account2 .form-signin input[type="email"],
-.account2 .form-signup input[type="text"],
-.account2 .form-signup input[type="email"] {
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  margin-bottom: 8px;
+
+@media screen and (max-width: 500px) {
+  .account-copyright {
+    position: relative;
+    margin-top: 660px;
+	margin-right: 20px !important;
+  }
 }
+
 #lockscreen-block #account-builder {
   bottom: 60px;
   left: 50%;
@@ -7011,22 +7011,21 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
 #account-builder .form-group label:not(.switch) {
   margin-top: 1px;
 }
-@media (min-width: 768px) {
+
+@media (min-width: 100px) {
   .account2 .container {
     height: 100%;
     margin: auto;
     position: relative;
-    width: 670px;
   }
   .account2 .account-info {
-    background: #319DB5;
+    background: #ffffff;
     color: #ffffff;
     display: block;
-    display: table-cell;
-    padding: 30px;
+   
     text-align: left;
     vertical-align: top;
-    width: 43%;
+    width: 100%;
   }
   .account2 .account-info .logo {
     color: #ffffff;
@@ -7061,8 +7060,123 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
     vertical-align: top;
     width: 57%;
   }
+  img.login {
+	width: 92%;
+	text-align:center;
+  }
 }
-@media (max-width: 800px) {
+
+@media (min-width: 480px) {
+  .account2 .container {
+    height: 100%;
+    margin: auto;
+    position: relative;
+    width: 480px;
+  }
+  .account2 .account-info {
+    background: #ffffff;
+    color: #ffffff;
+    display: block;
+   
+    text-align: left;
+    vertical-align: top;
+    width: 100%;
+  }
+  .account2 .account-info .logo {
+    color: #ffffff;
+    font-family: 'Lato', arial, sans-serif;
+    font-weight: 900;
+    font-size: 25px;
+    background: url(../images/logo/logo-white.png) no-repeat;
+    height: 31px;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .account2 .account-info h3 {
+    font-family: 'Open Sans';
+    font-size: 17px;
+    margin-top: 5px;
+  }
+  .account2 .account-info ul {
+    margin: 30px 0 0;
+    padding: 0;
+  }
+  .account2 .account-info ul li {
+    font-size: 15px;
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+  }
+  .account2 .account-info ul li i {
+    padding-right: 8px;
+  }
+  .account2 .account-form {
+    display: table-cell;
+    vertical-align: top;
+    width: 57%;
+  }
+  img.login {
+	width: 80%;
+  }
+}
+
+@media (min-width: 768px) {
+  .account2 .container {
+    height: 100%;
+    margin: auto;
+    position: relative;
+    width: 670px;
+  }
+  .account2 .account-info {
+    background: #ffffff;
+    color: #ffffff;
+    display: block;
+    display: table-cell;
+   
+    text-align: left;
+    vertical-align: top;
+    width: 100%;
+  }
+  .account2 .account-info .logo {
+    color: #ffffff;
+    font-family: 'Lato', arial, sans-serif;
+    font-weight: 900;
+    font-size: 25px;
+    background: url(../images/logo/logo-white.png) no-repeat;
+    height: 31px;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .account2 .account-info h3 {
+    font-family: 'Open Sans';
+    font-size: 17px;
+    margin-top: 5px;
+  }
+  .account2 .account-info ul {
+    margin: 30px 0 0;
+    padding: 0;
+  }
+  .account2 .account-info ul li {
+    font-size: 15px;
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+  }
+  .account2 .account-info ul li i {
+    padding-right: 8px;
+  }
+  .account2 .account-form {
+    display: table-cell;
+    vertical-align: top;
+    width: 57%;
+  }
+  img.login {
+	width: 100%;
+	 display: table-cell;
+  }
+}
+
+@media (min-width: 2000px) {
   .account #lockscreen-block .user-image {
     float: none;
     margin: auto;
@@ -7102,7 +7216,17 @@ progress {height:100%;width:0%; text-align: left;color: #121212;border-radius:2p
     top: 0px;
     width: 133px;
   }
+  img.login {
+	width: 100%;
+	 display: table-cell;
+  }
 }
+
+
+
+
+
+
 /**** Page Layout ****/
 .layouts .toggle-layout:hover,
 .layouts .toggle-layout,
@@ -13692,7 +13816,7 @@ select:focus,
 }
 
 .thumbnail {
-	width: 150px;
+	width: 100%;
 }
 
 img.thumbnail:hover { 

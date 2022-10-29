@@ -1159,6 +1159,13 @@ address {
   font-size: 16px;
   padding: 11px 48px;
 }
+.login_btn {
+  font-size: 13px !important;
+  padding: 4px 48px !important;
+  background-color: rgba(82, 184, 196, 1);
+  width: 70%;
+  margin-left: 10px;
+}
 .btn.btn-lg i {
   font-size: 18px;
 }
@@ -1727,7 +1734,7 @@ fieldset[disabled].btn-danger.active {
   border-color: #642121;
 }
 .btn-dark {
-  background-color: #353940;
+  background-color: rgba(82, 184, 196, 1);
   color: #fff;
 }
 .btn-dark .caret {
@@ -1898,8 +1905,12 @@ fieldset[disabled].btn-inverse.active {
   color: #696969;
 }
 .btn.btn-fb {
-  background-color: #3a548b;
+  background-color: #F7BA4D;
   color: #fff;
+  font-size: 13px !important;
+  width: 70%;
+  padding: 4px 95px 4px 50px !important;
+  margin-left: 10px;
 }
 .btn.btn-fb:hover {
   background-color: #364F83;
@@ -2757,12 +2768,13 @@ ul.list-unstyled {
   box-shadow: none !important;
   color: #555555;
   display: inline-block;
-  font-size: 13px;
+  font-size: 10px;
   height: auto;
   line-height: normal;
   padding: 9px 12px 8px;
   vertical-align: middle;
-  width: 100%;
+  align:center;
+  width: 80%;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -2814,9 +2826,10 @@ input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
 .form-control.form-white {
-  background-color: #ffffff;
+  background-color: #dddddd;
   border: 1px solid #ECEDEE;
-  color: #555555;
+  color: #ffffff;
+  border-radius: 20px;
 }
 .form-control.form-white:hover {
   background-color: #ffffff !important;
@@ -2976,19 +2989,19 @@ input:-webkit-autofill {
 }
 .append-icon {
   position: relative;
+  padding-bottom: 5px;
 }
 .append-icon input {
-  padding-right: 36px;
+  padding-left: 36px;
 }
 .append-icon i {
   color: #1b1e25;
-  color: rgba(27, 30, 37, 0.3);
+  color: #ffffff;
   font-size: 14px;
   height: 34px;
   left: auto;
   line-height: 34px;
   position: absolute;
-  right: 0;
   text-align: center;
   top: 0;
   width: 36px;
@@ -7622,6 +7635,9 @@ textarea {
   float: none;
   text-align: left;
   list-style: none;
+}
+div.append-icon {
+	text-align: center;
 }
 .z2 {
   z-index: 2;

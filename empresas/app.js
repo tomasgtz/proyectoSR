@@ -5,9 +5,15 @@
  * @name newappApp
  * @description
  * # newappApp
- *kk
  * Main module of the application.
  */
+
+var env = {};
+  
+if(window){
+    Object.assign(env, window.__env);
+}
+
 var MakeApp = angular
   .module('newApp', [
     'ngAnimate',
@@ -217,10 +223,10 @@ var MakeApp = angular
             templateUrl: 'layout/api.html',
             controller: 'apiCtrl'
         })
-		// Campa«Ğa
+		// Campaï¿½ï¿½ï¿½a
 		.when('/new-campaign', {
-            templateUrl: 'nueva_campa«Ğa/nueva_campa«Ğa.html',
-            controller: 'nvaCampanaCtrl'
+            templateUrl: 'nueva_campaï¿½ï¿½ï¿½a/nueva_campaï¿½ï¿½ï¿½a.html',
+            controller: 'nvaCampaï¿½naCtrl'
         })
 		.when('/new-user', {
             templateUrl: 'user/newUser.html',
@@ -308,6 +314,7 @@ var MakeApp = angular
 		  });
   });
 
+MakeApp.constant('__env', env);
 
 // Route State Load Spinner(used on page or content load)
 MakeApp.directive('ngSpinnerLoader', ['$rootScope',

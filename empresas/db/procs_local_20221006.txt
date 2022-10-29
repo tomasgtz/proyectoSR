@@ -1,0 +1,2611 @@
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Campaign`(IN `idcampaign_p` INT(9))
+    NO SQL
+BEGIN
+
+	Delete From campaign_fonts
+	Where fk_campaign = idcampaign_p;
+	Delete From campaign_material
+	Where fk_campaign = idcampaign_p;
+	Delete From campaign_pack
+	Where fk_campaign = idcampaign_p;
+	Delete From campaign_palette
+	Where fk_campaign = idcampaign_p;
+	Delete From campaign_texts
+	Where fk_campaign = idcampaign_p;
+	Delete From campaign
+	Where id_campaign = idcampaign_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_CampaignFonts`(IN `id_cgfont_c` INT(9))
+    NO SQL
+BEGIN
+
+	DELETE From campaign_fonts WHERE id_cgfont = id_cgfont_c;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_CampaignTexts`(IN `idcgtext_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE From campaign_texts WHERE id_cgtext = idcgtext_c;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_CampaignPalette`(IN `id_cgpalette_c` INT(9))
+    NO SQL
+BEGIN
+
+	DELETE From campaign_palette WHERE id_cgpalette = id_cgpalette_c;
+	SELECT 'SUCCESS' AS returnMessage;
+    END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_CampaignMaterial`(IN `campaign_c` INT(9), IN `idmaterial_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE From campaign_material WHERE fk_campaign = campaign_c and fk_material = idmaterial_c;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_CampaignPack`(IN `idcgpack_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE From campaign_pack WHERE id_cgpack = idcgpack_c;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Company_Font`(IN `idfont_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE FROM company_fonts WHERE id_font = idfont_c;
+	SELECT "SUCCESS" as returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Company_Pack`(IN `idpack_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE FROM company_pack  WHERE id_pack = idpack_c;
+	SELECT "SUCCESS" as returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Company_Palette`(IN `idpalette_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE FROM company_palette WHERE id_palette = idpalette_c;
+	SELECT "SUCCESS" as returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Company_Text`(IN `idconfig_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE FROM company_textconfig WHERE id_config = idconfig_c;
+	SELECT "SUCCESS" as returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Design`(IN `idudesign_p` INT)
+    NO SQL
+BEGIN
+	UPDATE udesign
+	SET status = 0
+	Where id = idudesign_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_DesignSlide`(IN `idudesign_p` INT(9), IN `idgroup_p` INT(9))
+    NO SQL
+BEGIN
+DELETE FROM udesign_udesign_group WHERE udesign_id = idudesign_p AND udesign_group_id = idgroup_p;
+UPDATE udesign SET status = 0 WHERE id = idudesign_p;
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Slide`(IN `idtemplate_p` INT(9), IN `idgroup_p` INT(9))
+    NO SQL
+BEGIN
+DELETE FROM template_template_group WHERE template_id = idtemplate_p AND template_group_id = idgroup_p;
+UPDATE template SET status = 0 WHERE id = idtemplate_p;
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_Template`(IN `idtemplate_p` INT)
+    NO SQL
+BEGIN
+	UPDATE template
+	SET status = 0
+	Where id = idtemplate_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDel_User`(IN `iduser_p` INT(9))
+    NO SQL
+BEGIN
+	UPDATE company SET no_employees = no_employees - 1 WHERE id_company = (SELECT fk_company FROM user WHERE id_user = iduser_p);
+	DELETE FROM user WHERE id_user = iduser_p;
+	
+	SELECT 'SUCCESS' as returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDuplicate_DesignSlide`(IN `idudesign_p` INT(9), IN `idgroup_p` INT(9))
+    NO SQL
+BEGIN
+SET @order := (SELECT slide_order FROM udesign_udesign_group WHERE udesign_group_id = idgroup_p AND udesign_id = idudesign_p);
+INSERT INTO udesign (`name`, template_id, contents, thumbnail, date_created, created_id, fk_company_id, `status` ) 
+SELECT name, template_id, contents, thumbnail, NOW(), created_id, fk_company_id, 1 FROM udesign WHERE id = idudesign_p;
+INSERT INTO udesign_udesign_group (udesign_group_id, udesign_id, slide_order) VALUES (idgroup_p, LAST_INSERT_ID(), @order);
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspDuplicate_Slide`(IN `idtemplate_p` INT(9), IN `idgroup_p` INT(9))
+    NO SQL
+BEGIN
+SET @order := (SELECT slide_order FROM template_template_group WHERE template_group_id = idgroup_p AND template_id = idtemplate_p);
+INSERT INTO template (`name`, fk_material_id, contents, thumbnail, date_created, created_id, fk_company_id, `status` ) 
+SELECT name, fk_material_id, contents, thumbnail, NOW(), created_id, fk_company_id, 1 FROM template WHERE id = idtemplate_p;
+INSERT INTO template_template_group (template_group_id, template_id, slide_order) VALUES (idgroup_p, LAST_INSERT_ID(), @order);
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Ages`()
+    NO SQL
+BEGIN
+SELECT id_age, rangee
+FROM Ct_Age;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_AllCompaniesSubs`()
+    NO SQL
+BEGIN
+	SELECT  C.id_company,
+			C.name,
+			C.industry,
+			C.web_page,
+			C.date_up,
+			CtS.description,
+			C.no_employees,
+			C.storage,
+			C.address,
+            
+            ct_city.name as city,
+            
+            state.description as state,
+            
+            ct_country.name as country,
+			fk_contract,
+			CS.date_up AS subs_contract,
+			"" as contract_status,
+			CASE 
+				WHEN fk_contract = 1
+				THEN DATEDIFF(DATE_ADD(CS.date_up, INTERVAL 1 MONTH),NOW())
+				ELSE DATEDIFF(DATE_ADD(CS.date_up, INTERVAL 12 MONTH),NOW())
+			END AS days_left,
+			C.status
+	FROM	company C
+	INNER JOIN company_subscription CS
+	on C.id_company = CS.fk_company
+	INNER JOIN ct_subscription CtS
+	ON id_subs = CS.fk_subscription
+	LEFT JOIN ct_city
+    
+    ON C.city = ct_city.id_city
+    
+    LEFT JOIN state
+    ON C.state = state.id_state
+	
+    LEFT JOIN ct_country
+    ON C.country = ct_country.id_country;
+		
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_AllSubscriptions`()
+    NO SQL
+BEGIN
+SELECT id_subs, description,users, storage
+FROM ct_subscription;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_AllUsersAdmin`()
+    NO SQL
+BEGIN
+	SELECT  U.id_user,
+			U.date_up,
+			U.name,
+			U.status,
+			CASE when U.status = 1 then 'Activo'
+				 when U.status = 2 then 'Inactivo'
+			END AS statusdesc,
+			C.name as empresa,
+			CtS.description
+			
+	FROM	user U
+	INNER JOIN company C
+	on U.fk_company = C.id_company
+	INNER JOIN company_subscription CS
+	on C.id_company = CS.fk_company
+	INNER JOIN ct_subscription CtS
+	ON id_subs = CS.fk_subscription;
+
+	
+		
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignCount`()
+    NO SQL
+BEGIN
+	SELECT COUNT(id_campaign) AS Campaigns From campaign WHERE status = 1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignFonts`(IN `campaign_c` INT(9), IN `host_p` VARCHAR(200))
+    NO SQL
+BEGIN
+
+	SELECT id_cgfont, date_up, date_update, fk_campaign, status, font,
+				CONCAT(host_p, font) as url
+From campaign_fonts 
+WHERE status = 1 AND fk_campaign = campaign_c;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignMaterial`(IN `campaign_c` INT(9))
+    NO SQL
+BEGIN
+SELECT CM.id_cgmaterial, CM.date_up, CM.date_update, CM.fk_campaign, 
+CM.status, CM.fk_material, CM.download, M.id_material, CONCAT_WS(' ', M.type, M.size_description, M.description) as description, 
+M.width, M.height, M.status, M.thumbnail , M.multiplier, M.width_small, M.height_small, M.width_multiplier, M.height_multiplier, M.offline, M.print_margins, M.width_cm, M.height_cm, M.multipage
+From campaign_material CM 
+INNER JOIN ct_material M 
+ON CM.fk_material = M.id_material 
+WHERE CM.status = 1 and fk_campaign = campaign_c
+AND M.status = 1;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignMaterialMosaico`(IN `campaign_c` INT(9))
+    NO SQL
+BEGIN
+
+SELECT * FROM 
+campaign_material CM
+INNER JOIN ct_material CTM
+ON CTM.id_material = CM.fk_material
+WHERE CM.fk_campaign = idcampaign_c
+AND CTM.status = 1;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignPack`(IN `campaign_c` INT(9), IN `category_c` VARCHAR(16))
+    NO SQL
+BEGIN
+SELECT CP.id_cgpack, CP.date_up, 
+CP.date_update, CP.fk_campaign, CP.category, CP.status, CP.image
+From campaign_pack CP
+
+WHERE CP.status = 1 AND CP.fk_campaign = campaign_c 
+AND CP.category LIKE CONCAT('%', category_c , '%');
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignPalette`(IN `campaign_c` INT(9))
+    NO SQL
+BEGIN
+
+SELECT id_cgpalette, date_up, date_update, fk_campaign, status, color 
+From campaign_palette WHERE status = 1 
+AND fk_campaign  = campaign_c;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CampaignTexts`(IN `campaign_c` INT(9))
+    NO SQL
+BEGIN
+	SELECT id_cgtext, date_up, date_update, fk_campaign, status, text 
+From campaign_texts 
+WHERE status = 1 AND fk_campaign = campaign_c;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Campaigns`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT  C.id_campaign,
+            C.name as campaign_name,
+            C.description,
+            C.date_up,
+            C.date_update,
+            C.fk_dimension,
+            C.fk_company,
+			CA.rangee,
+			CA.id_age,
+			CC.name,
+			CC.id_city,
+			C.segment as segment_description,
+            status,
+            
+            download
+	FROM	campaign C
+	LEFT JOIN ct_age CA
+	ON CA.id_age = C.fk_age
+	LEFT JOIN ct_city CC
+	ON CC.id_city = C.fk_city
+	WHERE	fk_company = idcompany_p
+	ORDER BY C.date_up DESC;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Cities`()
+    NO SQL
+BEGIN
+SELECT id_city,name
+FROM ct_city;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Company`()
+    NO SQL
+BEGIN 
+	SELECT 	id_company,
+			name,
+			address,
+			date_up,				
+			date_update,
+			status,
+			logo
+	From 	company;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CompanyAdministrator`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+
+Select U.name FROM user U
+Inner Join company C
+On U.fk_company = C.id_company
+where C.id_company = idcompany_p and type = 2
+limit 1;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Company_Fonts`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+
+	SELECT id_font, fk_company, font, date_up, date_update, status
+	FROM company_fonts
+	where fk_company = idcompany_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Company_Pack`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT	id_pack,
+			fk_company,
+			image,
+			date_up,
+			date_update,
+			status
+	
+	FROM 	company_pack
+	
+	WHERE 	fk_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Company_Subscription`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT	id_pack,
+			fk_company,
+			fk_subscription,
+			date_up,
+			date_update,
+			status
+	FROM company
+	
+	WHERE fk_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Company_TextConfig`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT 	id_config.
+			fk_company,
+			text_config,
+			date_up,
+			date_update,
+			status
+	FROM	company
+	
+	Where fk_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Control_Historic`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT	id_historic,
+		fk_user,
+		date_up,
+		description,
+		status
+	FROM company
+	WHERE id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_CountSubscriptions`()
+    NO SQL
+BEGIN
+SELECT	 fk_subscription 
+FROM	 company_subscription;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Countries`()
+    NO SQL
+BEGIN
+SELECT id_country,name
+FROM ct_country;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Ct_Dimensions`(IN `campaign` INT(9))
+    NO SQL
+BEGIN
+	SELECT	id_dimension,
+			description,
+			height,
+			width,
+			status
+	
+	FROM	campaign
+	
+	WHERE id_campaign = campaign_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Ct_Subscription`()
+    NO SQL
+BEGIN
+	SELECT 	id_subs,
+			description
+	FROM	company;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Design`(IN `campaign_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT id_design,
+			fk_user,
+			fk_campaign,
+			date_up,
+			date_update,
+			status
+	
+	FROM 	campaign
+	
+	WHERE fk_campaign = campaign_p;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_DesignGroup`(IN `idudesign_p` INT(9))
+    NO SQL
+BEGIN 
+	SELECT 	id,
+		name,
+		created_id,
+		status
+	FROM udesign_group
+    WHERE id = (SELECT udesign_group_id FROM udesign_udesign_group WHERE udesign_id = idudesign_p);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_DesignThumbnails`(IN `idudesigngroup_p` INT(9))
+    NO SQL
+BEGIN 
+SELECT udesign.id, udesign.thumbnail 
+FROM udesign, udesign_udesign_group 
+WHERE udesign.id = udesign_udesign_group.udesign_id AND udesign_group_id = idudesigngroup_p 
+ORDER BY udesign_udesign_group.slide_order;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_DesignsOfGroup`(IN `idudesigngroup_p` INT(9))
+    NO SQL
+BEGIN
+SELECT t.id, t.campaign_id, t.name, ttg.udesign_group_id, t.contents FROM udesign t
+INNER JOIN udesign_udesign_group ttg ON ttg.udesign_id = t.id AND ttg.udesign_group_id = idudesigngroup_p
+WHERE status = 1
+ORDER BY ttg.slide_order;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_DesignsThumbsList`(IN `iduser_p` INT(9), IN `page_p` TINYINT(2))
+    NO SQL
+BEGIN
+DECLARE lim_start INTEGER;
+SET lim_start = page_p * 10;
+
+
+SELECT 
+    t.id,
+    t.name,
+    t.fk_material_id,
+    t.thumbnail,
+    (ctm.width / ctm.height) AS ratio,
+    t.campaign_id,
+    cam.name AS campaign,
+    material_description
+FROM
+    (SELECT 
+        t.id,
+            t.name,
+            t.thumbnail,
+            t.date_created,
+            template.fk_material_id,
+            t.campaign_id,
+            CONCAT_WS(' ', ct_material.type, ct_material.size_description) as material_description
+    FROM
+        udesign AS t
+    INNER JOIN template ON template.id = t.template_id
+    INNER JOIN ct_material ON ct_material.id_material = t.fk_material_id
+    LEFT JOIN udesign_udesign_group AS ttg ON ttg.udesign_id = t.id
+    WHERE
+        ttg.udesign_group_id IS NULL
+            AND t.status = 1
+            AND t.fk_company_id = (SELECT 
+                fk_company
+            FROM
+                `user`
+            WHERE
+                id_user = iduser_p) 
+	UNION SELECT 
+        t.id,
+            t.name,
+            t.thumbnail,
+            t.date_created,
+            template.fk_material_id,
+            t.campaign_id,
+            CONCAT_WS(' ', ct_material.type, ct_material.size_description) as material_description
+    FROM
+        udesign AS t
+    INNER JOIN template ON template.id = t.template_id
+    INNER JOIN ct_material ON ct_material.id_material = t.fk_material_id
+    LEFT JOIN udesign_udesign_group AS ttg ON ttg.udesign_id = t.id
+    WHERE
+        ttg.udesign_group_id IS NOT NULL
+            AND ttg.slide_order = 1
+            AND t.status = 1
+            AND t.fk_company_id = (SELECT 
+                fk_company
+            FROM
+                `user`
+            WHERE
+                id_user = iduser_p)) AS t
+        INNER JOIN
+    ct_material AS ctm ON t.fk_material_id = ctm.id_material
+        INNER JOIN
+    campaign AS cam ON t.campaign_id = cam.id_campaign
+WHERE
+    1
+ORDER BY date_created DESC
+LIMIT LIM_START , 10;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_DesignsThumbsListCOUNT`(IN `iduser_p` INT(9))
+    NO SQL
+SELECT count(*) as c FROM (
+    SELECT t.id, t.name, t.thumbnail, t.date_created, template.fk_material_id, t.campaign_id
+    FROM udesign as t
+    INNER JOIN template ON template.id = t.template_id
+    LEFT JOIN udesign_udesign_group as ttg ON ttg.udesign_id = t.id
+    WHERE ttg.udesign_group_id is null 
+    AND t.status = 1 
+    AND t.fk_company_id = (SELECT fk_company FROM `user` WHERE id_user =  iduser_p)
+    UNION
+    SELECT t.id, t.name, t.thumbnail, t.date_created, template.fk_material_id, t.campaign_id
+    FROM udesign as t
+    INNER JOIN template ON template.id = t.template_id
+    LEFT JOIN udesign_udesign_group as ttg ON ttg.udesign_id = t.id
+    WHERE ttg.udesign_group_id is not null AND ttg.slide_order = 1 
+    AND t.status = 1
+    AND t.fk_company_id = (SELECT fk_company FROM `user` WHERE id_user =  iduser_p)
+) as t 
+INNER JOIN ct_material as ctm ON t.fk_material_id = ctm.id_material
+INNER JOIN campaign as cam ON t.campaign_id = cam.id_campaign
+WHERE 1$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Det_Subscription`(IN `campaign_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT	id_detsubs,
+			fk_subs,
+			price,
+			individual_user_cost,
+			image,
+			first_plus,
+			sec_plus,
+			third_plus,
+			frth_plus,
+			fifth_plus,
+			sixth_plus,
+			sevn_plus
+	
+	From campaign
+	WHERE id_campaign = campaign_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Fonts`()
+    NO SQL
+BEGIN
+	SELECT DISTINCT font From campaign_fonts
+	UNION
+	SELECT DISTINCT font FROM company_fonts;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_FreeUsers`()
+    NO SQL
+BEGIN
+	select count(id_user) AS FreeUsers FROM user where fk_company = 4;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_General_Messages`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT  id_gmessage,
+			user_up,
+			date_up,
+			user_send,
+			user_receive,
+			focus_group,
+			message,
+			status
+	FROM company
+	WHERE id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_HistoryCampaign`(IN `idcompany_p` INT)
+    NO SQL
+BEGIN
+	SELECT 
+    AH.id_history   ,	
+    U.name	 		,
+    AH.message 		,
+    AH.fk_campaign  ,	
+    AH.date_up  	,
+	C.name AS campaign_name,
+	id_campaign
+	FROM admin_history AH
+    
+    INNER JOIN user U
+    ON U.id_user = AH.fk_user
+	
+	INNER JOIN campaign C
+	ON C.id_campaign = AH.fk_campaign
+    
+    WHERE U.fk_company = idcompany_p AND fk_campaign > 0
+	ORDER BY AH.date_up DESC;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_HistoryCompany`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT 
+    AH.id_history   ,	
+    U.name	 		,
+    AH.message 		,
+    AH.fk_campaign  ,	
+    AH.date_up  	
+	FROM admin_history AH
+    
+    INNER JOIN user U
+    ON U.id_user = AH.fk_user
+    
+    WHERE U.fk_company = idcompany_p AND fk_campaign = 0
+	ORDER BY AH.date_up DESC;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_HistoryGeneral`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT 
+    AH.id_history   ,	
+    U.name	 		,
+    AH.message 		,
+    AH.fk_campaign  ,	
+    AH.date_up  	
+	FROM admin_history AH
+    
+    INNER JOIN user U
+    ON U.id_user = AH.fk_user
+    
+    WHERE U.fk_company = idcompany_p AND fk_campaign = 0
+	ORDER BY AH.date_up DESC;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_IdentityImages`(IN `campaignid_c` INT(9))
+    NO SQL
+BEGIN
+SELECT CP.image
+FROM company_pack CP
+INNER JOIN campaign C 
+ON C.fk_company = CP.fk_company
+
+where C.id_campaign = campaignid_c;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_ImageBank`()
+    NO SQL
+BEGIN
+SELECT id_bank, image FROM image_bank;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Inbox`()
+    NO SQL
+BEGIN
+
+SELECT name, date_up, message, status, company_name, email, phone
+			FROM admin_inbox;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_LoggedUser`(IN `email_p` VARCHAR(255))
+    NO SQL
+BEGIN
+	SELECT 
+			U.date_up,
+			U.date_update,
+			U.fk_company,
+			U.home_phone,
+			U.id_user,
+			U.image,
+			U.mobile_phone,
+			U.name,
+			U.password,
+			U.status,
+			CASE 
+			WHEN U.type = 1 THEN 'Administrador Wizad'
+			WHEN U.type = 2 THEN 'Administrador Empresa'
+			WHEN U.type = 3 THEN 'Diseñador'
+			WHEN U.type = 4 THEN 'Diseñador'
+			END AS type,
+			U.type as typenum,
+			C.address,
+			C.logo,
+			C.name as company_name,
+			C.status as company_status,
+			C.date_update as company_update,
+			C.pc,
+			C.city,
+                        Cities.name as city_name,
+			C.state,
+                        state.description as state_name,
+                        
+            C.country,
+                        ct_country.name as country_name,
+			C.web_page,
+			C.industry,
+			C.no_employees,
+			S.description as subs_description,
+			C.id_company,
+			U.free_campaign,
+			CASE 
+				WHEN fk_contract = 1
+				THEN DATEDIFF(DATE_ADD(CS.date_up, INTERVAL 1 MONTH),NOW())
+				ELSE DATEDIFF(DATE_ADD(CS.date_up, INTERVAL 12 MONTH),NOW())
+			END AS days_left,
+			U.namenoemail AS UserName
+			
+	FROM
+			user U
+	INNER
+	JOIN	company C
+	ON		U.fk_company = C.id_company
+	INNER
+	JOIN	company_subscription CS
+	ON		CS.fk_company = C.id_company
+	INNER
+	JOIN	ct_subscription S
+	ON		CS.fk_subscription = S.id_subs
+    INNER JOIN   ct_city Cities
+	
+	ON	C.city = Cities.id_city
+	INNER JOIN   state
+	
+	ON	C.state = state.id_state
+	INNER JOIN   ct_country
+	
+	ON	C.country = ct_country.id_country
+	WHERE
+			U.name = email_p
+	AND		U.status = 1
+	AND		C.status = 1
+	HAVING     days_left >= 1; 
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Material`(IN `idmaterial_p` INT(9))
+BEGIN
+SELECT M.* FROM ct_material M WHERE M.id_material = idmaterial_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Materials`()
+    NO SQL
+BEGIN
+SELECT M.id_material, M.type, M.size_description, M.description, 
+M.width, M.height, M.status, M.thumbnail , M.multiplier, M.width_small, M.height_small, 
+M.width_multiplier, M.height_multiplier,print_margins, M.multipage, M.offline
+FROM ct_material M 
+WHERE M.status = 1;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_NewCompanyID`()
+    NO SQL
+BEGIN
+SELECT MAX(id_company) AS id_company From company;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_PaletteCompany`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT  id_palette,
+			color,
+			status
+	FROM	company_palette
+	WHERE	fk_company = idcompany_p;
+	
+		
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_PublicImage`(IN `id_p` INT)
+    NO SQL
+BEGIN
+SELECT img_data
+FROM public_designs WHERE id = id_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Segments`()
+    NO SQL
+BEGIN
+SELECT id_segment, description
+FROM ct_segment;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_SelectedCompany`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	
+	SELECT 	id_company,
+			name,
+			address,
+			date_up,
+			date_update,
+			status,
+			logo
+	FROM 	company
+	
+	WHERE 	company_p = id_company;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_SelectedCt_Subscription`(IN `subs_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT  id_subs,
+			description
+	From company
+	
+	WHERE id_subs = sub_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_States`()
+    NO SQL
+BEGIN
+SELECT id_state, description as name
+FROM state;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Template`(IN `idtemplate_p` INT(9))
+    NO SQL
+BEGIN 
+	SELECT 	id,
+            campaign_id,
+			name,
+			contents,
+          
+            date_created,
+            
+            template_template_group.template_group_id
+	From template
+    
+    LEFT JOIN  template_template_group ON template.id = template_template_group.template_id
+    
+    WHERE id = idtemplate_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_TemplateGroup`(IN `idtemplate_p` INT(9))
+    NO SQL
+BEGIN 
+	SELECT 	id,
+		name,
+		created_id,
+		status
+	FROM template_group
+    WHERE id = (SELECT template_group_id FROM template_template_group WHERE template_id = idtemplate_p);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Templates`(IN `idcompany_p` INT(9), IN `idmaterial_p` INT(9), IN `idcampaign_p` INT(9))
+    NO SQL
+BEGIN
+SELECT * FROM (
+	SELECT 	T.id,
+			T.name,
+			T.fk_material_id,
+			T.contents,				
+			T.date_created,
+			T.status,
+			TTG.template_group_id
+	FROM 	template T
+    INNER JOIN template_template_group TTG ON T.id = TTG.template_id AND TTG.slide_order = 1
+    WHERE T.fk_company_id = idcompany_p
+    AND fk_material_id = idmaterial_p
+    AND T.campaign_id = idcampaign_p
+    AND status = 1
+	UNION
+	SELECT 	T.id,
+			T.name,
+			T.fk_material_id,
+			T.contents,				
+			T.date_created,
+			T.status,
+			TTG.template_group_id
+	FROM 	template T
+    LEFT JOIN template_template_group TTG ON T.id = TTG.template_id 
+    WHERE TTG.template_id IS NULL
+	AND T.fk_company_id = idcompany_p
+    AND fk_material_id = idmaterial_p
+    AND T.campaign_id = idcampaign_p
+    AND status = 1
+) AS A  ORDER BY A.date_created DESC;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_TemplatesOfGroup`(IN `idtemplategroup_p` INT(9))
+    NO SQL
+BEGIN
+SELECT t.id, t.campaign_id, t.name, ttg.template_group_id, t.contents FROM template t
+INNER JOIN template_template_group ttg ON ttg.template_id = t.id AND ttg.template_group_id = idtemplategroup_p
+WHERE status = 1
+ORDER BY ttg.slide_order;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_TemplatesThumbsList`(IN `iduser_p` INT(9), IN `page_p` TINYINT(2))
+    NO SQL
+BEGIN
+DECLARE lim_start INTEGER;
+SET lim_start = page_p * 10;
+
+
+SELECT t.id, t.name, t.fk_material_id, t.thumbnail, (ctm.width / ctm.height) as ratio, t.campaign_id, cam.name as campaign, material_description FROM (
+    SELECT t.id, t.name, t.thumbnail, t.date_created, t.fk_material_id, t.campaign_id,
+            CONCAT_WS(' ', ct_material.type, ct_material.size_description) as material_description
+    FROM template as t
+    LEFT JOIN template_template_group as ttg ON ttg.template_id = t.id
+    INNER JOIN ct_material ON ct_material.id_material = t.fk_material_id
+    WHERE ttg.template_group_id is null 
+    AND t.status = 1 
+    AND t.fk_company_id = (SELECT fk_company FROM `user` WHERE id_user =  iduser_p)
+    UNION
+    SELECT t.id, t.name, t.thumbnail, t.date_created, t.fk_material_id, t.campaign_id,
+            CONCAT_WS(' ', ct_material.type, ct_material.size_description) as material_description
+    FROM template as t
+    INNER JOIN ct_material ON ct_material.id_material = t.fk_material_id
+    LEFT JOIN template_template_group as ttg ON ttg.template_id = t.id
+    WHERE ttg.template_group_id is not null AND ttg.slide_order = 1 
+    AND t.status = 1
+    AND t.fk_company_id = (SELECT fk_company FROM `user` WHERE id_user =  iduser_p)
+) as t 
+INNER JOIN ct_material as ctm ON t.fk_material_id = ctm.id_material
+INNER JOIN campaign as cam ON t.campaign_id = cam.id_campaign
+WHERE 1 ORDER BY date_created DESC LIMIT lim_start, 10;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_TemplatesThumbsListCOUNT`(IN `iduser_p` INT(9))
+    NO SQL
+SELECT count(*) as c FROM (
+    SELECT t.id, t.name, t.thumbnail, t.date_created, t.fk_material_id, t.campaign_id
+    FROM template as t
+    LEFT JOIN template_template_group as ttg ON ttg.template_id = t.id
+    WHERE ttg.template_group_id is null 
+    AND t.status = 1 
+    AND t.fk_company_id = (SELECT fk_company FROM `user` WHERE id_user = iduser_p)
+    UNION
+    SELECT t.id, t.name, t.thumbnail, t.date_created, t.fk_material_id, t.campaign_id
+    FROM template as t
+    LEFT JOIN template_template_group as ttg ON ttg.template_id = t.id
+    WHERE ttg.template_group_id is not null AND ttg.slide_order = 1 
+    AND t.status = 1
+    AND t.fk_company_id = (SELECT fk_company FROM `user` WHERE id_user = iduser_p)
+) as t 
+INNER JOIN ct_material as ctm ON t.fk_material_id = ctm.id_material
+INNER JOIN campaign as cam ON t.campaign_id = cam.id_campaign
+WHERE 1$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_TextCompany`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT  id_config,
+			text_config as text,
+			status
+	FROM	company_textconfig
+	WHERE	fk_company = idcompany_p;
+	
+		
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_Thumbnails`(IN `idtemplategroup_p` INT(9))
+    NO SQL
+BEGIN 
+SELECT template.id, template.thumbnail 
+FROM template, template_template_group 
+WHERE template.id = template_template_group.template_id AND template_group_id = idtemplategroup_p 
+ORDER BY template_template_group.slide_order;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_UDesign`(IN `idudesign_p` INT(9))
+    NO SQL
+BEGIN 
+	SELECT 	id,
+            campaign_id,
+			name,
+			contents,
+            template_id,
+            date_created,
+            
+            udesign_udesign_group.udesign_group_id
+	FROM udesign
+    
+    LEFT JOIN  udesign_udesign_group ON udesign.id = udesign_udesign_group.udesign_id
+    
+    WHERE id = idudesign_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_UDesigns`(IN `idcompany_p` INT(9), IN `iduser_p` INT(9), IN `idcampaign_p` INT(9))
+    NO SQL
+BEGIN
+SELECT * FROM (
+	SELECT 	T.id,
+			T.name,
+			template.fk_material_id,
+			T.contents,				
+			T.date_created,
+			T.status,
+			TTG.udesign_group_id
+	FROM 	udesign T
+    INNER JOIN udesign_udesign_group TTG ON T.id = TTG.udesign_id AND TTG.slide_order = 1
+    INNER JOIN template ON template.id = T.template_id
+    WHERE T.fk_company_id = idcompany_p
+    AND T.created_id = iduser_p
+    AND T.campaign_id = idcampaign_p
+    AND T.status = 1
+	UNION
+	SELECT 	T.id,
+			T.name,
+			template.fk_material_id,
+			T.contents,				
+			T.date_created,
+			T.status,
+			TTG.udesign_group_id
+	FROM 	udesign T
+    LEFT JOIN udesign_udesign_group TTG ON T.id = TTG.udesign_id 
+    INNER JOIN template ON template.id = T.template_id
+    WHERE TTG.udesign_id IS NULL
+	AND T.fk_company_id = idcompany_p
+    AND T.created_id = iduser_p
+    AND T.campaign_id = idcampaign_p
+    AND T.status = 1
+) AS A  ORDER BY A.date_created DESC;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_UserCounts`()
+    NO SQL
+BEGIN
+	SELECT COUNT(id_user) AS Users 	  FROM user WHERE status = 1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_UserExist`(IN `name_p` TEXT)
+    NO SQL
+BEGIN
+	SELECT name , 1 FROM user
+	WHERE name = name_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_UsersCompany`(IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	SELECT  id_user,
+			date_up,
+			name,
+            
+            namenoemail,
+			status,
+			CASE when status = 1 then 'Activo'
+				 when status = 2 then 'Inactivo'
+			END AS statusdesc,
+			free_campaign,
+			mobile_phone,
+            
+            home_phone,
+			type
+	FROM	user
+	WHERE	fk_company = idcompany_p;
+	
+		
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspGet_VisitCount`()
+    NO SQL
+BEGIN
+	SELECT COUNT(id_visit) AS Visits	  FROM admin_visits;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_AddHistory`(IN `user_p` INT(9), IN `message_p` TEXT, IN `campaign_p` INT(9))
+    NO SQL
+BEGIN
+
+	INSERT INTO admin_history (fk_user, message, fk_campaign, date_up)
+	SELECT user_p,message_p,campaign_p,Now();
+
+	SELECT "SUCCESS" AS returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_CampaignFonts`(IN `campaign_c` INT(9), IN `font_c` TEXT)
+    NO SQL
+BEGIN
+INSERT INTO campaign_fonts ( date_up, date_update, fk_campaign, status, font )
+SELECT NOW(), NOW(), campaign_c, 1, font_c;
+
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_CampaignMaterial`(IN `campaign_c` INT(9), IN `material_c` INT(9))
+    NO SQL
+BEGIN
+	DELETE From campaign_material WHERE fk_campaign = campaign_c AND fk_material = material_c;
+	INSERT INTO campaign_material (date_up, date_update, 
+                                   fk_campaign, status, fk_material, download) 
+SELECT NOW(), NOW(), campaign_c, 1, material_c,0;
+
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_CampaignPack`(IN `campaign_c` INT(9), IN `image_c` TEXT, IN `category_c` VARCHAR(16))
+    NO SQL
+BEGIN
+INSERT INTO campaign_pack (date_up, date_update, fk_campaign, category, status, image ) 
+SELECT NOW(), NOW(), campaign_c, category_c, 1, image_c;
+
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_CampaignPalette`(IN `campaign_c` INT(9), IN `color_c` TEXT)
+    NO SQL
+BEGIN
+	INSERT INTO campaign_palette ( date_up, date_update, fk_campaign, 
+                                  status, color ) 
+SELECT NOW(), NOW(), campaign_c, 1, color_c;
+
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_CampaignTexts`(IN `campaign_c` INT(9), IN `text_c` TEXT)
+    NO SQL
+BEGIN
+INSERT INTO campaign_texts ( date_up, date_update, fk_campaign, status, text ) 
+SELECT NOW(), NOW(), campaign_c, 1, text_c;
+SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_CompanySubscription`(IN `company_p` INT(9), IN `subscription_p` INT(9), IN `freq_p` INT(9))
+    NO SQL
+BEGIN
+	INSERT INTO company_subscription
+	(fk_company, fk_subscription, date_up, date_update, status, fk_contract)
+	SELECT company_p, subscription_p, NOW(), NOW(), 1, freq_p;
+	SELECT "SUCCESS" AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_DesignSlide`(IN `idafterudesign_p` INT, IN `idgroup_p` INT)
+    NO SQL
+BEGIN
+SET @order := (SELECT slide_order FROM udesign_udesign_group WHERE udesign_group_id = idgroup_p AND udesign_id = idafterudesign_p);
+INSERT INTO udesign (`name`, template_id, contents, thumbnail, date_created, created_id, fk_company_id, `status` ) 
+SELECT name, template_id, '{"objects":[]}', 'new.png', NOW(), created_id, fk_company_id, 1 FROM udesign WHERE id = idafterudesign_p;
+INSERT INTO udesign_udesign_group (udesign_group_id, udesign_id, slide_order) VALUES (idgroup_p, LAST_INSERT_ID(), @order);
+SELECT "SUCCESS" AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_Inbox`(IN `name_c` TEXT, IN `message_c` TEXT, IN `company_c` TEXT, IN `email_c` TEXT, IN `phone_c` TEXT)
+    NO SQL
+BEGIN
+INSERT INTO admin_inbox(name, date_up, message, status, company_name, email, phone) 
+			SELECT name_c, Now(), message_c, 1, company_c, email_c, phone_c;
+			
+			SELECT 'SUCCESS' as returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewAdminUser`(IN `company_p` INT(9), IN `name_p` VARCHAR(255), IN `password_p` VARCHAR(255), IN `homephone_p` VARCHAR(20), IN `mobilephone_p` VARCHAR(20), IN `nameusernoemail_p` VARCHAR(255))
+    NO SQL
+BEGIN
+
+    INSERT INTO user
+	(fk_company, name, password,home_phone, mobile_phone, date_up, date_update, type, status, namenoemail)
+	SELECT company_p, name_p, password_p, homephone_p, mobilephone_p, now(), now(), 2, 1, nameusernoemail_p;
+
+	SELECT 'SUCCESS' as returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCampaign`(IN `name_p` TEXT, IN `description_p` TEXT, IN `userup_p` INT(9), IN `userupdate_p` INT(9), IN `dimension_p` INT(9), IN `company_p` INT(9), IN `segment_c` VARCHAR(200), IN `city_c` INT(9), IN `age_c` INT(9), IN `download_p` INT(1))
+    NO SQL
+BEGIN
+
+	INSERT INTO campaign
+			(name,
+             description,
+             date_up,
+             date_update,
+             fk_dimension,
+             fk_company,
+             segment,
+             fk_city,
+             fk_age,
+             status,
+            
+             download
+            )
+	SELECT	name_p,
+			description_p,
+            Now(),
+            Now(),
+            1,
+            company_p,
+			segment_c,
+			city_c,
+			age_c,
+            1,
+            
+            download_p;
+	SELECT LAST_INSERT_ID() AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewComany_Pack`(IN `company_p` INT(9), IN `image_p` TEXT)
+    NO SQL
+BEGIN
+	INSERT INTO company
+			(fk_company,
+             image,	
+             date_up,
+             date_update,
+             status)
+	SELECT	company_p,
+			image_p,
+			Now(),
+			Now(),
+			1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCompany`(IN `name_p` TEXT, IN `address_p` TEXT, IN `logo_p` TEXT, IN `city_p` INT(9), IN `employees_p` INT(9), IN `industry_p` TEXT, IN `webpage_p` TEXT, IN `pc_p` INT(9), IN `storage_p` INT(9), IN `state_p` INT(9), IN `country_p` INT(9))
+    NO SQL
+BEGIN
+	
+	INSERT INTO company
+			(name,
+             address,
+             date_up,
+             date_update,
+             city,
+             
+             state,
+             
+             country,
+             status,
+             logo,
+             no_employees,
+             industry,
+             web_page,
+             pc,
+             storage)
+	SELECT 	name_p,
+			address_p,
+			Now(),
+			Now(),
+			city_p,
+            
+            state_p,
+            
+            country_p,
+			1,
+			logo_p,
+            employees_p,
+			industry_p,
+			webpage_p,
+			pc_p,
+			storage_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCompany_Font`(IN `companyid_p` INT(9), IN `font_p` TEXT)
+    NO SQL
+BEGIN
+INSERT INTO company_fonts( fk_company, font, date_up, date_update, status) 
+SELECT companyid_p, font_p, now(), now(),1;
+SELECT "SUCCESS" AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCompany_Pack`(IN `idcompany_p` INT(9), IN `image_p` TEXT)
+    NO SQL
+BEGIN
+
+INSERT INTO company_pack(fk_company, image, status, date_up, date_update) 
+SELECT idcompany_p, image_p, 1, now(), now();
+
+SELECT "SUCCESS" as returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCompany_Palette`(IN `idcompany_p` INT(9), IN `color_p` TEXT)
+    NO SQL
+BEGIN
+		INSERT INTO company_palette
+				(fk_company,
+                 color,
+                 date_up,
+                 date_update,
+                 status)
+		
+		SELECT	idcompany_p,
+				color_p,
+				Now(),
+				Now(),
+				1;
+		SELECT 'SUCCESS' as returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCompany_Subscription`(IN `company_p` INT(9), IN `subscription_p` INT(9))
+    NO SQL
+BEGIN
+	INSERT INTO company
+			(fk_company,
+			fk_subscription,
+			date_up,
+			date_update,
+			status)
+	SELECT
+			company_p,
+			suscription_p,
+			Now(),
+			Now(),
+			1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCompany_TextConfig`(IN `company_p` INT(9), IN `textconfig_p` TEXT)
+    NO SQL
+BEGIN
+		INSERT INTO company_textConfig
+				(fk_company,
+                 text_config,
+                 date_up,
+                 date_update,
+                 status)
+		
+		SELECT	company_p,
+				textconfig_p,
+				Now(),
+				Now(),
+				1;
+		SELECT 'SUCCESS' as returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewControl_Historic`(IN `user_p` INT(9), IN `description_p` TEXT)
+    NO SQL
+BEGIN
+	INSERT INTO company
+			(fk_user,
+			date_up,
+			description,
+			status)
+	SELECT	user_p,
+			Now(),
+			description_p,
+			1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCt_Dimensions`(IN `description_p` TEXT, IN `height_p` INT(9), IN `width_p` INT(9))
+    NO SQL
+BEGIN
+	INSERT INTO	campaign
+			(description,
+            height,
+            width,
+            status)
+	SELECT description_p,
+			height_p,
+			width_p,
+			1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewCt_Subscription`(IN `description_p` TEXT)
+    NO SQL
+BEGIN
+	INSERT INTO company
+			(description)
+	SELECT	description_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewDesign`(IN `campaign_p` INT(9), IN `user_p` INT(9))
+    NO SQL
+BEGIN
+	
+	INSERT INTO campaign
+			(fk_user,
+			fk_campaign,
+			date_up,
+			date_update,
+			status)
+	SELECT	user_p,
+			campaign_p,
+			Now(),
+			Now(),
+			1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewDesignDesignGroup`(IN `udesigngroupid_p` INT(9), IN `udesignid_p` INT(9))
+    NO SQL
+BEGIN
+DECLARE SL_ORDER INT DEFAULT 0;
+SELECT MAX(slide_order) INTO SL_ORDER FROM udesign_udesign_group WHERE udesign_group_id = udesigngroupid_p;
+ IF(SL_ORDER IS NULL) THEN
+   SET SL_ORDER = 0;
+ END IF;
+INSERT INTO udesign_udesign_group
+(udesign_group_id,udesign_id,slide_order)
+VALUES
+(
+udesigngroupid_p,
+udesignid_p,
+SL_ORDER + 1
+);
+SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewDesignGroup`(IN `name_p` VARCHAR(100), IN `iduser_p` INT(9))
+    NO SQL
+BEGIN
+INSERT INTO udesign_group
+(name,created_id,status)
+VALUES
+(
+name_p,
+iduser_p,
+1
+);
+SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewDet_Subscription`(IN `subs_p` INT(9), IN `price_p` INT(9), IN `individualusercost_p` INT(9), IN `image_p` TEXT, IN `firstplus_p` TEXT, IN `secplus_p` TEXT, IN `thirdplus_p` TEXT, IN `frthplus_p` TEXT, IN `fifthplus_p` TEXT, IN `sixthplus_p` TEXT, IN `sevnplus_p` TEXT)
+    NO SQL
+BEGIN
+	INSERT INTO campaign
+			(fk_subs,
+			price,
+			individual_user_cost,
+			image,
+			first_plus,
+			sec_plus,
+			third_plus,
+			frth_plus,
+			fifth_plus,
+			sixth_plus,
+			sevn_plus)
+	SELECT	subs_p,
+			price_p,
+			individualusercost_p,	
+			image_p,
+			firstplus_p,
+			secplus_p,
+			thirdplus_p,
+			frthplus_p,
+			fifthplus_p,
+			sixthplus_p,
+			sevnplus_p
+	FROM	campaign
+	
+	WHERE 	fk_subs = subs_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewGeneral_Messages`(IN `idgmessage_p` INT(9), IN `userup_p` INT(9), IN `usersend_p` INT(9), IN `userreceive_p` INT(9), IN `focusgroup_p` INT(9), IN `message_p` TEXT)
+    NO SQL
+BEGIN
+	INSERT INTO company
+			(id_gmessage,
+			user_up,
+			date_up,
+			user_send,
+			user_receive,
+			focus_group,
+			message,
+            status)
+	SELECT	idgmessage_p,
+			userup_p,
+			Now(),
+			usersend_p,
+			focusgroup_p,
+			message_p,
+			1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewImage`(IN `img_data_p` LONGTEXT)
+    NO SQL
+BEGIN
+	
+	INSERT INTO public_designs
+			(img_data, created_date)
+	SELECT 	img_data_p, NOW();
+	SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewMaterial`(IN `type_p` TEXT, IN `size_description_p` TEXT, IN `description_p` TEXT, IN `width_p` TEXT, IN `height_p` TEXT, IN `multipage_p` INT)
+    NO SQL
+BEGIN 
+INSERT INTO ct_material (type, size_description, description, width, height, thumbnail, free, status, multipage) 
+SELECT description_p, width_p, height_p, 'NewMaterial.png', 0, 0, multipage_p; 
+SELECT 'SUCCESS' AS returnMessage; 
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewTemplate`(IN `name_p` VARCHAR(100), IN `idmaterial_p` INT(9), IN `contents_p` TEXT, IN `iduser_p` INT(9), IN `idcampaign_p` INT(9))
+    NO SQL
+BEGIN
+INSERT INTO template 
+(name,campaign_id,fk_material_id,contents,created_id,fk_company_id)
+VALUES
+(
+name_p,
+idcampaign_p,
+idmaterial_p,
+contents_p,
+iduser_p,
+(SELECT fk_company FROM user WHERE id_user = iduser_p)
+);
+SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewTemplateGroup`(IN `name_p` VARCHAR(100), IN `iduser_p` INT(9))
+    NO SQL
+BEGIN
+INSERT INTO template_group
+(name,created_id,status)
+VALUES
+(
+name_p,
+iduser_p,
+1
+);
+SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewTemplateTemplateGroup`(IN `templategroupid_p` INT(9), IN `templateid_p` INT(9))
+    NO SQL
+BEGIN
+DECLARE SL_ORDER INT DEFAULT 0;
+SELECT MAX(slide_order) INTO SL_ORDER FROM template_template_group WHERE template_group_id = templategroupid_p;
+ IF(SL_ORDER IS NULL) THEN
+   SET SL_ORDER = 0;
+ END IF;
+INSERT INTO template_template_group
+(template_group_id,template_id,slide_order)
+VALUES
+(
+templategroupid_p,
+templateid_p,
+SL_ORDER + 1
+);
+SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewUDesign`(IN `name_p` VARCHAR(100), IN `idmaterial_p` INT(9), IN `contents_p` TEXT, IN `iduser_p` INT(9), IN `idcampaign_p` INT(9), IN `idtemplate_p` INT(9))
+    NO SQL
+BEGIN
+INSERT INTO udesign 
+(name,campaign_id,fk_material_id,contents,created_id,fk_company_id,template_id)
+VALUES
+(
+name_p,
+idcampaign_p,
+idmaterial_p,
+contents_p,
+iduser_p,
+(SELECT fk_company FROM user WHERE id_user = iduser_p),
+idtemplate_p
+);
+SELECT 'SUCCESS' AS returnMessage, LAST_INSERT_ID() as id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewUser`(IN `company_p` INT(9), IN `name_p` VARCHAR(255), IN `password_p` VARCHAR(255), IN `homephone_p` VARCHAR(20), IN `mobilephone_p` VARCHAR(20), IN `username_p` VARCHAR(255))
+    NO SQL
+BEGIN
+    SET @no_employees_c := (SELECT no_employees + 1 FROM company WHERE id_company = company_p);
+    SET @no_max_users := (SELECT users FROM ct_subscription WHERE id_subs = (SELECT fk_subscription FROM company_subscription WHERE fk_company = company_p));
+    IF @no_employees_c <= @no_max_users THEN
+	    INSERT INTO user
+		(fk_company, name, password,home_phone, mobile_phone, date_up, date_update, type, status, namenoemail)
+		SELECT company_p, 
+	    name_p, 
+	    password_p, 
+	    homephone_p, 
+	    mobilephone_p, 
+	    now(), 
+	    now(), 
+	    3, 
+	    1, 
+	    username_p;
+	UPDATE company SET no_employees = no_employees + 1 WHERE id_company = company_p;
+	SELECT 'SUCCESS' as returnMessage;
+    ELSE
+	SELECT 'ERROR: MAX USERS' as returnMessage;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_NewVisit`()
+    NO SQL
+BEGIN
+	INSERT INTO admin_visits (date_up, value)
+	SELECT NOW(), 1;
+
+	SELECT "SUCCESS" AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_SaveImageOnBank`(IN `image` TEXT)
+    NO SQL
+BEGIN
+INSERT INTO image_bank (image)
+Select image;
+SELECT "SUCCESS" as returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspIns_Slide`(IN `idaftertemplate_p` INT, IN `idgroup_p` INT)
+    NO SQL
+BEGIN
+SET @order := (SELECT slide_order FROM template_template_group WHERE template_group_id = idgroup_p AND template_id = idaftertemplate_p);
+INSERT INTO template (`name`, fk_material_id, contents, thumbnail, date_created, created_id, fk_company_id, `status` ) 
+SELECT name, fk_material_id, '{"objects":[]}', 'new.png', NOW(), created_id, fk_company_id, 1 FROM template WHERE id = idaftertemplate_p;
+INSERT INTO template_template_group (template_group_id, template_id, slide_order) VALUES (idgroup_p, LAST_INSERT_ID(), @order);
+SELECT "SUCCESS" AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Campaign`(IN `name_p` TEXT, IN `description_p` TEXT, IN `userupdate_p` INT(9), IN `campaign_p` INT(9), IN `download_p` INT)
+    NO SQL
+BEGIN
+	UPDATE campaign
+		SET name = name_p,
+			description = description_p,
+			user_update = userupdate_p,
+            
+            download = download_p,
+			date_update = Now()
+	WHERE id_campaign = campaign_p;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Company`(IN `name_p` TEXT, IN `address_p` TEXT, IN `company_p` INT(9), IN `industry_p` TEXT, IN `noemployees_p` INT(9), IN `pc_p` INT(9), IN `webpage_p` TEXT)
+    NO SQL
+BEGIN
+	
+	UPDATE company
+		
+		SET name=name_p,
+			address=address_p,
+			date_update=now(),
+			industry = industry_p,
+			no_employees = noemployees_p,
+			pc = pc_p,
+			web_page = webpage_p
+			
+	WHERE	id_company=company_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_CompanyStatus`(IN `status_p` INT(9), IN `idcompany_p` INT(9))
+    NO SQL
+BEGIN
+	UPDATE company
+	SET status = status_p
+	WHERE id_company = idcompany_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Company_Pack`(IN `company_p` INT(9), IN `image_p` TEXT)
+    NO SQL
+BEGIN
+	UPDATE company
+		
+		SET image = image_p,
+			date_update = Now()
+	WHERE id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Company_Subscription`(IN `company_p` INT(9))
+    NO SQL
+BEGIN
+	UPDATE company
+		
+		SET date_update = Now()
+	
+	WHERE id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Company_TextConfig`(IN `company_p` INT(9), IN `textconfig_p` TEXT)
+    NO SQL
+BEGIN
+	UPDATE company
+		SET text_config = textconfig_p,
+			date_update = Now()
+	
+	WHERE 	id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Control_Historic`(IN `user_p` INT(9), IN `description_p` TEXT, IN `company_p` INT(9))
+    NO SQL
+BEGIN 
+	UPDATE company
+		SET fk_user = user_p,
+			description = description_p
+	WHERE id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Ct_Dimensions`(IN `description_p` TEXT, IN `height_p` INT(9), IN `width_p` INT(9), IN `campaign` INT(9))
+    NO SQL
+BEGIN
+	UPDATE campaign
+	
+		SET description = description_p,
+			height = height_p,
+			width = width_p
+	WHERE id_campaign = campaign;
+	
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Ct_Subscription`(IN `description_p` TEXT, IN `subs_p` INT(9))
+    NO SQL
+BEGIN
+	UPDATE company
+		SET description = description_p
+	WHERE id_subs = subs_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Design`(IN `campaign_p` INT(9))
+    NO SQL
+BEGIN
+	UPDATE campaign
+		SET date_update = Now()
+	WHERE id_campaign = campaign_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_DesignSlideOrder`(IN `idudesign_p` INT(9), IN `idgroup_p` INT(9), IN `direction_p` VARCHAR(6))
+    NO SQL
+BEGIN
+DECLARE ORDER1 INT DEFAULT 0;
+DECLARE TID INT DEFAULT 0;
+IF (direction_p = 'left') THEN
+	SELECT slide_order INTO ORDER1 FROM udesign_udesign_group WHERE udesign_id = idudesign_p AND udesign_group_id = idgroup_p;
+	SELECT udesign_id INTO TID FROM udesign_udesign_group WHERE udesign_group_id = idgroup_p AND slide_order = ORDER1 - 1;
+	
+	IF (TID IS NOT NULL AND TID > 0) THEN
+		
+		UPDATE udesign_udesign_group SET slide_order = slide_order - 1 WHERE udesign_group_id = idgroup_p AND udesign_id = idudesign_p;
+		UPDATE udesign_udesign_group SET slide_order = slide_order + 1 WHERE udesign_group_id = idgroup_p AND udesign_id = TID;
+	END IF;
+END IF;
+IF (direction_p = 'right') THEN
+	SELECT slide_order INTO ORDER1 FROM udesign_udesign_group WHERE udesign_id = idudesign_p AND udesign_group_id = idgroup_p;
+	SELECT udesign_id INTO TID FROM udesign_udesign_group WHERE udesign_group_id = idgroup_p AND slide_order = ORDER1 + 1;
+	
+	IF (TID IS NOT NULL AND TID > 0) THEN
+		
+		UPDATE udesign_udesign_group SET slide_order = slide_order + 1 WHERE udesign_group_id = idgroup_p AND udesign_id = idudesign_p;
+		UPDATE udesign_udesign_group SET slide_order = slide_order - 1 WHERE udesign_group_id = idgroup_p AND udesign_id = TID;
+	END IF;
+END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_DesignThumbnail`(IN `idudesign_p` INT(9), IN `thumbnail_p` VARCHAR(100))
+    NO SQL
+BEGIN
+	UPDATE udesign
+		SET thumbnail = thumbnail_p
+	WHERE id = idudesign_p;
+ SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Det_Subscription`(IN `subs_p` INT(9), IN `price_p` INT(9), IN `individualusercost_p` INT(9), IN `image_p` TEXT, IN `firstplus_p` TEXT, IN `secplus_p` TEXT, IN `thirdplus_p` TEXT, IN `frthplus_p` TEXT, IN `fifthplus_p` TEXT, IN `sixthplus_p` TEXT, IN `sevnplus_p` TEXT)
+    NO SQL
+BEGIN
+	UPDATE campaign
+		SET price = price_p,
+			individual_user_cost = individualusercost_p,
+			image = image_p,
+			first_plus = firstplus_p,
+			sec_plus = secplus_p,
+			third_plus = thirdplus_p,
+			frth_plus = frthplus_p,
+			fifth_plus = fifthplus_p,
+			sixth_plus = sixthplus_p,
+			sevn_plus = sevnplus_p
+	WHERE id_campaign = campaign_p;
+	
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_FixDesignSlidesOrder`(IN `idudesigngroup_p` INT(9))
+    NO SQL
+BEGIN 
+							DECLARE total_slides INT DEFAULT 0;
+							DECLARE counter INT DEFAULT 0;
+							DECLARE tid INT DEFAULT 0;
+							SELECT count(udesign_id) INTO total_slides FROM udesign_udesign_group WHERE udesign_group_id = idudesigngroup_p;
+							
+							myloop: LOOP
+								SELECT udesign_id INTO tid FROM udesign_udesign_group WHERE udesign_group_id = idudesigngroup_p ORDER BY slide_order LIMIT counter, 1;
+								
+								UPDATE udesign_udesign_group SET slide_order = counter + 1 WHERE udesign_group_id = idudesigngroup_p AND udesign_id = tid;
+								SET counter = counter + 1;
+								IF counter = total_slides then
+									LEAVE myloop;
+								END IF;
+							END LOOP myloop;
+						SELECT 'SUCCESS' AS returnMessage;	
+						END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_FixDesignSlidesOrderAfterDuplicate`(IN `idudesign_p` INT(9), IN `idgroup_p` INT(9))
+    NO SQL
+BEGIN
+DECLARE done INT DEFAULT FALSE;
+DECLARE a INT(9);
+DECLARE cur1 CURSOR FOR 
+	SELECT ttg.udesign_id FROM udesign_udesign_group ttg 
+	WHERE ttg.udesign_group_id = idgroup_p AND ttg.slide_order >= (SELECT slide_order FROM udesign_udesign_group 
+																	WHERE udesign_group_id = idgroup_p AND udesign_id = idudesign_p) 
+										ORDER BY ttg.slide_order;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+OPEN cur1;
+read_loop: LOOP
+    SET done = FALSE ;
+    FETCH cur1 INTO a;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+   
+    
+    IF a != idudesign_p THEN
+      UPDATE udesign_udesign_group SET slide_order = slide_order + 1 WHERE udesign_group_id = idgroup_p and udesign_id = a;
+     
+    END IF;
+  END LOOP;
+  CLOSE cur1;
+  
+ SELECT "SUCCESS" AS returnMessage;
+  
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_FixSlidesOrder`(IN `idtemplategroup_p` INT(9))
+    NO SQL
+BEGIN 
+							DECLARE total_slides INT DEFAULT 0;
+							DECLARE counter INT DEFAULT 0;
+							DECLARE tid INT DEFAULT 0;
+							SELECT count(template_id) INTO total_slides FROM template_template_group WHERE template_group_id = idtemplategroup_p;
+							
+							myloop: LOOP
+								SELECT template_id INTO tid FROM template_template_group WHERE template_group_id = idtemplategroup_p ORDER BY slide_order LIMIT counter, 1;
+								
+								UPDATE template_template_group SET slide_order = counter + 1 WHERE template_group_id = idtemplategroup_p AND template_id = tid;
+								SET counter = counter + 1;
+								IF counter = total_slides then
+									LEAVE myloop;
+								END IF;
+							END LOOP myloop;
+						SELECT 'SUCCESS' AS returnMessage;	
+						END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_FixSlidesOrderAfterDuplicate`(IN `idtemplate_p` INT(9), IN `idgroup_p` INT(9))
+    NO SQL
+BEGIN
+DECLARE done INT DEFAULT FALSE;
+DECLARE a INT(9);
+DECLARE cur1 CURSOR FOR 
+	SELECT ttg.template_id FROM template_template_group ttg 
+	WHERE ttg.template_group_id = idgroup_p AND ttg.slide_order >= (SELECT slide_order FROM template_template_group 
+																	WHERE template_group_id = idgroup_p AND template_id = idtemplate_p) 
+										ORDER BY ttg.slide_order;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+OPEN cur1;
+read_loop: LOOP
+    SET done = FALSE ;
+    FETCH cur1 INTO a;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+   
+    
+    IF a != idtemplate_p THEN
+      UPDATE template_template_group SET slide_order = slide_order + 1 WHERE template_group_id = idgroup_p and template_id = a;
+     
+    END IF;
+  END LOOP;
+  CLOSE cur1;
+  
+ SELECT "SUCCESS" AS returnMessage;
+  
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_FreeMaterial`(IN `idmaterial_p` INT(9), IN `free_p` INT(9))
+    NO SQL
+    COMMENT '1'
+BEGIN
+    
+    UPDATE ct_material
+    
+    SET free = free_p
+    
+    WHERE id_material = idmaterial_p;
+	SELECT 'SUCCESS' AS returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_General_Messages`(IN `company_p` INT(9), IN `idgmessage_p` INT(9), IN `userup_p` INT(9), IN `usersend` INT(9), IN `userreceive_p` INT(9), IN `focusgroup_p` INT(9), IN `message_p` TEXT)
+    NO SQL
+BEGIN
+	UPDATE company 
+		SET id_gmessage = idgmessage_p,
+			user_up = userup_p,
+			user_send = usersend,
+			user_receive = userreceive_p,
+			focus_group = focusgroup_p,
+			message = message_p
+	WHERE id_company = company_p;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Inbox`(IN `idinbox_c` INT(9))
+    NO SQL
+BEGIN
+	UPDATE admin_inbox
+			SET status = 2
+			WHERE id_inbox = idinbox_c;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_MaterialStatus`(IN `idmaterial_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+    UPDATE ct_material
+    
+    SET status = status_p
+    
+    WHERE id_material = idmaterial_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_MultipageMaterial`(IN `idmaterial_p` INT(9), IN `multipage_p` INT(1))
+    NO SQL
+BEGIN UPDATE ct_material SET multipage = multipage_p WHERE id_material = idmaterial_p; 
+SELECT 'SUCCESS' AS returnMessage; 
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_SlideOrder`(IN `idtemplate_p` INT(9), IN `idgroup_p` INT(9), IN `direction_p` VARCHAR(6))
+    NO SQL
+BEGIN
+DECLARE ORDER1 INT DEFAULT 0;
+DECLARE TID INT DEFAULT 0;
+IF (direction_p = 'left') THEN
+	SELECT slide_order INTO ORDER1 FROM template_template_group WHERE template_id = idtemplate_p AND template_group_id = idgroup_p;
+	SELECT template_id INTO TID FROM template_template_group WHERE template_group_id = idgroup_p AND slide_order = ORDER1 - 1;
+	
+	IF (TID IS NOT NULL AND TID > 0) THEN
+		
+		UPDATE template_template_group SET slide_order = slide_order - 1 WHERE template_group_id = idgroup_p AND template_id = idtemplate_p;
+		UPDATE template_template_group SET slide_order = slide_order + 1 WHERE template_group_id = idgroup_p AND template_id = TID;
+	END IF;
+END IF;
+IF (direction_p = 'right') THEN
+	SELECT slide_order INTO ORDER1 FROM template_template_group WHERE template_id = idtemplate_p AND template_group_id = idgroup_p;
+	SELECT template_id INTO TID FROM template_template_group WHERE template_group_id = idgroup_p AND slide_order = ORDER1 + 1;
+	
+	IF (TID IS NOT NULL AND TID > 0) THEN
+		
+		UPDATE template_template_group SET slide_order = slide_order + 1 WHERE template_group_id = idgroup_p AND template_id = idtemplate_p;
+		UPDATE template_template_group SET slide_order = slide_order - 1 WHERE template_group_id = idgroup_p AND template_id = TID;
+	END IF;
+END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusCampaign`(IN `campaign_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+        UPDATE campaign
+            SET status = 1
+        WHERE id_campaign = campaign_p;
+	ELSE
+		UPDATE campaign
+            SET status = 2
+        WHERE id_campaign = campaign_p;
+	END IF;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusCompany`(IN `company_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	ELSE
+		UPDATE company
+			SET status = 2
+		WHERE id_company = company_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusCompany_Pack`(IN `company_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	ELSE
+		UPDATE company
+			SET status = 2
+		WHERE id_company = company_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusCompany_Subscription`(IN `company_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (ststaus_p = 1)
+	THEN
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	ELSE
+		UPDATE company
+			SET status = 2
+		WHERE id_company = company_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusCompany_TextConfig`(IN `company_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	ELSE
+		UPDATE company
+			SET status = 2
+		WHERE id_company = company_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusControl_Historic`(IN `company_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	ELSE
+		UPDATE company
+			SET status = 2
+		WHERE id_company = company_p;
+	END IF;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusCt_Dimensions`(IN `campaign_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE campaign
+			SET status = 1
+		WHERE id_campaign = campaign_p;
+	ELSE
+		UPDATE campaign
+			SET status = 2
+		WHERE id_campaign = campaign_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusDesign`(IN `campaign_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE campaign
+			SET status = 1
+		WHERE id_campaign = campaign_p;
+	ELSE
+		UPDATE campaign
+			SET status = 1
+		WHERE id_campaign = campaign_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_StatusGeneral_Messages`(IN `company_p` INT(9), IN `status_p` INT(9))
+    NO SQL
+BEGIN
+	IF (status_p = 1)
+	THEN
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	ELSE
+		UPDATE company
+			SET status = 1
+		WHERE id_company = company_p;
+	END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Template`(IN `idtemplate_p` INT(9), IN `name_p` VARCHAR(100), IN `contents_p` TEXT)
+    NO SQL
+BEGIN
+	
+	UPDATE template
+		SET name = name_p,
+            
+            contents = contents_p
+			
+	WHERE	id = idtemplate_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_Thumbnail`(IN `idtemplate_p` INT(9), IN `thumbnail_p` VARCHAR(100))
+    NO SQL
+BEGIN
+	UPDATE template
+		SET thumbnail = thumbnail_p
+	WHERE id = idtemplate_p;
+ SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UDesign`(IN `idudesign_p` INT(9), IN `name_p` VARCHAR(100), IN `contents_p` TEXT)
+    NO SQL
+BEGIN
+	
+	UPDATE udesign
+		SET name = name_p,
+            
+            contents = contents_p
+			
+	WHERE	id = idudesign_p;
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_User`(IN `name_p` VARCHAR(255), IN `password_p` VARBINARY(255), IN `mobilephone_p` VARCHAR(20), IN `homephone_p` VARCHAR(20), IN `iduser_p` INT(9))
+    NO SQL
+BEGIN
+	UPDATE  user
+	
+	SET
+			name = name_p,
+			password = password_p,
+			date_update = now(),
+			home_phone = homephone_p,
+			mobile_phone = mobilephone_p
+	WHERE	id_user =  iduser_p;
+		
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UserFreeCampaign`(IN `freecamp_p` INT(9), IN `userid_p` INT(9))
+    NO SQL
+BEGIN
+UPDATE user SET free_campaign = freecamp_p
+WHERE id_user = userid_p;
+SELECT 'SUCCESS' AS returnMessage;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UserGeneralData`(IN `iduser_p` INT(9), IN `name_p` VARCHAR(255), IN `namenoemail_p` VARCHAR(255), IN `homephone_p` VARCHAR(20), IN `mobilephone_p` VARCHAR(20))
+    NO SQL
+BEGIN
+	UPDATE  user
+	
+	SET
+			name = name_p,
+			namenoemail = namenoemail_p,
+			date_update = now(),
+			home_phone = homephone_p,
+			mobile_phone = mobilephone_p
+	WHERE	id_user =  iduser_p;
+		
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UserLogo`(IN `iduser_p` INT(9), IN `logo_p` LONGTEXT)
+    NO SQL
+BEGIN
+	UPDATE company
+    SET logo = logo_p
+    WHERE id_company = (SELECT fk_company from 
+                        user WHERE id_user = iduser_p);
+                        
+    SELECT "SUCCESS" AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UserPassword`(IN `password_p` VARCHAR(255), IN `email_p` VARCHAR(255))
+    NO SQL
+BEGIN
+	UPDATE  user
+	
+	SET
+			password = password_p
+	WHERE	name =  email_p;
+		
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UserPhoto`(IN `iduser_p` INT(9), IN `photo` LONGTEXT)
+    NO SQL
+BEGIN
+	UPDATE  user
+	
+	SET
+			image = photo
+	WHERE	id_user =  iduser_p;
+		
+	SELECT 'SUCCESS' AS returnMessage;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`sggwmepjij2bg`@`localhost` PROCEDURE `uspUpd_UserStatus`(IN `status_p` INT(9), IN `iduser_p` INT(9))
+    NO SQL
+BEGIN
+    SET @no_employees_c := (SELECT no_employees + 1 FROM company WHERE id_company = (SELECT fk_company FROM user WHERE id_user = iduser_p));
+    SET @no_max_users := (SELECT users FROM ct_subscription WHERE id_subs = (SELECT fk_subscription FROM company_subscription WHERE fk_company = (SELECT fk_company FROM user WHERE id_user = iduser_p)));
+    IF status_p = 1 THEN
+       IF @no_employees_c <= @no_max_users THEN
+		UPDATE 	User
+		SET		status = status_p
+		WHERE 	id_user = iduser_p;
+        	UPDATE company SET no_employees = no_employees + 1 
+            WHERE id_company = (SELECT fk_company FROM user WHERE id_user = iduser_p);
+	    SELECT 'SUCCESS' AS returnMessage;
+        ELSE
+	    SELECT 'ERROR: MAX USERS' AS returnMessage;
+	END IF;
+    ELSE
+	UPDATE 	user SET status = status_p WHERE id_user = iduser_p;
+	UPDATE company SET no_employees = no_employees - 1 
+            WHERE id_company = (SELECT fk_company FROM user WHERE id_user = iduser_p);
+	SELECT 'SUCCESS' AS returnMessage;
+    END IF;
+END$$
+DELIMITER ;

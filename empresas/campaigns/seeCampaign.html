@@ -34,7 +34,16 @@
 						<!-- <h3><strong>{{CampaignSelected.description}}</strong></h3> -->
 					</div>
                     <div class="row" style="margin-top:12px;">
-                        <h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i> IMÁGENES</h3>
+						<h3 style="border-bottom: 1px solid black;"><i class="fa fa-picture-o"></i> IMÁGENES</h3>
+						<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+							<div class="btn-group mr-2" role="group" aria-label="First group">
+							  <button type="button" class="btn btn-secondary img_category" id="identidad" ng-click="setImgCat('identidad')">Identidad</button>
+							  <button type="button" class="btn btn-secondary img_category" id="principal" ng-click="setImgCat('principal')">Principal</button>
+							  <button type="button" class="btn btn-secondary img_category" id="secundario" ng-click="setImgCat('secundario')">Secundario</button>
+							  <button type="button" class="btn btn-secondary img_category" id="fondos" ng-click="setImgCat('fondos')">Fondos</button>
+							  <button type="button" class="btn btn-secondary img_category" id="otros" ng-click="setImgCat('otros')">Otros</button>
+							</div>
+						</div>
                         <form id="dzImages_c" action="upload.php" class="dropzone" ng-dropzone"> </form>
                     </div>
                     <div class="row" style="margin-top:12px;">

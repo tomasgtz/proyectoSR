@@ -31,13 +31,16 @@
 							<div class="col-md-3 col-xs-6" ng-repeat="image in images">
 							  <div class="thumb" data-toggle='modal' data-target="#myModal" ng-if="image.src != 'undefined'">
 								<a class="thumbnail" href="#campaign-materials" ng-click="getIndex(image)">
-								  <img class="img-responsive" ng-src="{{image.src}}" alt="invalid image url">
-								  <span class="text-content" style="font-size:0.7em; color:gray" ><span>PLANTILLA: </span></span>
-								  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption}}</span></span><br>
-								  <span class="text-content" style="font-size:0.7em; color:gray" ><span>CAMPAÑA: </span></span>
-								  <span class="text-content" style="font-size:0.7em; "><span>{{image.caption2}}</span></span><br>
-								  <span class="text-content" style="font-size:0.7em; color:gray" ><span>MATERIAL: </span></span>
-								  <span class="text-content" style="font-size:0.7em; "><span>{{image.material_description}}</span></span><br>
+								  <img class="img-responsive" ng-src="{{image.src}}" alt="">
+								  <div style="white-space: nowrap;">
+									<span class="text-content" style="font-size:0.9em; color:gray; " >CAMPAÑA: </span><span class="text-content" style="font-size:0.9em; ">{{image.caption2}}</span>
+								  </div>
+								  <div style="white-space: nowrap;">
+									<span class="text-content" style="font-size:0.9em; color:gray; white-space: nowrap;" >PLANTILLA: </span><span class="text-content" style="font-size:0.9em; ">{{image.caption}}</span>  
+								  </div>
+								  <div style="white-space: nowrap;">
+									<span class="text-content" style="font-size:0.9em; color:gray; white-space: nowrap;" >MATERIAL: </span><span class="text-content" style="font-size:0.9em; ">{{image.material_description}}</span>
+								  </div>
 								</a>
 							  </div>
 							</div>

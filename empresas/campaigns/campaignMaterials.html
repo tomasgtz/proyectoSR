@@ -1,7 +1,7 @@
      
 <div class="header">
 	<div class="row">
-		<div ng-if="currentUser.typenum == '3'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO:</div>
+		<div ng-if="currentUser.typenum == '3'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">CAMPAÑA:</div>
 		<div ng-if="currentUser.typenum == '2' || currentUser.typenum == '4'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">DISEÑO <strong>DE LA PLANTILLA</strong>:</div>
 		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-model="CampaignSelected">{{CampaignSelected.name}}</div>
 	</div>
@@ -39,12 +39,7 @@
 					<div class="panel-body">
 						<div class="col-sm-1" style="min-height: 100px; max-height: 100px; min-height: 715px; max-width: 55px;">
 							<ul class="nav navbar-nav fixtop" >
-								<li> 
-									<button id="redo" ng-click="replayRedo()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="RE DO" src="images/utils/{{icon_folder}}/redo32x32.png" ></button>
-								</li>
-								<li> 
-									<button id="undo" ng-click="replayUndo()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="UN DO" src="images/utils/{{icon_folder}}/undo32x32.png" ></button>
-								</li>
+								
 								<li> 
 									<!-- <button ng-if="factory.canvas.getZoom()<4" style="width: 58px; padding: 0; background-color: #5DB6E6;" ng-click="addZoom()" class="btn btn-embossed btn-primary m-r-10">+Zoom</button>
 									<button ng-if="factory.canvas.getZoom() != 1" style="width: 58px; padding: 0; background-color: #5DB6E6;" ng-click="lessZoom()" class="btn btn-embossed btn-primary m-r-10">-Zoom</button> -->
@@ -120,11 +115,32 @@
 								<li> 
 									<button ng-show="formSelected" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img title="Configurar formato" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/color32x32.png" ></button>
 								</li>
+								<li> 
+									<button ng-show="imageSelected" data-toggle="modal" data-target="#modal-formato" class="btn btn-xs btn-default"><img title="Configurar formato" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/imgprops32x32.png" ></button>
+								</li>
 								<li>
 									<button data-dismiss="modal" style="padding: 1px 1px 1px 1px; " ng-show="isObjectSelected" ng-click="deleteSelectedObject()" class="btn btn-xs btn-danger"><img title="Eliminar" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/delete_red32x32.png" ></button>
 								</li>
 								<li>
 									<button data-toggle="modal" data-target="#modal-removecolorsoptions" ng-click="setImageToEdit()" class="btn btn-xs btn-default" style="width:32px; height:32px; padding: 1px 1px 1px 1px; " ng-show="isObjectSelected"><img title="Quitar color" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/eraser32x32.png" ></button>
+								</li>
+
+								<li ng-show="share_design">
+									<div class="btn-group fixBtnGroup">
+										<button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" style="height: 48px"><img style="width:32px; height:32px" title="Compartir" src="images/utils/{{icon_folder}}/send32x32.png" ></button>
+
+										<ul class="dropdown-menu">
+											<li>
+												<button ng-click="postToFacebook()" class="btn btn-default"><i class="fa fa-facebook fa-3x"></i>Facebook</button>
+											</li>
+											<li>
+												<button data-toggle="modal" data-target="#modal-shareemailoptions" class="btn btn-xs btn-default"><i class="fa fa-envelope-o fa-3x"></i>Email</button>
+											</li>
+											<li>
+												<button ng-click="sendByWhatsApp()" class="btn btn-default"> <i class="fa fa-whatsapp fa-3x"></i>Whatsapp</button>
+											</li>								
+										</ul>
+									</div>		
 								</li>
 								
 							</ul>
@@ -159,11 +175,33 @@
 						<div ng-show="loading">  
 							<img id="loadingSpinner" src="../images/loading.gif" width="30px" height="30px"/> <p>{{waitingMessage}}</p>
 						</div>
+						<table style="border-collapse: collapse;">
+							<tr>
+								<td>&nbsp;<td>
+								<td>
+									<ul class="nav navbar-nav fixtop" >
+										<li> 
+											<button id="zoom_in" ng-click="zoom_in()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="RE DO" src="images/utils/{{icon_folder}}/zoomin32x32.png" ></button>
+										</li>
+										<li> 
+											<button id="zoom_out" ng-click="zoom_out()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="UN DO" src="images/utils/{{icon_folder}}/zoomout32x32.png" ></button>
+										</li>
+										<li> 
+											<button id="redo" ng-click="replayRedo()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="RE DO" src="images/utils/{{icon_folder}}/redo32x32.png" ></button>
+										</li>
+										<li> 
+											<button id="undo" ng-click="replayUndo()" class="btn btn-xs btn-default"> <img style="width:32px; height:32px" title="UN DO" src="images/utils/{{icon_folder}}/undo32x32.png" ></button>
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
 				
 						<div id="hero_container" style="position:static; margin-top: 20px; " >
 							<div id="canvas_container" >
 								<div id="canvas_board" >
 									<table style="border-collapse: collapse;">
+										
 										<tr>
 											<td>&nbsp;</td>
 											<td><canvas id="top-ruler" width="600" height="20" style="box-shadow: 10px 0px 20px #888888"/></td>
@@ -214,16 +252,128 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-12">
-								<ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages(images)" class="col">
-								   <li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | limitTo : limit" ng-click="dropImage(image, $event)" >			
-									  								
-									  <!-- <div  class="delete" ng-click="deleteSticker(image)">X</div> -->
-									  <!-- <img data-dismiss="modal" ng-src="{{image.src}}" height="{{image.height}}" width="{{image.width}}" dragIt="true">	 -->
-										<p style="width: 90px;">{{image.title}}</p>
-											<img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
-										
-								   </li>	
-								</ul>
+								
+								<div class="panel-group" id="accordion">
+									
+						
+									
+
+									<div class="panel panel-default">
+										<div class="panel-heading">
+										  <h4 class="panel-title">
+										  <li class="accordion-toggle" style="cursor:pointer;" data-toggle="collapse" data-parent="#accordion" ng-click="expand('identidad')">Identidad</li>
+										  </h4>
+										</div>
+						  
+										<div id="collapse_identidad" class="panel-collapse collapse">
+										  <div class="panel-body" style="overflow-y: scroll;">
+											  <ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages('identidad')" class="col">
+												  <li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | filter: { category:'identidad' } | limitTo : limit" ng-click="dropImage(image, $event)" >			
+																					 
+													   <p style="width: 90px;">{{image.title}}</p>
+														   <img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+													   
+												  </li>	
+											  </ul>
+										  </div>
+										</div>
+									  </div>
+
+									  <div class="panel panel-default">
+										<div class="panel-heading">
+										  <h4 class="panel-title">
+										  <li class="accordion-toggle" style="cursor:pointer;" data-toggle="collapse" data-parent="#accordion" ng-click="expand('principal')">Principal</li>
+										  </h4>
+										</div>
+						  
+										<div id="collapse_principal" class="panel-collapse collapse">
+										  <div class="panel-body" style="overflow-y: scroll;">
+											  <ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages('principal')" class="col">
+												  <li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | filter: { category:'principal' } | limitTo : limit" ng-click="dropImage(image, $event)" >			
+																					 
+													   <p style="width: 90px;">{{image.title}}</p>
+														   <img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+													   
+												  </li>	
+											  </ul>
+										  </div>
+										</div>
+									  </div>
+
+									  <div class="panel panel-default">
+									  <div class="panel-heading">
+										<h4 class="panel-title">
+											<li class="accordion-toggle" style="cursor:pointer;" data-toggle="collapse" data-parent="#accordion" ng-click="expand('secundario')">Secundario</li>
+										</h4>
+									  </div>
+						
+									  <div id="collapse_secundario" class="panel-collapse collapse">
+										<div class="panel-body" style="overflow-y: scroll;">
+											<ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages('secundario')" class="col">
+												<li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | filter: { category:'secundario' } | limitTo : limit" ng-click="dropImage(image, $event)" >			
+																				   
+												   <!-- <div  class="delete" ng-click="deleteSticker(image)">X</div> -->
+												   <!-- <img data-dismiss="modal" ng-src="{{image.src}}" height="{{image.height}}" width="{{image.width}}" dragIt="true">	 -->
+													 <p style="width: 90px;">{{image.title}}</p>
+														 <img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+													 
+												</li>	
+											 </ul>
+										</div>
+									  </div>
+									</div>
+
+									<div class="panel panel-default">
+									  <div class="panel-heading">
+										<h4 class="panel-title">
+										<li class="accordion-toggle" style="cursor:pointer;" data-toggle="collapse" data-parent="#accordion" ng-click="expand('fondos')">Fondos</li>
+										</h4>
+									  </div>
+						
+									  <div id="collapse_fondos" class="panel-collapse collapse">
+										<div class="panel-body" style="overflow-y: scroll;">
+											<ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages('fondos')" class="col">
+												<li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | filter: { category:'fondos' } | limitTo : limit" ng-click="dropImage(image, $event)" >			
+																				   
+													 <p style="width: 90px;">{{image.title}}</p>
+														 <img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+													 
+												</li>	
+											</ul>
+										</div>
+									  </div>
+									</div>
+
+
+									<div class="panel panel-default">
+										<div class="panel-heading">
+										  <h4 class="panel-title">
+										  <li class="accordion-toggle" style="cursor:pointer;" data-toggle="collapse" data-parent="#accordion" ng-click="expand('otros')">Otros</li>
+										  </h4>
+										</div>
+						  
+										<div id="collapse_otros" class="panel-collapse collapse">
+										  <div class="panel-body" style="overflow-y: scroll;">
+											  <ul ng-drag-drop dropTo="#canvas_board" styles="{{styles}}" on-drag="dragCallback(event)" on-drop="dropCallback(event)" on-over="overCallback(event)" style=" max-height: 500px; white-space: nowrap; width: 135px; float:left;" ng-repeat="limit in getColumnImages('otros')" class="col">
+												  <li style="width: 120px;text-align: center; margin-bottom:10px;"  ng-repeat="image in images | filter: { category:'otros' } | limitTo : limit" ng-click="dropImage(image, $event)" >			
+																					 
+													   <p style="width: 90px;">{{image.title}}</p>
+														   <img data-dismiss="modal" ng-src="{{image.src}}"  style="width:90px; min-height:100%; box-shadow: 6px 6px 7px #888888;">
+													   
+												  </li>	
+											  </ul>
+										  </div>
+										</div>
+									</div>
+						
+									
+								  </div>
+
+								
+							
+							
+							
+							
 							</div>
 							<!-- <div class="col-sm-12">
 								<form callbacks="dzCallbacks" id="dropzoneFrm3" action="upload1.php" class="dropzone" style="height: 300px;    overflow-y: scroll;">
@@ -548,6 +698,38 @@
 			</div>
 		</div>
 
+		<div class="modal fade modal-slideright" id="modal-shareemailoptions" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h2 class="c-primary m-b-30">Compartir por email</h2>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<div class="input-group">
+												<label for="emailAddress">Correo electrónico</label>
+												<input type="email" id="emailAddress" ng-model="emailAddress" value="" class="form-control">
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12 alert" ng-class="alertExpiredClass" ng-show="alertExpiredShow">
+												<a class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+								<button type="button" data-dismiss="modal" class="btn btn-primary btn-block" ng-click="shareByEmail()">Enviar</button>
+								<button type="button" data-dismiss="modal" class="btn btn-default btn-block">Cerrar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="modal fade modal-slideright" id="modal-removecolorsoptions" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -713,23 +895,23 @@
 											<br>
 										</div>
 									
-										<div class="text-center">
+										<div class="text-left">
 											<div class="btn-group">
 											  <button style="width:180px; margin-top:20px; margin-left: 10px; margin-bottom: 8px;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											  <i class="fa fa-ellipsis-horizontal"></i> Posición <i class="fa fa-angle-down"></i>
 											  </button>
 											  <ul class="dropdown-menu">
 												<li>
-												  <button class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected" ng-click="moveToFront()" style="width:130px;">Al frente</button>
+												  <a class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected || showFonts" ng-click="moveToFront()" style="width:130px;">Al frente</a>
 												</li>
 												<li>
-												  <button class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected" ng-click="moveToBack()" style="width:130px;">Al fondo</button>
+												  <a class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected || showFonts" ng-click="moveToBack()" style="width:130px;">Al fondo</a>
 												</li>
 												<li>
-												 <button class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected" ng-click="moveToForward()" style="width:130px;">Adelante</button>
+												 <a class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected || showFonts" ng-click="moveToForward()" style="width:130px;">Adelante</a>
 												</li>
 												<li>
-												  <button class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected" ng-click="moveToBackward()" style="width:130px;">Atrás</button>
+												  <a class="btn btn-embossed btn-info m-r-10" ng-if="imageSelected || formSelected || showFonts" ng-click="moveToBackward()" style="width:130px;">Atrás</a>
 												</li>
 											  </ul>
 											</div>	

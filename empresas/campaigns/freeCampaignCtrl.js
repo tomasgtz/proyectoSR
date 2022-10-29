@@ -6,8 +6,6 @@
  * Controller of the newappApp
  */
 
-var urlHost = 'https://wizad.mx/';
-
 angular.module('newApp')
   .controller('freeCampaignCtrl', function ($scope, CanvasFactory, ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService) {
 
@@ -20,6 +18,8 @@ angular.module('newApp')
 				"date_update" 	: "",
 				"status" 		: ""
 		}
+
+	var urlHost = __env.urlHost;
 		
 	$scope.objectsC = [];
 	$scope.factory = {};

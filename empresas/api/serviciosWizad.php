@@ -1,4 +1,7 @@
 <?php
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
 
 cors();
 define( 'API_ACCESS_KEY', 'AIzaSyBherwZbWKLAG1ZpIQvo1NbIyZjuoFYJ6o' );
@@ -21,7 +24,7 @@ function cors() {
 }
 
 $dbms = 'mysql';
-$host = 'localhost'; 
+$host = 'localhost:3307'; 
 $db = 'wizadadm_wizad';
 $user = 'wizadadm_mrkt';
 $pass = 'Decaene09!';
@@ -33,7 +36,13 @@ include("vendor/autoload.php");
 //registran la instancia de slim
 //\Slim\Slim::registerAutoloader();
 //aplicacion 
-$app = new \Slim\Slim();
+// $app = new \Slim\Slim();
+
+$app = AppFactory::create();
+
+$app->addErrorMiddleware(true, true, true);
+
+$app->setBasePath("/wizad/empresas/api/serviciosWizad.php");
 
 //routing 
 //accediendo VIA URL
@@ -41,13 +50,15 @@ $app = new \Slim\Slim();
 //localhost/apirest/index.php/ => "Hola mundo ...."
 
 $app->post(
-		'/Authentication',function() use ($app){
+		'/Authentication',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$email_p = $req->post('email_p');
-			$password_p = $req->post('password_p');
-				
+			$allPostVars = (array)$request->getParsedBody();
+
+			// Get a single POST parameter
+			
+			$email_p = $allPostVars['email_p'];
+			$password_p = $allPostVars['password_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -62,13 +73,18 @@ $app->post(
 						$data = $cn->query("call uspGet_LoggedUser('$email_p');")->fetchAll(PDO::FETCH_ASSOC);
 
 						if (true === password_verify($password_p, $data[0]['password'])) {
-							echo json_encode($data);
+							
+							$response->getBody()->write( json_encode($data) );
+   							return $response;
 						}
 				}
 				
 				catch(PDOException $e) {
 						echo $e->getMessage();
-				}			
+				}
+				
+				$response->getBody()->write( json_encode(['Error' => 'Wrong credentials']) );
+				return $response;
 				
 			}
 );
@@ -77,19 +93,13 @@ $app->post(
 
 $app->post(
 		
-		'/Campaigns',function() use ($app){
+		'/Campaigns',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
+			$idcompany_p = $allPostVars['idcompany_p'];
 			
-			
-			$idcompany_p = $req->post('idcompany_p');
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -105,7 +115,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Campaigns('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -118,26 +129,19 @@ $app->post(
 
 $app->post(
 		
-		'/NewCampaign',function() use ($app){
+		'/NewCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$name_p = $req->post('name_p');
-			$description_p = $req->post('description_p');
-			$userup_p = $req->post('userup_p');
-			$userupdate_p = $req->post('userupdate_p');
-			$dimension_p = $req->post('dimension_p');
-			$company_p = $req->post('company_p');
-                        $download_p = $req->post('download_p');
+			$name_p = $allPostVars['name_p'];
+			$description_p = $allPostVars['description_p'];
+			$userup_p = $allPostVars['userup_p'];
+			$userupdate_p = $allPostVars['userupdate_p'];
+			$dimension_p = $allPostVars['dimension_p'];
+			$company_p = $allPostVars['company_p'];
+            $download_p = $allPostVars['download_p'];
 
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -153,7 +157,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCampaign('$name_p','$description_p','$userup_p','$userupdate_p','$dimension_p','$company_p', '$download_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -169,23 +174,18 @@ $app->post(
 
 $app->post(
 		
-		'/UCampaign',function() use ($app){
+		'/UCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
 			
+			$name_p = $allPostVars['name_p'];
+			$description_p = $allPostVars['description_p'];
+			$userupdate_p = $allPostVars['userupdate_p'];
+			$dimension_p = $allPostVars['dimension_p'];
+			$company_p = $allPostVars['company_p'];
 			
-			$name_p = $req->post('name_p');
-			$description_p = $req->post('description_p');
-			$userupdate_p = $req->post('userupdate_p');
-			$dimension_p = $req->post('dimension_p');
-			$company_p = $req->post('company_p');
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -201,7 +201,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Campaign('$name_p','$description_p','$userupdate_p','$dimension_p','$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -215,16 +216,13 @@ $app->post(
 
 $app->post(
 		
-		'/UUserPhoto',function() use ($app){
+		'/UUserPhoto',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$userid = $req->post('userid');
-			$photo = $req->post('photo');
+			$userid = $allPostVars['userid'];
+			$photo = $allPostVars['photo'];
 			
 				
 				
@@ -244,7 +242,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_UserPhoto('$userid','$photo');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -257,16 +256,16 @@ $app->post(
 
 $app->post(
 		
-		'/UUserLogo',function() use ($app){
+		'/UUserLogo',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
 			
 			
-			$userid = $req->post('userid');
-			$photo = $req->post('photo');
+			
+			$userid = $allPostVars['userid'];
+			$photo = $allPostVars['photo'];
 			
 				
 				
@@ -286,7 +285,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_UserLogo('$userid','$photo');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -300,19 +300,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/ISaveImageOnBank',function() use ($app){
+		'/ISaveImageOnBank',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$image = $req->post('image');
-			
-				
-				
-				
+			$allPostVars = (array)$request->getParsedBody();
+
+			$image = $allPostVars['image'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -328,7 +322,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_SaveImageOnBank('$image');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -344,15 +339,11 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/GImageBank',function() use ($app){
+		'/GImageBank',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-				
-				
 				
 				global $dbms;
 				global $host; 
@@ -369,7 +360,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_ImageBank();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -384,20 +376,14 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusCampaign',function() use ($app){
+		'/StatusCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
+			$campaign_p = $allPostVars['company_p'];
+			$status_p = $allPostVars['status_p'];
 			
-			
-			$campaign_p = $req->post('company_p');
-			$status_p = $req->post('status_p');
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -413,7 +399,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusCampaign('$campaign_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -427,18 +414,11 @@ $app->post(
 
 $app->post(
 		
-		'/Company',function() use ($app){
+		'/Company',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			
-				
-				
-				
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -454,7 +434,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Company();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -467,20 +448,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/SelectedCompany',function() use ($app){
+		'/SelectedCompany',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$company_p = $allPostVars['company_p'];
 			
-			
-			
-			$company_p = $req->post('company_p');
-			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -496,7 +469,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_SelectedCompany('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -510,20 +484,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewCompany',function() use ($app){
+		'/NewCompany',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$name_p = $allPostVars['name_p'];
+			$address_p = $allPostVars['address_p'];
 			
-			
-			
-			$name_p = $req->post('name_p');
-			$address_p = $req->post('address_p');
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -539,7 +506,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCompany('$name_p','$address_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -552,24 +520,18 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UCompany',function() use ($app){
+		'/UCompany',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$name_p = $req->post('name_p');
-			$address_p = $req->post('address_p');
-			$company_p = $req->post('company_p');
-			$industry_p = $req->post('industry_p');
-			$noemployees_p = $req->post('noemployees_p');
-			$webpage_p = $req->post('webpage_p');
-			$pc_p = $req->post('pc_p');
-
-				
-				
-				
+			$name_p = $allPostVars['name_p'];
+			$address_p = $allPostVars['address_p'];
+			$company_p = $allPostVars['company_p'];
+			$industry_p = $allPostVars['industry_p'];
+			$noemployees_p = $allPostVars['noemployees_p'];
+			$webpage_p = $allPostVars['webpage_p'];
+			$pc_p = $allPostVars['pc_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -585,7 +547,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Company('$name_p','$address_p','$company_p', '$industry_p', '$noemployees_p', '$pc_p', '$webpage_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -598,20 +561,14 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusCompany',function() use ($app){
+		'/StatusCompany',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$company_p = $req->post('company_p');
-			$status_p = $req->post('status_p');
+			$company_p = $allPostVars['company_p'];
+			$status_p = $allPostVars['status_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -627,7 +584,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusCompany('$company_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -640,19 +598,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Company_TextConfig',function() use ($app){
+		'/Company_TextConfig',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$company_p = $req->post('company_p');
+			$company_p = $allPostVars['company_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -668,7 +620,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Company_TextConfig('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -681,23 +634,14 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewCompany_TextConfig',function() use ($app){
+		'/NewCompany_TextConfig',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$textconfig_p = $req->post('textconfig_p');
+			$company_p = $allPostVars['company_p'];
+			$textconfig_p = $allPostVars['textconfig_p'];
 			$array = json_decode( $textconfig_p, true );
 
-			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -715,8 +659,8 @@ $app->post(
 							$data = $cn->query("call uspIns_NewCompany_TextConfig('$company_p','$textnew');")->fetchAll(PDO::FETCH_ASSOC);
 						}
 						
-						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -729,23 +673,14 @@ $app->post(
 
 $app->post(
 		
-		'/NewCompany_Palette',function() use ($app){
+		'/NewCompany_Palette',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$color_p = $req->post('color_p');
+			$company_p = $allPostVars['company_p'];
+			$color_p = $allPostVars['color_p'];
 			$array = json_decode( $color_p, true );
 
-			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -764,7 +699,8 @@ $app->post(
 						}
 						
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -777,20 +713,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UCompany_TextConfig',function() use ($app){
+		'/UCompany_TextConfig',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$textconfig_p = $req->post('textconfig_p');
+			$company_p = $allPostVars['company_p'];
+			$textconfig_p = $allPostVars['textconfig_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -806,7 +735,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_UCompany_TextConfig('$company_p','$textconfig_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -819,20 +749,14 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusCompany_TextConfig',function() use ($app){
+		'/StatusCompany_TextConfig',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$company_p = $req->post('company_p');
-			$status_p = $req->post('status_p');
+			$company_p = $allPostVars['company_p'];
+			$status_p = $allPostVars['status_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -848,7 +772,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusCompany_TextConfig('$company_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -861,19 +786,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Company_Pack',function() use ($app){
-		
+		'/Company_Pack',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$company_p = $req->post('company_p');
+			$company_p = $allPostVars['company_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -889,7 +807,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Company_Pack('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -902,20 +821,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewCompany_Pack',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$image_p = $req->post('image_p');
+		'/NewCompany_Pack',function (Request $request, Response $response, array $args) {
 
-				
-				
-				
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$company_p = $allPostVars['company_p'];
+			$image_p = $allPostVars['image_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -931,7 +843,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCompany_Pack('$company_p','$image_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -944,20 +857,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UCompany_Pack',function() use ($app){
-		
+		'/UCompany_Pack',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$company_p = $req->post('company_p');
-			$image_p = $req->post('image_p');
+			$company_p = $allPostVars['company_p'];
+			$image_p = $allPostVars['image_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -973,7 +879,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Company_Pack('$company_p','$image_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -986,20 +893,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusCompany_Pack',function() use ($app){
+		'/StatusCompany_Pack',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$status_p = $req->post('status_p');
+			$company_p = $allPostVars['company_p'];
+			$status_p = $allPostVars['status_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1015,7 +915,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusCompany_Pack('$company_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1028,20 +929,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Company_Subscription',function() use ($app){
+		'/Company_Subscription',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-
-
-				
-				
-				
+			$company_p = $allPostVars['company_p'];
+		
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1057,7 +950,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Company_Subscription('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1070,20 +964,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewCompany_Subscription',function() use ($app){
+		'/NewCompany_Subscription',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$subscription_p = $req->post('subscription_p');
+			$company_p = $allPostVars['company_p'];
+			$subscription_p = $allPostVars['subscription_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1099,7 +986,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCompany_Subscription('$company_p','$subscription_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1112,20 +1000,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UCompany_Subscription',function() use ($app){
+		'/UCompany_Subscription',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
+			$allPostVars = (array)$request->getParsedBody();
 
+			$company_p = $allPostVars['company_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1141,7 +1021,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Company_Subscription('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1154,20 +1035,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusCompany_Subscription',function() use ($app){
-		
+		'/StatusCompany_Subscription',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$status_p = $req->post('status_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$company_p = $allPostVars['company_p'];
+			$status_p = $allPostVars['status_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1183,7 +1057,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusCompany_Subscription('$company_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1196,19 +1071,11 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Design',function() use ($app){
+		'/Design',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			
-
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -1225,7 +1092,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Design('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1238,20 +1106,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewDesign',function() use ($app){
-		
+		'/NewDesign',function (Request $request, Response $response, array $args) {
+					
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$user_p = $req->post('user_p');
+			$campaign_p = $allPostVars['campaign_p'];
+			$user_p = $allPostVars['user_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1267,7 +1128,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewDesign('$campaign_p','$user_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1280,20 +1142,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UDesign',function() use ($app){
-		
+		'/UDesign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1309,7 +1163,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Design('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1322,20 +1177,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusDesign',function() use ($app){
-		
+		'/StatusDesign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$status_p = $req->post('status_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$status_p = $allPostVars['status_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1351,7 +1199,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusDesign('$campaign_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1364,18 +1213,10 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Ct_Subscription',function() use ($app){
-		
+		'/Ct_Subscription',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1391,7 +1232,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Ct_Subscription();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1404,19 +1246,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/SelectedCt_Subscription',function() use ($app){
-		
+		'/SelectedCt_Subscription',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
+			$subs_p = $allPostVars['subs_p'];
 			
-			
-			$subs_p = $req->post('subs_p');
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1432,7 +1267,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_SelectedCt_Subscription('$subs_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1445,19 +1281,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewCt_Subscription',function() use ($app){
+		'/NewCt_Subscription',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$description_p = $req->post('description_p');
-
-				
-				
-				
+			$description_p = $allPostVars['description_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1473,7 +1303,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCt_Subscription('$description_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1486,20 +1317,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UCt_Subscription',function() use ($app){
-		
+		'/UCt_Subscription',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$description_p = $req->post('description_p');
-			$subs_p = $req->post('subs_p');
+			$description_p = $allPostVars['description_p'];
+			$subs_p = $allPostVars['subs_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1515,7 +1339,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Ct_Subscription('$description_p'.'$subs_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1528,20 +1353,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Ct_Dimensions',function() use ($app){
+		'/Ct_Dimensions',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
+			$campaign_p = $allPostVars['campaign_p'];
 
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1557,7 +1374,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Ct_Dimensions('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1570,23 +1388,14 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewCt_Dimensions',function() use ($app){
+		'/NewCt_Dimensions',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$height_p = $req->post('height_p');
-			$width_p = $req->post('width_p');
+			$campaign_p = $allPostVars['campaign_p'];
+			$height_p = $allPostVars['height_p'];
+			$width_p = $allPostVars['width_p'];
 
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1602,7 +1411,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCt_Dimensions('$campaign_p','$height_p','$width_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1616,24 +1426,15 @@ $app->post(
 
 $app->post(
 		
-		'/UCt_Dimensions',function() use ($app){
+		'/UCt_Dimensions',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$height_p = $req->post('height_p');
-			$width_p = $req->post('width_p');
-			$description_p = $req->post('description_p');	
+			$campaign_p = $allPostVars['campaign_p'];
+			$height_p = $allPostVars['height_p'];
+			$width_p = $allPostVars['width_p'];
+			$description_p = $allPostVars['description_p'];	
 
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1649,7 +1450,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Ct_Dimensions('$campaign_p','$height_p','$width_p','$description_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1662,21 +1464,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Det_Subscription',function() use ($app){
+		'/Det_Subscription',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaign_p = $req->post('campaign_p');
+			$campaign_p = $allPostVars['campaign_p'];
 
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1692,7 +1485,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Det_Subscription('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1705,31 +1499,22 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewDet_Subscription',function() use ($app){
+		'/NewDet_Subscription',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$subs_p = $req->post('subs_p');
-			$price_p = $req->post('price_p');
-			$individualusercost_p = $req->post('individualusercost_p');
-			$image_p = $req->post('image_p');
-			$firstplus_p = $req->post('firstplus_p');
-			$secplus_p = $req->post('secplus_p');
-			$thirdplus_p = $req->post('thirdplus_p');
-			$frthplus_p = $req->post('frthplus_p');
-			$fifthplus_p = $req->post('fifthplus_p');
-			$sixthplus_p = $req->post('sixthplus_p');
-			$sevnplus_p = $req->post('sevnplus_p');
+			$subs_p = $allPostVars['subs_p'];
+			$price_p = $allPostVars['price_p'];
+			$individualusercost_p = $allPostVars['individualusercost_p'];
+			$image_p = $allPostVars['image_p'];
+			$firstplus_p = $allPostVars['firstplus_p'];
+			$secplus_p = $allPostVars['secplus_p'];
+			$thirdplus_p = $allPostVars['thirdplus_p'];
+			$frthplus_p = $allPostVars['frthplus_p'];
+			$fifthplus_p = $allPostVars['fifthplus_p'];
+			$sixthplus_p = $allPostVars['sixthplus_p'];
+			$sevnplus_p = $allPostVars['sevnplus_p'];
 
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1745,7 +1530,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewDet_Subscription('$subs_p','$price_p','$individualusercost_p','$image_p','$firstplus_p','$secplus_p','$thirdplus_p','$frthplus_p','$fifthplus_p','$sixthplus_p','$sevnplus_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1758,30 +1544,22 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UDet_Subscription',function() use ($app){
+		'/UDet_Subscription',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$subs_p = $req->post('subs_p');
-			$price_p = $req->post('price_p');
-			$individualusercost_p = $req->post('individualusercost_p');
-			$image_p = $req->post('image_p');
-			$firstplus_p = $req->post('firstplus_p');
-			$secplus_p = $req->post('secplus_p');
-			$thirdplus_p = $req->post('thirdplus_p');
-			$frthplus_p = $req->post('frthplus_p');
-			$fifthplus_p = $req->post('fifthplus_p');
-			$sixthplus_p = $req->post('sixthplus_p');
-			$sevnplus_p = $req->post('sevnplus_p');
-
-
-
-				
-				
+			$subs_p = $allPostVars['subs_p'];
+			$price_p = $allPostVars['price_p'];
+			$individualusercost_p = $allPostVars['individualusercost_p'];
+			$image_p = $allPostVars['image_p'];
+			$firstplus_p = $allPostVars['firstplus_p'];
+			$secplus_p = $allPostVars['secplus_p'];
+			$thirdplus_p = $allPostVars['thirdplus_p'];
+			$frthplus_p = $allPostVars['frthplus_p'];
+			$fifthplus_p = $allPostVars['fifthplus_p'];
+			$sixthplus_p = $allPostVars['sixthplus_p'];
+			$sevnplus_p = $allPostVars['sevnplus_p'];
 				
 				global $dbms;
 				global $host; 
@@ -1798,7 +1576,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Det_Subscription('$subs_p','$price_p','$individualusercost_p','$image_p','$firstplus_p','$secplus_p','$thirdplus_p','$frthplus_p','$fifthplus_p','$sixthplus_p','$sevnplus_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1811,20 +1590,12 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/Control_Historic',function() use ($app){
+		'/Control_Historic',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$company_p = $req->post('company_p');
-			
-
-
-				
-				
+			$company_p = $allPostVars['company_p'];
 				
 				global $dbms;
 				global $host; 
@@ -1841,7 +1612,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Control_Historic('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1854,21 +1626,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/NewControl_Historic',function() use ($app){
+		'/NewControl_Historic',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$user_p = $req->post('user_p');
-			$description_p = $req->post('description_p');
-			
-
-
-				
-				
+			$user_p = $allPostVars['user_p'];
+			$description_p = $allPostVars['description_p'];
 				
 				global $dbms;
 				global $host; 
@@ -1885,7 +1649,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewControl_Historic('$user_p','$description_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1898,23 +1663,15 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UControl_Historic',function() use ($app){
+		'/UControl_Historic',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
+			$user_p = $allPostVars['user_p'];
+			$description_p = $allPostVars['description_p'];
+			$company_p = $allPostVars['company_p'];
 			
-			
-			$user_p = $req->post('user_p');
-			$description_p = $req->post('description_p');
-			$company_p = $req->post('company_p');
-			
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1930,7 +1687,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Control_Historic('$user_p','$description_p','$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1943,23 +1701,15 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusControl_Historic',function() use ($app){
+		'/StatusControl_Historic',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
+			$user_p = $allPostVars['user_p'];
+			$description_p = $allPostVars['description_p'];
+			$company_p = $allPostVars['company_p'];
 			
-			
-			$user_p = $req->post('user_p');
-			$description_p = $req->post('description_p');
-			$company_p = $req->post('company_p');
-			
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -1975,7 +1725,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusControl_Historic('$user_p','$description_p','$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -1988,21 +1739,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/General_Messages',function() use ($app){
+		'/General_Messages',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
+			$company_p = $allPostVars['company_p'];
 			
-			
-			$company_p = $req->post('company_p');
-			
-
-
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2018,7 +1761,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_General_Messages('$company_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2031,24 +1775,19 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/UGeneral_Messages',function() use ($app){
+		'/UGeneral_Messages',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$company_p = $req->post('company_p');
-			$idgmessage_p = $req->post('idgmessage_p');
-			$userup_p = $req->post('userup_p');
-			$usersend_p = $req->post('usersend_p');
-			$userreceive_p = $req->post('userreceive_p');
-			$focusgroup_p = $req->post('focusgroup_p');
-			$message_p = $req->post('message_p');			
+			$company_p = $allPostVars['company_p'];
+			$idgmessage_p = $allPostVars['idgmessage_p'];
+			$userup_p = $allPostVars['userup_p'];
+			$usersend_p = $allPostVars['usersend_p'];
+			$userreceive_p = $allPostVars['userreceive_p'];
+			$focusgroup_p = $allPostVars['focusgroup_p'];
+			$message_p =$allPostVars['message_p'];
 
-
-				
-				
 				
 				global $dbms;
 				global $host; 
@@ -2065,7 +1804,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_General_Messages('$company_p','$idgmessage_p','$userup_p','$usersend_p','$userreceive_p','$focusgroup_p','$message_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2078,20 +1818,13 @@ $app->post(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $app->post(
 		
-		'/StatusGeneral_Messages',function() use ($app){
-		
+		'/StatusGeneral_Messages',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$company_p = $req->post('company_p');
-			$status_p = $req->post('status_p');			
+			$allPostVars = (array)$request->getParsedBody();
 
+			$company_p = $allPostVars['company_p'];
+			$status_p = $allPostVars['status_p'];			
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2107,7 +1840,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_StatusGeneral_Messages('$company_p','$status_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2120,22 +1854,16 @@ $app->post(
 
 $app->post(
 		
-		'/UUser',function() use ($app){
+		'/UUser',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$name_p = $req->post('name_p');
-			$password_p = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
-			$mobilephone_p = $req->post('mobilephone_p');
-			$homephone_p = $req->post('homephone_p');
-			$iduser_p = $req->post('iduser_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$name_p = $allPostVars['name_p'];
+			$password_p = password_hash($allPostVars['password_p'], PASSWORD_DEFAULT);
+			$mobilephone_p = $allPostVars['mobilephone_p'];
+			$homephone_p = $allPostVars['homephone_p'];
+			$iduser_p = $allPostVars['iduser_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2151,7 +1879,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_User('$name_p','$password_p','$mobilephone_p', '$homephone_p', '$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2164,22 +1893,17 @@ $app->post(
 
 $app->post(
 		
-		'/UUserGeneralData',function() use ($app){
+		'/UUserGeneralData',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$name_p = $req->post('name_p');
-			$namenoemail_p = $req->post('namenoemail_p');
-			$mobilephone_p = $req->post('mobilephone_p');
-			$homephone_p = $req->post('homephone_p');
-			$iduser_p = $req->post('iduser_p');
+			$name_p = $allPostVars['name_p'];
+			$namenoemail_p = $allPostVars['namenoemail_p'];
+			$mobilephone_p = $allPostVars['mobilephone_p'];
+			$homephone_p = $allPostVars['homephone_p'];
+			$iduser_p = $allPostVars['iduser_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2195,7 +1919,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_UserGeneralData('$iduser_p', '$name_p','$namenoemail_p', '$homephone_p', '$mobilephone_p' );")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2209,18 +1934,12 @@ $app->post(
 
 $app->post(
 		
-		'/GUserCompany',function() use ($app){
+		'/GUserCompany',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$idcompany_p = $req->post('idcompany_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$idcompany_p = $allPostVars['idcompany_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2236,7 +1955,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_UsersCompany('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2249,19 +1969,13 @@ $app->post(
 
 $app->post(
 		
-		'/UUserFreeCampaign',function() use ($app){
+		'/UUserFreeCampaign',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$userArray = $req->post('user');
+			$userArray = $allPostVars['user'];
 			$userArray = json_decode($userArray, true );
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2281,7 +1995,8 @@ $app->post(
 							$data = $cn->query("call uspUpd_UserFreeCampaign('$value', '$textnew');")->fetchAll(PDO::FETCH_ASSOC);
 						}
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2294,18 +2009,12 @@ $app->post(
 
 $app->post(
 		
-		'/GTextsCompany',function() use ($app){
+		'/GTextsCompany',function (Request $request, Response $response, array $args) {
+			
+			$allPostVars = (array)$request->getParsedBody();
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$idcompany_p = $req->post('idcompany_p');
-
-				
-				
-				
+			$idcompany_p = $allPostVars['idcompany_p'];
+		
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2321,7 +2030,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_TextCompany('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2334,18 +2044,13 @@ $app->post(
 
 $app->post(
 		
-		'/GPaletteCompany',function() use ($app){
+		'/GPaletteCompany',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$idcompany_p = $req->post('idcompany_p');
+			$idcompany_p = $allPostVars['idcompany_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2361,7 +2066,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_PaletteCompany('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2374,18 +2080,13 @@ $app->post(
 
 $app->post(
 		
-		'/GFontsCompany',function() use ($app){
+		'/GFontsCompany',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$idcompany_p = $req->post('idcompany_p');
+			$idcompany_p = $allPostVars['idcompany_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2401,7 +2102,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Company_Fonts('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2414,18 +2116,13 @@ $app->post(
 
 $app->post(
 		
-		'/GPackCompany',function() use ($app){
+		'/GPackCompany',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$idcompany_p = $req->post('idcompany_p');
-
-				
-				
-				
+			$idcompany_p = $allPostVars['idcompany_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2441,7 +2138,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Company_Pack('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2455,16 +2153,10 @@ $app->post(
 
 $app->post(
 		
-		'/GMaterials',function() use ($app){
+		'/GMaterials',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-
-				
-				
+			$allPostVars = (array)$request->getParsedBody();
 				
 				global $dbms;
 				global $host; 
@@ -2481,7 +2173,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_Materials();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2494,18 +2187,13 @@ $app->post(
 
 $app->post(
 		
-		'/GPaletteCampaign',function() use ($app){
+		'/GPaletteCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$campaign_p = $req->post('campaign_p');
+			$campaign_p = $allPostVars['campaign_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2521,7 +2209,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_CampaignPalette('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2533,18 +2222,12 @@ $app->post(
 );
 $app->post(
 		
-		'/GTextsCampaign',function() use ($app){
-		
+		'/GTextsCampaign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$campaign_p = $req->post('campaign_p');
+			$campaign_p = $allPostVars['campaign_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2560,7 +2243,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_CampaignTexts('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2572,18 +2256,13 @@ $app->post(
 );
 $app->post(
 		
-		'/GMaterialsCampaign',function() use ($app){
+		'/GMaterialsCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$campaign_p = $req->post('campaign_p');
-
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2599,7 +2278,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_CampaignMaterial('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2611,16 +2291,12 @@ $app->post(
 );
 $app->post(
 		
-		'/GPackCampaign',function() use ($app){
-		
+		'/GPackCampaign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$campaign_p = $req->post('campaign_p');
-
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$category_p = $allPostVars['category_p'];
 				
 				
 				global $dbms;
@@ -2636,9 +2312,10 @@ $app->post(
 				try
 				{
 						//CAMBIAR PROCEDIMIENTO
-						$data = $cn->query("call uspGet_CampaignPack('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
+						$data = $cn->query("call uspGet_CampaignPack('$campaign_p', '$category_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2651,18 +2328,12 @@ $app->post(
 
 $app->post(
 		
-		'/GPackIdentity',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
+		'/GPackIdentity',function (Request $request, Response $response, array $args) {
+				
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+		
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2678,7 +2349,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_IdentityImages('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2691,19 +2363,13 @@ $app->post(
 
 $app->post(
 		
-		'/GFontsCampaign',function() use ($app){
-		
+		'/GFontsCampaign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$campaign_p = $req->post('campaign_p');
-			$host_p = $req->post('host_p');
+			$campaign_p = $allPostVars['campaign_p'];
+			$host_p = $allPostVars['host_p'];
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2719,7 +2385,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_CampaignFonts('$campaign_p','$host_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2732,22 +2399,14 @@ $app->post(
 
 //Deletes Campaign Features
 
-
-
 $app->post(
 		
-		'/DPaletteCampaign',function() use ($app){
-		
+		'/DPaletteCampaign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2763,7 +2422,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspDel_CampaignPalette('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2773,20 +2433,15 @@ $app->post(
 					
 			}
 );
+
 $app->post(
 		
-		'/DTextsCampaign',function() use ($app){
-		
+		'/DTextsCampaign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2802,7 +2457,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspDel_CampaignTexts('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2812,20 +2468,15 @@ $app->post(
 					
 			}
 );
+
 $app->post(
 		
-		'/DMaterialsCampaign',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
+		'/DMaterialsCampaign',function (Request $request, Response $response, array $args) {
+				
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2841,7 +2492,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspDel_CampaignMaterial('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2851,20 +2503,15 @@ $app->post(
 					
 			}
 );
+
 $app->post(
 		
-		'/DPackCampaign',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
+		'/DPackCampaign',function (Request $request, Response $response, array $args) {
+				
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2880,7 +2527,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspDel_CampaignPack('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2890,20 +2538,15 @@ $app->post(
 					
 			}
 );
+
 $app->post(
 		
-		'/DFontsCampaign',function() use ($app){
+		'/DFontsCampaign',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2919,7 +2562,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspDel_CampaignFonts('$campaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2932,24 +2576,16 @@ $app->post(
 
 // Campaign Insert services features
 
-
-
-
 $app->post(
 		
-		'/IPaletteCampaign',function() use ($app){
+		'/IPaletteCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$color_p = $req->post('color_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$color_p = $allPostVars['color_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -2965,7 +2601,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_CampaignPalette('$campaign_p','$color_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -2978,20 +2615,15 @@ $app->post(
 
 $app->post(
 		
-		'/IMaterialCampaign',function() use ($app){
+		'/IMaterialCampaign',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$material_p = $req->post('material_p');
-			$download_p = $req->post('download_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$material_p = $allPostVars['material_p'];
+			$download_p = $allPostVars['download_p'];
+
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3007,7 +2639,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_CampaignMaterial('$campaign_p','$material_p', '$download_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3021,19 +2654,13 @@ $app->post(
 
 $app->post(
 		
-		'/ITextCampaign',function() use ($app){
+		'/ITextCampaign',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$text_p = $req->post('text_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$text_p = $allPostVars['text_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3049,7 +2676,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_CampaignTexts('$campaign_p','$text_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3063,19 +2691,13 @@ $app->post(
 
 $app->post(
 		
-		'/IFontCampaign',function() use ($app){
-		
+		'/IFontCampaign',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$font_p = $req->post('font_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$font_p = $allPostVars['font_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3091,7 +2713,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_CampaignFonts('$campaign_p','$font_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3104,19 +2727,13 @@ $app->post(
 
 $app->post(
 		
-		'/IPackCampaign',function() use ($app){
+		'/IPackCampaign',function (Request $request, Response $response, array $args) {
 		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$campaign_p = $req->post('campaign_p');
-			$pack_p = $req->post('pack_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$campaign_p = $allPostVars['campaign_p'];
+			$pack_p = $allPostVars['pack_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3132,7 +2749,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_CampaignPack('$campaign_p','$pack_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3145,21 +2763,15 @@ $app->post(
 
 $app->post(
 		
-		'/NewMaterial',function() use ($app){
-		
+		'/NewMaterial',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$description_p = $req->post('description_p');
-			$width_p = $req->post('width_p');
-			$height_p = $req->post('height_p');
-			$thumbnail_p = $req->post('thumbnail_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$description_p = $allPostVars['description_p'];
+			$width_p = $allPostVars['width_p'];
+			$height_p = $allPostVars['height_p'];
+			$thumbnail_p = $allPostVars['thumbnail_p'];
+	
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3175,7 +2787,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_Material('$description_p','$width_p','$height_p','$thumbnail_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3188,21 +2801,15 @@ $app->post(
 
 $app->post(
 		
-		'/UpdMaterial',function() use ($app){
-		
+		'/UpdMaterial',function (Request $request, Response $response, array $args) {
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$description_p = $req->post('description_p');
-			$width_p = $req->post('width_p');
-			$height_p = $req->post('height_p');
-			$thumbnail_p = $req->post('thumbnail_p');
-			$material_p = $req->post('material_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
+			$description_p = $allPostVars['description_p'];
+			$width_p = $allPostVars['width_p'];
+			$height_p = $allPostVars['height_p'];
+			$thumbnail_p = $allPostVars['thumbnail_p'];
+			$material_p = $allPostVars['material_p'];
 				
 				global $dbms;
 				global $host; 
@@ -3219,7 +2826,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_Material('$description_p','$width_p','$height_p','$thumbnail_p','$material_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3232,19 +2840,14 @@ $app->post(
 
 $app->post(
 		
-		'/UpdMaterialStatus',function() use ($app){
+		'/UpdMaterialStatus',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$status_p = $req->post('status_p');
-			$material_p = $req->post('material_p');
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
+			$status_p = $allPostVars['status_p'];
+			$material_p = $allPostVars['material_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3260,7 +2863,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_Material('$status_p','$material_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3274,17 +2878,10 @@ $app->post(
 
 $app->post(
 		
-		'/AllUsersAdmin',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
+		'/AllUsersAdmin',function (Request $request, Response $response, array $args) {
+				
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3300,7 +2897,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_AllUsersAdmin();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3313,17 +2911,10 @@ $app->post(
 
 $app->post(
 		
-		'/AllCompaniesAdmin',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
+		'/AllCompaniesAdmin',function (Request $request, Response $response, array $args) {
+				
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3339,7 +2930,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_AllCompaniesSubs();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3352,17 +2944,10 @@ $app->post(
 
 $app->post(
 		
-		'/CountSubscriptions',function() use ($app){
-		
-			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
+		'/CountSubscriptions',function (Request $request, Response $response, array $args) {
+					
+			$allPostVars = (array)$request->getParsedBody();
 
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3378,7 +2963,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspGet_CountSubscriptions();")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3391,22 +2977,20 @@ $app->post(
 
 $app->post(
 		
-		'/NewUser',function() use ($app){
+		'/NewUser',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$username_p = $req->post('username_p');
-			$company_p = $req->post('company_p');
-			$name_p = $req->post('name_p');
-			$password_p = $req->post('password_p');
-			$password_encrypted = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
-			$homephone_p = $req->post('homephone_p');
-			$mobilephone_p = $req->post('mobilephone_p');
-			$fromPublic = $req->post('fp');
-			$grecaptcharesponse = $req->post('grecaptcharesponse');
+			$allPostVars = (array)$request->getParsedBody();
+
+			$username_p = $allPostVars['username_p'];
+			$company_p = $allPostVars['company_p'];
+			$name_p = $allPostVars['name_p'];
+			$password_p = $allPostVars['password_p'];
+			$password_encrypted = password_hash($allPostVars['password_p'], PASSWORD_DEFAULT);
+			$homephone_p = $allPostVars['homephone_p'];
+			$mobilephone_p = $allPostVars['mobilephone_p'];
+			$fromPublic = $allPostVars['fp'];
+			$grecaptcharesponse = $allPostVars['grecaptcharesponse'];
 
 			if($fromPublic == '1') {
 
@@ -3426,7 +3010,8 @@ $app->post(
 
 				if(!isset($response) || !isset($response->success) || $response->success === false) {
 					$data[0]["returnMessage"] = "ERROR: NO CAPTCHA";
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 					return ;
 				}
 				
@@ -3486,16 +3071,19 @@ $app->post(
 							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_encrypted','$homephone_p','$mobilephone_p', '$username_p');")->fetchAll(PDO::FETCH_ASSOC);
 
 							if($data[0]["returnMessage"] == "ERROR: MAX USERS") {
-								echo json_encode($data);
+								$response->getBody()->write( json_encode($data) ); 
+								return $response;
 								return;
 							}
 							
 							mail($to, "Wizad - Registrate", $message, $headers);
-							echo json_encode($data);
+							$response->getBody()->write( json_encode($data) ); 
+							return $response;
 						
 						}else{
 							$data[0]["returnMessage"] = "Ya existe";
-							echo json_encode($data);
+							$response->getBody()->write( json_encode($data) ); 
+							return $response;
 						}
 						
 				}
@@ -3510,16 +3098,16 @@ $app->post(
 
 $app->post(
 		
-		'/Comentario',function() use ($app){
+		'/Comentario',function (Request $request, Response $response, array $args) {
 		
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$nombrec = $req->post('nombrec');
-			$correoc = $req->post('correoc');
-			$companiac = $req->post('companiac');
-			$telc = $req->post('telc');
-			$comentariosc = $req->post('comentariosc');
+			
+			$nombrec = $allPostVars['nombrec'];
+			$correoc = $allPostVars['correoc'];
+			$companiac = $allPostVars['companiac'];
+			$telc = $allPostVars['telc'];
+			$comentariosc = $allPostVars['comentariosc'];
 			$wizademail = "contacto@wizad.mx";
 			
 			$to   = $wizademail;
@@ -3565,10 +3153,12 @@ $app->post(
 							$data = $cn->query("call uspIns_NewUser('$company_p','$name_p','$password_p','$homephone_p','$mobilephone_p', '$username_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
 							mail($to, "Wizad - Comentario", $message, $headers);
-							echo json_encode($data);
+							$response->getBody()->write( json_encode($data) ); 
+							return $response;
 						}else{
 							$data = "Ya existe";
-							echo json_encode($data);
+							$response->getBody()->write( json_encode($data) ); 
+							return $response;
 						}
 						
 				}
@@ -3583,18 +3173,17 @@ $app->post(
 
 $app->post(
 		
-		'/NewUserLanding',function() use ($app){
+		'/NewUserLanding',function (Request $request, Response $response, array $args) {
 		
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
 			
-			$company_p = $req->post('company_p');
-			$name_p = $req->post('name_p');
-			$password_p = $req->post('password_p');
-			$password_encrypted = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
-			$homephone_p = $req->post('homephone_p');
-			$mobilephone_p = $req->post('mobilephone_p');
+			$company_p = $allPostVars['company_p'];
+			$name_p = $allPostVars['name_p'];
+			$password_p = $allPostVars['password_p'];
+			$password_encrypted = password_hash($allPostVars['password_p'], PASSWORD_DEFAULT);
+			$homephone_p = $allPostVars['homephone_p'];
+			$mobilephone_p = $allPostVars['mobilephone_p'];
 			 			
 			
 			$to   = $name_p;
@@ -3648,11 +3237,14 @@ $app->post(
 						
 							mail($to, "Wizad - Registrate", $message, $headers);
 
-							$data = "Usuario registrado exitosamente, se enviÛ tu contraseÒa por correo. °Ya puedes iniciar en nuestra plataforma!";
-							echo json_encode($data);
+							$data = "Usuario registrado exitosamente, se enviÔøΩ tu contraseÔøΩa por correo. ÔøΩYa puedes iniciar en nuestra plataforma!";
+							$response->getBody()->write( json_encode($data) ); 
+							return $response;
+						
 						}else{
 							$data = "Este usuario ya se encuentra registrado.";
-							echo json_encode($data);
+							$response->getBody()->write( json_encode($data) ); 
+							return $response;
 						}
 						
 				}
@@ -3667,16 +3259,14 @@ $app->post(
 
 $app->post(
 		
-		'/RecoverPassword',function() use ($app){
+		'/RecoverPassword',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$password_p = $req->post('password_p');
-			$password_encrypted = password_hash($req->post('password_p'), PASSWORD_DEFAULT);
-			$email_p = $req->post('email_p');
+			$password_p = $allPostVars['password_p'];
+			$password_encrypted = password_hash($allPostVars['password_p'], PASSWORD_DEFAULT);
+			$email_p = $allPostVars['email_p'];
 			
 			$to   = $email_p;
 			$from = 'sistema@wizad.com';
@@ -3723,7 +3313,8 @@ $app->post(
 						$data = $cn->query("call uspUpd_UserPassword('$password_encrypted','$email_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
 						mail($to, "Wizad - Nueva clave", $message, $headers);
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3736,31 +3327,18 @@ $app->post(
 
 $app->post(
 		
-		'/SaveNewCampaign',function() use ($app){
+		'/SaveNewCampaign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$description_c = $req->post('description_c');
-			$title_c = $req->post('title_c');
-			$autorization_c = $req->post('autorization_c');
-			$company_p = $req->post('company_p');
-			$segment_c = $req->post('segment_c');
-			$city_c = $req->post('city_c');
-			$age_c = $req->post('age_c');
-                        
-			
-			// foreach($array as $item) {
-				// $textnew = $item['color']; 
-				// $data = $cn->query("call uspIns_NewCompany_Palette('$company_p','$textnew');")->fetchAll(PDO::FETCH_ASSOC);
-			// }
-			
-			
-				
-				
+			$description_c = $allPostVars['description_c'];
+			$title_c = $allPostVars['title_c'];
+			$autorization_c = $allPostVars['autorization_c'];
+			$company_p = $allPostVars['company_p'];
+			$segment_c = $allPostVars['segment_c'];
+			$city_c = $allPostVars['city_c'];
+			$age_c = $allPostVars['age_c'];
 				
 				global $dbms;
 				global $host; 
@@ -3777,7 +3355,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspIns_NewCampaign('$title_c','$description_c',0,0,1,'$company_p','$segment_c','$city_c','$age_c', '$autorization_c');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3790,30 +3369,24 @@ $app->post(
 
 $app->post(
 		
-		'/SaveCampaignConfig',function() use ($app){
+		'/SaveCampaignConfig',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$campaignid = $req->post('campaignid');
-			$textconfig_p = $req->post('textconfig_p');
+			$campaignid = $allPostVars['campaignid'];
+			$textconfig_p = $allPostVars['textconfig_p'];
 			$textarray = json_decode($textconfig_p, true );
-			$palette_p = $req->post('palette_p');
+			$palette_p = $allPostVars['palette_p'];
 			$palettearray = json_decode( $palette_p, true );
-			$material_p = $req->post('material_p');
+			$material_p = $allPostVars['material_p'];
 			$materialarray = json_decode( $material_p, true );
-			$image_p = $req->post('image_p');
+			$image_p = $allPostVars['image_p'];
 			$imagearray = json_decode( $image_p, true );
-			$font_p = $req->post('font_p');
+			$font_p = $allPostVars['font_p'];
 			$fontarray = json_decode( $font_p, true );
 			
 			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -3840,14 +3413,15 @@ $app->post(
 						}
 						foreach($imagearray as $item) {
 							$textnew = $item['pack']; 
-							$data = $cn->query("call uspIns_CampaignPack('$campaignid','$textnew');")->fetchAll(PDO::FETCH_ASSOC);
+							$data = $cn->query("call uspIns_CampaignPack('$campaignid','$textnew', 'identidad');")->fetchAll(PDO::FETCH_ASSOC);
 						}
 						foreach($fontarray as $item) {
 							$textnew = $item['font']; 
 							$data = $cn->query("call uspIns_CampaignFonts('$campaignid','$textnew');")->fetchAll(PDO::FETCH_ASSOC);
 						}
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -3860,44 +3434,36 @@ $app->post(
 
 $app->post(
 		
-		'/SaveCampaignUpdate',function() use ($app){
+		'/SaveCampaignUpdate',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$campaignid = $req->post('campaignid');
-			$newTextArray = $req->post('newTextArray');
+			$campaignid = $allPostVars['campaignid'];
+			$newTextArray = $allPostVars['newTextArray'];
 			$newTextArray = json_decode($newTextArray, true );
-			$newPaletteArray = $req->post('newPaletteArray');
+			$newPaletteArray = $allPostVars['newPaletteArray'];
 			$newPaletteArray = json_decode( $newPaletteArray, true );
-			$newMaterialArray = $req->post('newMaterialArray');
+			$newMaterialArray = $allPostVars['newMaterialArray'];
 			$newMaterialArray = json_decode( $newMaterialArray, true );
-			$newPackArray = $req->post('newPackArray');
+			$newPackArray = $allPostVars['newPackArray'];
 			$newPackArray = json_decode( $newPackArray, true );
-			$newFontArray = $req->post('newFontArray');
+			$newFontArray = $allPostVars['newFontArray'];
 			$newFontArray = json_decode( $newFontArray, true );
-			$delTextArray = $req->post('delTextArray');
+			$delTextArray = $allPostVars['delTextArray'];
 			$delTextArray = json_decode($delTextArray, true );
-			$delPaletteArray = $req->post('delPaletteArray');
+			$delPaletteArray = $allPostVars['delPaletteArray'];
 			$delPaletteArray = json_decode( $delPaletteArray, true );
-			$delMaterialArray = $req->post('delMaterialArray');
+			$delMaterialArray = $allPostVars['delMaterialArray'];
 			$delMaterialArray = json_decode( $delMaterialArray, true );
-			$delPackArray = $req->post('delPackArray');
+			$delPackArray = $allPostVars['delPackArray'];
 			$delPackArray = json_decode( $delPackArray, true );
-			$delFontArray = $req->post('delFontArray');
+			$delFontArray = $allPostVars['delFontArray'];
 			$delFontArray = json_decode( $delFontArray, true );
-			$autorization = $req->post('autorization');
-                        $name         = $req->post('name');
-                        $description  = $req->post('description');
-                        $userupdate   = $req->post('userupdate');
-                       
-
-			
-			
-			
+			$autorization = $allPostVars['autorization'];
+			$name         = $allPostVars['name'];
+			$description  = $allPostVars['description'];
+			$userupdate   = $allPostVars['userupdate'];
+                       		
 			
 			global $dbms;
 			global $host; 
@@ -3939,7 +3505,8 @@ $app->post(
 				if(is_array($newPackArray) && count($newPackArray) > 0) {
 					foreach($newPackArray as $item) {
 						$textnew = $item['image']; 
-						$data = $cn->query("call uspIns_CampaignPack('$campaignid','$textnew');")->fetchAll(PDO::FETCH_ASSOC);
+						$category = $item['category']; 
+						$data = $cn->query("call uspIns_CampaignPack('$campaignid','$textnew', '$category');")->fetchAll(PDO::FETCH_ASSOC);
 					}
 				}
 
@@ -3990,7 +3557,8 @@ $app->post(
 				}
 				$data = null;
 				$data[] = array('returnMessage' => "SUCCESS");	
-				echo json_encode($data);
+				$response->getBody()->write( json_encode($data) ); 
+				return $response;
 			}
 			
 			catch(PDOException $e) {
@@ -4003,40 +3571,32 @@ $app->post(
 
 $app->post(
 		
-		'/SaveCompanyUpdate',function() use ($app){
+		'/SaveCompanyUpdate',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			
-			$company_p = $req->post('company_p');
-			$newTextArray = $req->post('newTextArray');
+			$company_p = $allPostVars['company_p'];
+			$newTextArray = $allPostVars['newTextArray'];
 			$newTextArray = json_decode($newTextArray, true );
-			$newPaletteArray = $req->post('newPaletteArray');
+			$newPaletteArray = $allPostVars['newPaletteArray'];
 			$newPaletteArray = json_decode( $newPaletteArray, true );
-			$newMaterialArray = $req->post('newMaterialArray');
+			$newMaterialArray = $allPostVars['newMaterialArray'];
 			$newMaterialArray = json_decode( $newMaterialArray, true );
-			$newPackArray = $req->post('newPackArray');
+			$newPackArray = $allPostVars['newPackArray'];
 			$newPackArray = json_decode( $newPackArray, true );
-			$newFontArray = $req->post('newFontArray');
+			$newFontArray = $allPostVars['newFontArray'];
 			$newFontArray = json_decode( $newFontArray, true );
-			$delTextArray = $req->post('delTextArray');
+			$delTextArray = $allPostVars['delTextArray'];
 			$delTextArray = json_decode($delTextArray, true );
-			$delPaletteArray = $req->post('delPaletteArray');
+			$delPaletteArray = $allPostVars['delPaletteArray'];
 			$delPaletteArray = json_decode( $delPaletteArray, true );
-			$delMaterialArray = $req->post('delMaterialArray');
+			$delMaterialArray = $allPostVars['delMaterialArray'];
 			$delMaterialArray = json_decode( $delMaterialArray, true );
-			$delPackArray = $req->post('delPackArray');
+			$delPackArray = $allPostVars['delPackArray'];
 			$delPackArray = json_decode( $delPackArray, true );
-			$delFontArray = $req->post('delFontArray');
+			$delFontArray = $allPostVars['delFontArray'];
 			$delFontArray = json_decode( $delFontArray, true );
 			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4085,7 +3645,8 @@ $app->post(
 							$data = $cn->query("call uspDel_Company_Font('$textnew');")->fetchAll(PDO::FETCH_ASSOC);
 						}
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -4098,23 +3659,15 @@ $app->post(
 
 $app->post(
 		
-		'/NewCampaign_TextConfig',function() use ($app){
+		'/NewCampaign_TextConfig',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$campaignid = $req->post('campaignid');
-			$textconfig_p = $req->post('textconfig_p');
+			$campaignid = $allPostVars['campaignid'];
+			$textconfig_p = $allPostVars['textconfig_p'];
 			$array = json_decode( $textconfig_p, true );
 
-			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4133,7 +3686,8 @@ $app->post(
 						}
 						
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -4146,23 +3700,15 @@ $app->post(
 
 $app->post(
 		
-		'/NewCampaign_Palette',function() use ($app){
+		'/NewCampaign_Palette',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$campaignid = $req->post('campaignid');
-			$color_p = $req->post('color_p');
+			$campaignid = $allPostVars['campaignid'];
+			$color_p = $allPostVars['color_p'];
 			$array = json_decode( $color_p, true );
 
-			
-			
-				
-				
-				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4181,7 +3727,8 @@ $app->post(
 						}
 						
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -4193,10 +3740,9 @@ $app->post(
 );
 
 $app->post(
-		'/NewCampaign_Pack',function() use ($app){
+		'/NewCampaign_Pack',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
 						
 				global $dbms;
 				global $host; 
@@ -4205,8 +3751,8 @@ $app->post(
 				global $pass;
 				$dsn = "$dbms:host=$host;dbname=$db";
 
-				$campaignid 	= $req->post('campaignid');
-				$baseimage 		= $req->post('baseimage');
+				$campaignid = $allPostVars['campaignid'];
+				$baseimage = $allPostVars['baseimage'];
 				$imagename 		= 'wizadImages/a.jpg';
 				
 				$cn=new PDO($dsn, $user, $pass);
@@ -4214,17 +3760,16 @@ $app->post(
 				
 				try
 				{							
-									
-					
-								list($type, $baseimage) = explode(';', $data);
-								list(, $baseimage)      = explode(',', $data);
-								$baseimage = base64_decode($baseimage);
-								file_put_contents($imagename, $baseimage);
-							
-							
-							
+								
+						list($type, $baseimage) = explode(';', $data);
+						list(, $baseimage)      = explode(',', $data);
+						$baseimage = base64_decode($baseimage);
+						file_put_contents($imagename, $baseimage);
+								
 						$callBack  = $cn->query("CALL uspIns_CampaignPack ('$campaignid','$imagename')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($imagename);
+						
+						$response->getBody()->write( json_encode($imagename) ); 
+				        return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4236,10 +3781,10 @@ $app->post(
 );
 
 $app->post(
-		'/GCities',function() use ($app){
+		'/GCities',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
 				global $dbms;
 				global $host; 
@@ -4255,7 +3800,9 @@ $app->post(
 				try
 				{						
 						$callBack  = $cn->query("CALL uspGet_Cities ()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						
+						$response->getBody()->write( json_encode($callBack) ); 
+				        return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4267,11 +3814,10 @@ $app->post(
 );
 
 $app->post(
-		'/GStates',function() use ($app){
+		'/GStates',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
+				$allPostVars = (array)$request->getParsedBody();
+							
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4286,7 +3832,8 @@ $app->post(
 				try
 				{						
 						$callBack  = $cn->query("CALL uspGet_States()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4298,11 +3845,10 @@ $app->post(
 );
 
 $app->post(
-		'/GCountries',function() use ($app){
+		'/GCountries',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
+				$allPostVars = (array)$request->getParsedBody();
+					
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4317,7 +3863,8 @@ $app->post(
 				try
 				{						
 						$callBack  = $cn->query("CALL uspGet_Countries()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4329,10 +3876,10 @@ $app->post(
 );
 
 $app->post(
-		'/GAges',function() use ($app){
+		'/GAges',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
 				global $dbms;
 				global $host; 
@@ -4348,7 +3895,8 @@ $app->post(
 				{							
 								
 						$callBack  = $cn->query("CALL uspGet_Ages ()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4360,10 +3908,10 @@ $app->post(
 );
 
 $app->post(
-		'/GSegments',function() use ($app){
+		'/GSegments',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
 				global $dbms;
 				global $host; 
@@ -4378,7 +3926,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspGet_Segments ()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4390,17 +3939,16 @@ $app->post(
 );
 
 $app->post(
-		'/IAdminInbox',function() use ($app){
+		'/IAdminInbox',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-				$name_c 	= $req->post('name_c');
-				$message_c 	= $req->post('message_c');
-				$company_c 	= $req->post('company_c');
-				$email_c 	= $req->post('email_c');
-				$phone_c 	= $req->post('phone_c');
+				$allPostVars = (array)$request->getParsedBody();
 				
-						
+				$name_c = $allPostVars['name_c'];
+				$message_c = $allPostVars['message_c'];
+				$company_c = $allPostVars['company_c'];
+				$email_c = $allPostVars['email_c'];
+				$phone_c = $allPostVars['phone_c'];
+				
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4414,7 +3962,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspIns_Inbox ('$name_c', '$message_c', '$company_c', '$email_c', '$phone_c' )")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4426,10 +3975,10 @@ $app->post(
 );
 
 $app->post(
-		'/GAdmin_Inbox',function() use ($app){
+		'/GAdmin_Inbox',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
 				global $dbms;
 				global $host; 
@@ -4444,7 +3993,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspGet_Inbox()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4456,13 +4006,12 @@ $app->post(
 );
 
 $app->post(
-		'/UInbox',function() use ($app){
+		'/UInbox',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idinbox_c 	= $req->post('idinbox_c');
-				
+				$allPostVars = (array)$request->getParsedBody();
+			
+				$idinbox_c = $allPostVars['idinbox_c'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4476,7 +4025,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspUpd_Inbox ('$idinbox_c')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4488,15 +4038,14 @@ $app->post(
 );
 
 $app->post(
-		'/AddHistory',function() use ($app){
+		'/AddHistory',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$user_p 		= $req->post('user_p');
-				$message_p 		= $req->post('message_p');
-				$campaign_p 	= $req->post('campaign_p');
+				$allPostVars = (array)$request->getParsedBody();
 				
+				$user_p = $allPostVars['user_p'];
+				$message_p = $allPostVars['message_p'];
+				$campaign_p = $allPostVars['campaign_p'];
+
 				global $dbms;
 				global $host; 
 				global $db;
@@ -4510,7 +4059,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspIns_AddHistory ('$user_p','$message_p','$campaign_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4522,12 +4072,11 @@ $app->post(
 );
 
 $app->post(
-		'/DUser',function() use ($app){
+		'/DUser',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$user_p 		= $req->post('user_p');
+				$allPostVars = (array)$request->getParsedBody();
+				
+				$user_p = $allPostVars['user_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4542,7 +4091,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspDel_User ('$user_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4554,13 +4104,12 @@ $app->post(
 );
 
 $app->post(
-		'/UUserStatus',function() use ($app){
+		'/UUserStatus',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$user_p 		= $req->post('user_p');
-				$status_p 		= $req->post('status_p');
+				$allPostVars = (array)$request->getParsedBody();
+
+				$user_p = $allPostVars['user_p'];
+				$status_p = $allPostVars['status_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4575,7 +4124,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspUpd_UserStatus ('$status_p','$user_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4587,13 +4137,12 @@ $app->post(
 );
 
 $app->post(
-		'/UCompanyStatus',function() use ($app){
+		'/UCompanyStatus',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$company_p 		= $req->post('company_p');
-				$status_p 		= $req->post('status_p');
+				$allPostVars = (array)$request->getParsedBody();
+
+				$company_p = $allPostVars['company_p'];
+				$status_p = $allPostVars['status_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4608,7 +4157,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspUpd_CompanyStatus ('$status_p','$company_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4620,13 +4170,12 @@ $app->post(
 );
 
 $app->post(
-		'/UMaterialStatus',function() use ($app){
+		'/UMaterialStatus',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idmaterial_p	= $req->post('idmaterial_p');
-				$status_p 		= $req->post('status_p');
+				$allPostVars = (array)$request->getParsedBody();
+
+				$idmaterial_p = $allPostVars['idmaterial_p'];
+				$status_p = $allPostVars['status_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4641,7 +4190,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspUpd_MaterialStatus ('$idmaterial_p','$status_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4653,17 +4203,16 @@ $app->post(
 );
 
 $app->post(
-		'/IMaterial',function() use ($app){
+		'/IMaterial',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
 				
-				$type_p				= $req->post('type_p');
-				$size_description_p	= $req->post('size_description_p');
-				$description_p		= $req->post('description_p');
-				$width_p 			= $req->post('width_p');
-				$height_p 			= $req->post('height_p');
-				$multipage_p 		= $req->post('multipage_p');
+				$type_c = $allPostVars['type_p'];
+				$size_description_p = $allPostVars['size_description_p'];
+				$description_p = $allPostVars['description_p'];
+				$width_p = $allPostVars['width_p'];
+				$height_p = $allPostVars['height_p'];
+				$multipage_p = $allPostVars['multipage_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4678,7 +4227,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspIns_NewMaterial ('$type_p','$size_description_p','$description_p','$width_p','$height_p', $multipage_p)")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4689,16 +4239,13 @@ $app->post(
 			}
 );
 
-
-
 $app->post(
-		'/UFreeMaterial',function() use ($app){
+		'/UFreeMaterial',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idmaterial_p	= $req->post('idmaterial_p');
-				$free_p 		= $req->post('free_p');
+				$allPostVars = (array)$request->getParsedBody();
+				
+				$idmaterial_p = $allPostVars['idmaterial_p'];
+				$free_p = $allPostVars['free_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4713,7 +4260,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspUpd_FreeMaterial ('$idmaterial_p','$free_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4724,15 +4272,13 @@ $app->post(
 			}
 );
 
-
 $app->post(
-		'/UMaterialMultipage',function() use ($app){
+		'/UMaterialMultipage',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idmaterial_p	= $req->post('idmaterial_p');
-				$multipage_p 		= $req->post('multipage_p');
+				$allPostVars = (array)$request->getParsedBody();
+
+				$idmaterial_p = $allPostVars['idmaterial_p'];
+				$multipage_p = $allPostVars['multipage_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4747,7 +4293,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspUpd_MultipageMaterial ('$idmaterial_p','$multipage_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4758,14 +4305,12 @@ $app->post(
 			}
 );
 
-
 $app->post(
-		'/DCampaign',function() use ($app){
+		'/DCampaign',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
 						
-				$campaign_p	= $req->post('campaign_p');
+				$campaign_p = $allPostVars['campaign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4780,7 +4325,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspDel_Campaign ('$campaign_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4792,11 +4338,9 @@ $app->post(
 );
 
 $app->post(
-		'/GFonts',function() use ($app){
+		'/GFonts',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
+				$allPostVars = (array)$request->getParsedBody();
 				
 				global $dbms;
 				global $host; 
@@ -4811,7 +4355,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspGet_Fonts ()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4823,11 +4368,9 @@ $app->post(
 );
 
 $app->post(
-		'/NewVisit',function() use ($app){
+		'/NewVisit',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
+				$allPostVars = (array)$request->getParsedBody();
 				
 				global $dbms;
 				global $host; 
@@ -4842,7 +4385,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspIns_NewVisit ()")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4854,10 +4398,10 @@ $app->post(
 );
 
 $app->post(
-		'/DashboardCount',function() use ($app){
+		'/DashboardCount',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 				$array = array();
 				
 				global $dbms;
@@ -4880,8 +4424,9 @@ $app->post(
 						array_push($array, $callBack);
 						$callBack  = $cn->query("CALL uspGet_FreeUsers ()")->fetchAll(PDO::FETCH_ASSOC);
 						array_push($array, $callBack);
-						
-						echo json_encode($array);
+
+						$response->getBody()->write( json_encode($array) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4893,12 +4438,12 @@ $app->post(
 );
 
 $app->post(
-		'/GetHistory',function() use ($app){
+		'/GetHistory',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 				$array = array();
-				$idcompany_p	= $req->post('idcompany_p');
+				$idcompany_p = $allPostVars['idcompany_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4917,7 +4462,8 @@ $app->post(
 						$callBack  = $cn->query("CALL uspGet_HistoryCampaign ('$idcompany_p')")->fetchAll(PDO::FETCH_ASSOC);
 						array_push($array, $callBack);
 						
-						echo json_encode($array);
+						$response->getBody()->write( json_encode($array) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4929,10 +4475,10 @@ $app->post(
 );
 
 $app->post(
-		'/GetAllSubscriptions',function() use ($app){
+		'/GetAllSubscriptions',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 				$array = array();
 				
 				global $dbms;
@@ -4949,8 +4495,8 @@ $app->post(
 				{					
 						$callBack  = $cn->query("CALL uspGet_AllSubscriptions ()")->fetchAll(PDO::FETCH_ASSOC);
 						
-						
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4962,11 +4508,11 @@ $app->post(
 );
 
 $app->post(
-		'/GHistoryCompany',function() use ($app){
+		'/GHistoryCompany',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-				$idcompany_p 		= $req->post('idcompany_p');
+				$allPostVars = (array)$request->getParsedBody();
+				
+				$idcompany_p = $allPostVars['idcompany_p'];
 				
 				global $dbms;
 				global $host; 
@@ -4982,8 +4528,8 @@ $app->post(
 				{					
 						$callBack  = $cn->query("CALL uspGet_HistoryCompany ('$idcompany_p')")->fetchAll(PDO::FETCH_ASSOC);
 						
-						
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -4995,30 +4541,29 @@ $app->post(
 );
 
 $app->post(
-		'/ICompanyNAdminUser',function() use ($app){
+		'/ICompanyNAdminUser',function (Request $request, Response $response, array $args) {
 						
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-					
-			$nameusernoemail 		= $req->post('nameusernoemail_p');
-			$name_p 		= $req->post('name_p');
-			$address_p 		= $req->post('address_p');
-			$logo_p 		= $req->post('logo_p');
-			$city_p 		= $req->post('city_p');
-			$state_p 		= $req->post('state_p');
-			$country_p 		= $req->post('country_p');
-			$nameuser_p 	= $req->post('nameuser_p');
-			$password_p 	= $req->post('password_p');
-			$password_encrypted 	= password_hash($req->post('password_p'), PASSWORD_DEFAULT);
-			$homephone_p 	= $req->post('homephone_p');
-			$mobilephone_p 	= $req->post('mobilephone_p');
-			$employees_p 	= $req->post('employees_p');
-			$industry_p 	= $req->post('industry_p');
-			$webpage_p 		= $req->post('webpage_p');
-			$pc_p	 		= $req->post('pc_p');
-			$subs_p	 		= $req->post('subs_p');
-			$storage_p	 	= $req->post('storage_p');
-			$freq_p			= $req->post('freq_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$nameusernoemail 		= $allPostVars['nameusernoemail'];
+			$name_p 		= $allPostVars['name_p'];
+			$address_p 		= $allPostVars['address_p'];
+			$logo_p 		= $allPostVars['logo_p'];
+			$city_p 		= $allPostVars['city_p'];
+			$state_p 		= $allPostVars['state_p'];
+			$country_p 		= $allPostVars['country_p'];
+			$nameuser_p 	= $allPostVars['nameuser_p'];
+			$password_p 	= $allPostVars['password_p'];
+			$password_encrypted 	= password_hash($allPostVars['password_p'], PASSWORD_DEFAULT);
+			$homephone_p 	= $allPostVars['homephone_p'];
+			$mobilephone_p 	= $allPostVars['mobilephone_p'];
+			$employees_p 	= $allPostVars['employees_p'];
+			$industry_p 	= $allPostVars['industry_p'];
+			$webpage_p 		= $allPostVars['webpage_p'];
+			$pc_p	 		= $allPostVars['pc_p'];
+			$subs_p	 		= $allPostVars['subs_p'];
+			$storage_p	 	= $allPostVars['storage_p'];
+			$freq_p			= $allPostVars['freq_p'];
 			
 			$to   = $nameuser_p;
 			$from = 'sistema@wizad.com';
@@ -5070,9 +4615,12 @@ $app->post(
 						$data = $cn->query("call uspIns_NewAdminUser('$id_company','$nameuser_p','$password_encrypted','$homephone_p','$mobilephone_p', '$nameusernoemail');")->fetchAll(PDO::FETCH_ASSOC);
 					
 						mail($to, "Wizad - Inicia", $message, $headers);
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 					}else{
-						echo json_encode($id_company);
+
+						$response->getBody()->write( json_encode($id_company) ); 
+				        return $response;
 					}
 					
 			}
@@ -5086,13 +4634,13 @@ $app->post(
 );
 
 $app->post(
-		'/NotifyAdministratorFreeCampaign',function() use ($app){
+		'/NotifyAdministratorFreeCampaign',function (Request $request, Response $response, array $args) {
 						
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-					
-			$idcompany_p 	= $req->post('idcompany_p');
-			$user_p 		= $req->post('user_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+
+			$idcompany_p = $allPostVars['idcompany_p'];
+			$user_p = $allPostVars['user_p'];
 			
 			$from = 'sistema@wizad.com';
 			$headers = "From: " . strip_tags($from) . "\r\n";
@@ -5137,7 +4685,8 @@ $app->post(
 						</html>';
 					
 					mail($to, "Wizad - NOTIFICACION", $message, $headers);
-					echo json_encode($callBack);
+					$response->getBody()->write( json_encode($callBack) );  
+					return $response;
 					
 			}
 			
@@ -5151,12 +4700,13 @@ $app->post(
 
 
 $app->post(
-		'/GetDownloadPermission',function() use ($app){
+		'/GetDownloadPermission',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 				$array = array();
-				$idcompany_p	= $req->post('idcompany_p');
+
+				$idcampaign_p = $allPostVars['idcampaign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -5173,7 +4723,8 @@ $app->post(
 						$callBack  = $cn->query("CALL uspGet_CampaignDownloadPermission ('$idcampaign_p')")->fetchAll(PDO::FETCH_ASSOC);
 						array_push($array, $callBack);
 						
-						echo json_encode($array);
+						$response->getBody()->write( json_encode($array) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -5186,12 +4737,11 @@ $app->post(
 
 
 $app->post(
-		'/DTemplate',function() use ($app){
+		'/DTemplate',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idtemplate_p 		= $req->post('idtemplate_p');
+				$allPostVars = (array)$request->getParsedBody();
+			
+				$idtemplate_p = $allPostVars['idtemplate_p'];
 				
 				global $dbms;
 				global $host; 
@@ -5206,7 +4756,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspDel_Template('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -5218,12 +4769,11 @@ $app->post(
 );
 
 $app->post(
-		'/DDesign',function() use ($app){
+		'/DDesign',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idudesign_p 		= $req->post('idudesign_p');
+				$allPostVars = (array)$request->getParsedBody();
+				
+				$idudesign_p = $allPostVars['idudesign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -5238,7 +4788,8 @@ $app->post(
 				try
 				{					
 						$callBack  = $cn->query("CALL uspDel_Design('$idudesign_p')")->fetchAll(PDO::FETCH_ASSOC);
-						echo json_encode($callBack);
+						$response->getBody()->write( json_encode($callBack) );  
+						return $response;
 				}
 				
 				catch(Exception $e) {
@@ -5251,13 +4802,13 @@ $app->post(
 
 
 $app->post(
-		'/GTemplates',function() use ($app){
+		'/GTemplates',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$idcompany_p = $req->post('idcompany_p');
-			$idmaterial_p = $req->post('idmaterial_p');
-			$idcampaign_p = $req->post('idcampaign_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$idcompany_p = $allPostVars['idcompany_p'];
+			$idmaterial_p = $allPostVars['idmaterial_p'];
+			$idcampaign_p = $allPostVars['idcampaign_p'];
 
 			global $dbms;
 			global $host; 
@@ -5273,7 +4824,8 @@ $app->post(
 				{ 
 						$data = $cn->query("call uspGet_Templates('$idcompany_p', '$idmaterial_p', '$idcampaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5284,13 +4836,13 @@ $app->post(
 );
 
 $app->post(
-		'/GDesigns',function() use ($app){
+		'/GDesigns',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$idcompany_p	= $req->post('idcompany_p');
-			$iduser_p		= $req->post('iduser_p');
-			$idcampaign_p	= $req->post('idcampaign_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$idcompany_p = $allPostVars['idcompany_p'];
+			$iduser_p = $allPostVars['iduser_p'];
+			$idcampaign_p = $allPostVars['idcampaign_p'];
 
 			global $dbms;
 			global $host; 
@@ -5306,7 +4858,8 @@ $app->post(
 				{ 
 						$data = $cn->query("call uspGet_UDesigns('$idcompany_p', '$iduser_p', '$idcampaign_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5318,12 +4871,12 @@ $app->post(
 
 
 $app->post(
-		'/GTemplatesThumbs',function() use ($app){
+		'/GTemplatesThumbs',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$iduser_p = $req->post('iduser_p');
-			$page_p = $req->post('page_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$iduser_p = $allPostVars['iduser_p'];
+			$page_p = $allPostVars['page_p'];
 
 			global $dbms;
 			global $host; 
@@ -5339,7 +4892,8 @@ $app->post(
 			{ 
 					$data = $cn->query("call uspGet_TemplatesThumbsList('$iduser_p', '$page_p');")->fetchAll(PDO::FETCH_ASSOC);
 				
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 			}
 			catch(PDOException $e) {
 					echo $e->getMessage();
@@ -5349,12 +4903,12 @@ $app->post(
 );
 
 $app->post(
-		'/GDesignsThumbs',function() use ($app){
+		'/GDesignsThumbs',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$iduser_p = $req->post('iduser_p');
-			$page_p = $req->post('page_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$iduser_p = $allPostVars['iduser_p'];
+			$page_p = $allPostVars['page_p'];
 
 			global $dbms;
 			global $host; 
@@ -5370,7 +4924,8 @@ $app->post(
 			{ 
 					$data = $cn->query("call uspGet_DesignsThumbsList('$iduser_p', '$page_p');")->fetchAll(PDO::FETCH_ASSOC);
 				
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 			}
 			catch(PDOException $e) {
 					echo $e->getMessage();
@@ -5380,11 +4935,11 @@ $app->post(
 );
 
 $app->post(
-		'/GTemplatesThumbsCount',function() use ($app){
+		'/GTemplatesThumbsCount',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$iduser_p = $req->post('iduser_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$iduser_p = $allPostVars['iduser_p'];
 
 			global $dbms;
 			global $host; 
@@ -5400,7 +4955,8 @@ $app->post(
 			{ 
 					$data = $cn->query("call uspGet_TemplatesThumbsListCOUNT('$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
 				
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 			}
 			catch(PDOException $e) {
 					echo $e->getMessage();
@@ -5410,11 +4966,11 @@ $app->post(
 );
 
 $app->post(
-		'/GDesignsThumbsCount',function() use ($app){
+		'/GDesignsThumbsCount',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$iduser_p = $req->post('iduser_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$iduser_p = $allPostVars['iduser_p'];
 
 			global $dbms;
 			global $host; 
@@ -5430,7 +4986,8 @@ $app->post(
 			{ 
 					$data = $cn->query("call uspGet_DesignsThumbsListCOUNT('$iduser_p');")->fetchAll(PDO::FETCH_ASSOC);
 				
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 			}
 			catch(PDOException $e) {
 					echo $e->getMessage();
@@ -5442,11 +4999,11 @@ $app->post(
 
 
 $app->post(
-		'/GTemplate',function() use ($app){
+		'/GTemplate',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$idtemplate_p = $req->post('idtemplate_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$idtemplate_p = $allPostVars['idtemplate_p'];
 
 			global $dbms;
 			global $host; 
@@ -5462,7 +5019,8 @@ $app->post(
 				{ 
 						$data = $cn->query("call uspGet_Template('$idtemplate_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5474,11 +5032,11 @@ $app->post(
 
 
 $app->post(
-		'/GDesign',function() use ($app){
+		'/GDesign',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			$idudesign_p = $req->post('idudesign_p');
+			$allPostVars = (array)$request->getParsedBody();
+			
+			$idudesign_p = $allPostVars['idudesign_p'];
 
 			global $dbms;
 			global $host; 
@@ -5494,7 +5052,8 @@ $app->post(
 				{ 
 						$data = $cn->query("call uspGet_UDesign('$idudesign_p');")->fetchAll(PDO::FETCH_ASSOC);
 					
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5507,19 +5066,16 @@ $app->post(
 
 $app->post(
 		
-		'/NewTemplate',function() use ($app){
+		'/NewTemplate',function (Request $request, Response $response, array $args) {
 		
+			$allPostVars = (array)$request->getParsedBody();
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
-			
-			
-			$name_p = $req->post('name_p');
-			$idmaterial_p = $req->post('idmaterial_p');
-			$contents_p = $req->post('contents_p');
-			$iduser_p = $req->post('iduser_p');
-			$idcampaign_p = $req->post('idcampaign_p');
-			$idtemplategroup_p = $req->post('idtemplategroup_p');
+			$name_p = $allPostVars['name_p'];
+			$idmaterial_p = $allPostVars['idmaterial_p'];
+			$contents_p = $allPostVars['contents_p'];
+			$iduser_p = $allPostVars['iduser_p'];
+			$idcampaign_p = $allPostVars['idcampaign_p'];
+			$idtemplategroup_p = $allPostVars['idtemplategroup_p'];
 			$group_id = 0;
 				
 				global $dbms;
@@ -5556,7 +5112,8 @@ $app->post(
 
 						$dataT[0]['template_group_id'] = $group_id;
 						
-						echo json_encode($dataT);
+						$response->getBody()->write( json_encode($dataT) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5570,20 +5127,18 @@ $app->post(
 
 $app->post(
 		
-		'/NewUDesign',function() use ($app){
+		'/NewUDesign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			$name_p = $req->post('name_p');
-			$idmaterial_p = $req->post('idmaterial_p');
-			$contents_p = $req->post('contents_p');
-			$iduser_p = $req->post('iduser_p');
-			$idcampaign_p = $req->post('idcampaign_p');
-			$idtemplategroup_p = $req->post('idtemplategroup_p');
-			$idtemplate_p = $req->post('idtemplate_p');
+			$name_p = $allPostVars['name_p'];
+			$idmaterial_p = $allPostVars['idmaterial_p'];
+			$contents_p = $allPostVars['contents_p'];
+			$iduser_p = $allPostVars['iduser_p'];
+			$idcampaign_p = $allPostVars['idcampaign_p'];
+			$idtemplategroup_p = $allPostVars['idtemplategroup_p'];
+			$idtemplate_p = $allPostVars['idtemplate_p'];
 			$group_id = 0;
 				
 				global $dbms;
@@ -5620,7 +5175,8 @@ $app->post(
 
 						$dataT[0]['design_group_id'] = $group_id;
 						
-						echo json_encode($dataT);
+						$response->getBody()->write( json_encode($dataT) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5634,17 +5190,14 @@ $app->post(
 
 $app->post(
 		
-		'/UTemplate',function() use ($app){
+		'/UTemplate',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$idtemplate_p = $req->post('idtemplate_p');
-			$name_p = $req->post('name_p');
-			$contents_p = $req->post('contents_p');
+			$idtemplate_p = $allPostVars['idtemplate_p'];
+			$name_p = $allPostVars['name_p'];
+			$contents_p = $allPostVars['contents_p'];
 			
 			
 				global $dbms;
@@ -5662,7 +5215,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_Template('$idtemplate_p','$name_p','$contents_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5675,17 +5229,14 @@ $app->post(
 
 $app->post(
 		
-		'/UUDesign',function() use ($app){
+		'/UUDesign',function (Request $request, Response $response, array $args) {
 		
 			
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
 			
-			
-			
-			$idudesign_p = $req->post('idudesign_p');
-			$name_p = $req->post('name_p');
-			$contents_p = $req->post('contents_p');
+			$idudesign_p = $allPostVars['idudesign_p'];
+			$name_p = $allPostVars['name_p'];
+			$contents_p = $allPostVars['contents_p'];
 			
 			
 				global $dbms;
@@ -5703,7 +5254,8 @@ $app->post(
 						//CAMBIAR PROCEDIMIENTO
 						$data = $cn->query("call uspUpd_UDesign('$idudesign_p','$name_p','$contents_p');")->fetchAll(PDO::FETCH_ASSOC);
 						
-						echo json_encode($data);
+						$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				}
 				
 				catch(PDOException $e) {
@@ -5716,20 +5268,20 @@ $app->post(
 
 $app->post(
 		
-		'/SaveNewThumbnail',function() use ($app) {
+		'/SaveNewThumbnail',function(Request $request, Response $response, array $args) {
 
 			$path = '../images/thumbnails/';
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
+			
 
-			$idtemplate_p = $req->post('idtemplate_p');
+			$idtemplate_p = $allPostVars['idtemplate_p'];
 			
 			$filename = $idtemplate_p . '_' . rand(1, 10000) . '.png';
 			
 			try {
 				
-				$img_base64 = str_replace(' ', '+', urldecode($req->post('img_data')));
+				$img_base64 = str_replace(' ', '+', urldecode($allPostVars['img_data']));
 				$data = explode(',', $img_base64);
 				$img_bin = base64_decode($data[1]);
 
@@ -5753,36 +5305,40 @@ $app->post(
 				{
 					$data = $cn->query("call uspUpd_Thumbnail('$idtemplate_p','$filename');")->fetchAll(PDO::FETCH_ASSOC);
 					
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(PDOException $e) {
-						echo $e->getMessage();
+					$errmsg = $e->getMessage();
 				}	
 
 			} catch(Exception $e) {
-				echo $e->getMessage();
+				$errmsg = $e->getMessage();
 			}
-		
+			
+			$data['error'] = $errmsg;
+			$response->getBody()->write( json_encode($data) ); 
+			return $response;
 		}
 );
 
 
 $app->post(
 		
-		'/DesignSaveNewThumbnail',function() use ($app) {
+		'/DesignSaveNewThumbnail',function (Request $request, Response $response, array $args) {
 
 			$path = '../images/thumbnails/';
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
+			
 
-			$idudesign_p = $req->post('idudesign_p');
+			$idudesign_p = $allPostVars['idudesign_p'];
 			
 			$filename = $idudesign_p . 'D_' . rand(1, 10000) . '.png';
 			
 			try {
 				
-				$img_base64 = str_replace(' ', '+', urldecode($req->post('img_data')));
+				$img_base64 = str_replace(' ', '+', urldecode($allPostVars['img_data']));
 				$data = explode(',', $img_base64);
 				$img_bin = base64_decode($data[1]);
 
@@ -5806,7 +5362,8 @@ $app->post(
 				{
 					$data = $cn->query("call uspUpd_DesignThumbnail('$idudesign_p','$filename');")->fetchAll(PDO::FETCH_ASSOC);
 					
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(PDOException $e) {
 						echo $e->getMessage();
@@ -5823,12 +5380,12 @@ $app->post(
 
 $app->post(
 		
-		'/getSlidesThumbnails',function() use ($app){
+		'/getSlidesThumbnails',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
+			
 
-			$idtemplategroup_p = $req->post('idtemplategroup_p');
+			$idtemplategroup_p = $allPostVars['idtemplategroup_p'];
 			
 			global $dbms;
 			global $host; 
@@ -5844,7 +5401,8 @@ $app->post(
 			try {
 				
 				$data = $cn->query("call uspGet_Thumbnails($idtemplategroup_p);")->fetchAll(PDO::FETCH_ASSOC);
-				echo json_encode($data);
+				$response->getBody()->write( json_encode($data) ); 
+				return $response;
 			
 			} catch(PDOException $e) {
 				echo $e->getMessage();
@@ -5855,12 +5413,12 @@ $app->post(
 
 $app->post(
 		
-		'/getDesignSlidesThumbnails',function() use ($app){
+		'/getDesignSlidesThumbnails',function (Request $request, Response $response, array $args) {
 
-			$allPostVars = $app->request->post();
-			$req = $app->request();
+			$allPostVars = (array)$request->getParsedBody();
+			
 
-			$idudesigngroup_p = $req->post('idudesigngroup_p');
+			$idudesigngroup_p = $allPostVars['idudesigngroup_p'];
 			
 			global $dbms;
 			global $host; 
@@ -5876,7 +5434,8 @@ $app->post(
 			try {
 				
 				$data = $cn->query("call uspGet_DesignThumbnails($idudesigngroup_p);")->fetchAll(PDO::FETCH_ASSOC);
-				echo json_encode($data);
+				$response->getBody()->write( json_encode($data) ); 
+				return $response;
 			
 			} catch(PDOException $e) {
 				echo $e->getMessage();
@@ -5886,12 +5445,12 @@ $app->post(
 );
 
 $app->post(
-		'/DSlide',function() use ($app){
+		'/DSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idtemplate_p 		= $req->post('idtemplate_p');
+				$idtemplate_p 		= $allPostVars['idtemplate_p'];
 				
 				global $dbms;
 				global $host; 
@@ -5912,7 +5471,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_FixSlidesOrder('$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -5924,12 +5484,12 @@ $app->post(
 );
 
 $app->post(
-		'/DDesignSlide',function() use ($app){
+		'/DDesignSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idudesign_p 		= $req->post('idudesign_p');
+				$idudesign_p 		= $allPostVars['idudesign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -5950,7 +5510,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_FixDesignSlidesOrder('$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -5963,12 +5524,12 @@ $app->post(
 
 
 $app->post(
-		'/GSlides',function() use ($app){
+		'/GSlides',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idtemplategroup_p 		= $req->post('idtemplategroup_p');
+				$idtemplategroup_p 		= $allPostVars['idtemplategroup_p'];
 				
 				global $dbms;
 				global $host; 
@@ -5983,7 +5544,8 @@ $app->post(
 				try
 				{					
 					$data = $cn->query("CALL uspGet_TemplatesOfGroup('$idtemplategroup_p')")->fetchAll(PDO::FETCH_ASSOC);
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(Exception $e) {
 					echo $e->getMessage();
@@ -5995,12 +5557,12 @@ $app->post(
 
 
 $app->post(
-		'/GDesignSlides',function() use ($app){
+		'/GDesignSlides',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idudesigngroup_p 		= $req->post('idudesigngroup_p');
+				$idudesigngroup_p 		= $allPostVars['idudesigngroup_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6015,7 +5577,8 @@ $app->post(
 				try
 				{					
 					$data = $cn->query("CALL uspGet_DesignsOfGroup('$idudesigngroup_p')")->fetchAll(PDO::FETCH_ASSOC);
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(Exception $e) {
 					echo $e->getMessage();
@@ -6026,12 +5589,12 @@ $app->post(
 );
 
 $app->post(
-		'/DuplicateSlide',function() use ($app){
+		'/DuplicateSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idtemplate_p 		= $req->post('idtemplate_p');
+				$idtemplate_p 		= $allPostVars['idtemplate_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6052,7 +5615,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -6064,12 +5628,12 @@ $app->post(
 );
 
 $app->post(
-		'/DuplicateDesignSlide',function() use ($app){
+		'/DuplicateDesignSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idudesign_p 		= $req->post('idudesign_p');
+				$idudesign_p 		= $allPostVars['idudesign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6090,7 +5654,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_FixDesignSlidesOrderAfterDuplicate('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -6103,12 +5668,12 @@ $app->post(
 
 
 $app->post(
-		'/ISlide',function() use ($app){
+		'/ISlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idtemplate_p 		= $req->post('idtemplate_p');
+				$idtemplate_p 		= $allPostVars['idtemplate_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6129,7 +5694,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idtemplate_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -6141,12 +5707,12 @@ $app->post(
 );
 
 $app->post(
-		'/IDesignSlide',function() use ($app){
+		'/IDesignSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idudesign_p 		= $req->post('idudesign_p');
+				$idudesign_p 		= $allPostVars['idudesign_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6167,7 +5733,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_FixSlidesOrderAfterDuplicate('$idudesign_p', '$group_id')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				        return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -6180,13 +5747,13 @@ $app->post(
 
 
 $app->post(
-		'/MSlide',function() use ($app){
+		'/MSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
+				$allPostVars = (array)$request->getParsedBody();
+				
 						
-				$idtemplate_p 		= $req->post('idtemplate_p');
-				$direction_p 		= $req->post('direction_p');
+				$idtemplate_p 		= $allPostVars['idtemplate_p'];
+				$direction_p 		= $allPostVars['direction_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6205,7 +5772,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_SlideOrder('$idtemplate_p', '$group_id', '$direction_p')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -6217,13 +5785,13 @@ $app->post(
 );
 
 $app->post(
-		'/MDesignSlide',function() use ($app){
+		'/MDesignSlide',function (Request $request, Response $response, array $args) {
 						
-				$allPostVars = $app->request->post();
-				$req = $app->request();
-						
-				$idudesign_p 		= $req->post('idudesign_p');
-				$direction_p 		= $req->post('direction_p');
+				$allPostVars = (array)$request->getParsedBody();
+				
+
+				$idudesign_p = $allPostVars['idudesign_p'];
+				$direction_p = $allPostVars['direction_p'];
 				
 				global $dbms;
 				global $host; 
@@ -6242,7 +5810,8 @@ $app->post(
 
 					$data = $cn->query("CALL uspUpd_DesignSlideOrder('$idudesign_p', '$group_id', '$direction_p')")->fetchAll(PDO::FETCH_ASSOC);
 
-					echo json_encode($data);
+					$response->getBody()->write( json_encode($data) ); 
+				    return $response;
 				
 				} catch(Exception $e) {
 						echo $e->getMessage();
@@ -6253,6 +5822,105 @@ $app->post(
 
 );
 
+
+$app->post(
+	'/SaveImageToDisk',function (Request $request, Response $response, array $args) {
+					
+		$allPostVars = (array)$request->getParsedBody();
+
+		$data = $allPostVars['img_data'];
+		list($type, $data) = explode(';', $data);
+		list(, $data)      = explode(',', $data);
+		$data = base64_decode($data);
+
+		$name = rand(1000,100000) . '-' . rand(1000, 100000) . '.png';
+
+		file_put_contents('../tmp/' . $name, $data);
+
+		try {
+			$response->getBody()->write( $name ); 
+			return $response;
+		
+		} catch(Exception $e) {
+				echo $e->getMessage();
+		}			
+			
+	}
+
+);
+
+
+$app->post(
+	'/ShareByEmail',function (Request $request, Response $response, array $args) {
+
+		$allPostVars = (array)$request->getParsedBody();
+
+		if ($allPostVars['x'] != 'enviaEmailWizad')
+			die;
+
+		$to = $allPostVars['to_p'];
+		$link = $allPostVars['link_p'];
+
+		$headers[] = 'MIME-Version: 1.0';
+		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
+		$headers[] = 'From: Wizad <info@wizad.mx>';
+		$headers[] = 'X-Mailer: PHP/' . phpversion();
+		$headers[] = 'Reply-To: Wizad <info@wizad.mx>';
+
+		$subject = 'Te comparto este diseno Wizad';
+
+		$message = "Hola!, <br><br> 
+		aqui te comparto este dise√±o que hice usando Wizad <br>
+		para verlo solo tienes que abrir este enlace <a href='".$link."'>Dise√±o</a>"; 
+		
+		$success = mail($to, $subject, $message, implode("\r\n", $headers));
+		$responseText = 'OK';
+
+		if (!$success) {
+			$responseText = error_get_last()['message'];
+		}
+
+		$response->getBody()->write( json_encode($responseText) ); 
+		return $response;
+	}
+);
+
+
+$app->post(
+		
+	'/GPermissionsCompany',function (Request $request, Response $response, array $args) {
+	
+		
+		$allPostVars = (array)$request->getParsedBody();
+		
+		$idcompany_p = $allPostVars['idcompany_p'];
+
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+
+
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+			try
+			{
+					//CAMBIAR PROCEDIMIENTO
+					$data = $cn->query("call uspGet_Company_Permissions('$idcompany_p');")->fetchAll(PDO::FETCH_ASSOC);
+					
+					$response->getBody()->write( json_encode($data) ); 
+					return $response;
+			}
+			
+			catch(PDOException $e) {
+					echo $e->getMessage();
+			}			
+			
+				
+		}
+);
 
 
 

@@ -10,10 +10,8 @@ angular.module('newApp')
   .controller('campaignMaterialsCtrl', function ($scope,  ngDialog, $rootScope, $timeout, ngDragDrop, ImagesFactory, UtilsFactory, AppSettings, campaignService, objCampaign , $location, generalService, $modal
 ) {
 	
-  	//var urlHost = 'https://wizad.mx/';
-	var urlHostEmpresas = 'https://empresas.wizad.mx/';
-	var urlHost = 'https://localhost/wizad/';
-	//var urlHostEmpresas = 'https://localhost/wizad/empresas/';
+	var urlHost = __env.urlHost;
+	var urlHostEmpresas = __env.urlHostEmpresas;
 
 	$scope.templates		 = [];
 	$scope.template_name	 = "";
@@ -76,7 +74,7 @@ angular.module('newApp')
 	$scope.clipToFunctionsValues = [];
 	$scope.clipToFunctionsFcs = [];
 	
-	$scope.showGrid = false;
+	$scope.showGrid = true;
 	$scope.oldshowGrid = true;
 	$scope.showPrintingLines = false;
 	$scope.oldshowPrintingLines = false;
@@ -88,6 +86,9 @@ angular.module('newApp')
 	$scope.selection_object_left=0;
 	$scope.selection_object_top=0;
 	$scope.cntObj=0;
+
+	//zoom
+	$scope.zoom_pointer = null;
 
 	$scope.object1 = {};
 	$scope.object2 = {};
@@ -108,6 +109,7 @@ angular.module('newApp')
 	
 	$scope.imageSelectedObj = null;
 	$scope.removeColorFilters = [];
+	$scope.img_cat = '%';
 	
 	var main = document.getElementById("play_board");
 	var ctx = main.getContext("2d");
@@ -120,6 +122,7 @@ angular.module('newApp')
 	// reverted states
 	$scope.Redo = [];
 	/* undo, redo */
+	
 	
 	$scope.$on('openTemplate', function () {
 
@@ -175,21 +178,19 @@ angular.module('newApp')
 
 	})
 
-	$scope.getColumnImages = function (array) {
-        
-        if(array.length % 2 === 0 ) { 
-        	return [
-            	Math.floor(array.length / 2) + 1,
-            	-Math.floor(array.length / 2)
-        	];
-        } else {
+	$scope.getColumnImages = function (category) {
+		
+		var array = [];
+		
+		$scope.images.forEach((element) => {
+			if(element.category == category) {
+				array.push(element);
+			}
+		});
 
-        	return [
-            	Math.floor(array.length / 2) + 1,
-            	-Math.floor(array.length / 2)
-        	];
-        }
-
+		return [
+			array.length, 0
+		];
         
     };
 
@@ -556,9 +557,10 @@ angular.module('newApp')
 						   height: parseInt($scope.newMaterialChange.height_small), 
 						   distance: 10};
 		
-		if($scope.showGrid)	{
+		// Fixing bug not grid was showing 2020-03-11
+		// if($scope.showGrid)	{
 			$scope.addBackgroundGrid(gridOptions);
-		}
+		// }
 		
 		// print red printing margin lines, uses the same gridOptions
 		if($scope.newMaterialChange.offline == 1) {
@@ -794,10 +796,13 @@ angular.module('newApp')
 					
 
 			var params = {
-				"campaign_p" : ""
+				"campaign_p" : "",
+				"category_p" : ""
 			}
 			
 			params.campaign_p = $scope.CampaignSelected.id_campaign;
+			params.category_p = $scope.img_cat;
+			
 			$scope.images = [];
 			$scope.imagesIdentity = [];
 			$scope.phrases = [];
@@ -812,10 +817,13 @@ angular.module('newApp')
 							var newImg   = { title: '', src: '' , isUserUploaded: false};
 							newImg.title = $scope.imageArray[i].image;
 							newImg.src   = urlHostEmpresas + 'uploads/' + $scope.imageArray[i].image;
+							newImg.category   = $scope.imageArray[i].category;
 							$scope.images.push(newImg);
 						}
 					}
 				}
+
+				console.log($scope.images);
 			})
 			
 			campaignService.GPackIdentity(params)
@@ -866,6 +874,8 @@ angular.module('newApp')
 				
 				
 			})
+
+			
 			
 			$scope.applyFont2 = function(font){
 				
@@ -1348,7 +1358,7 @@ angular.module('newApp')
 				  
 				  activeObject.id = activeObject.get('type') + $scope.getRandomSpan();
 			  }
-			  
+
 			  if(activeObject.id.indexOf("circle") !== -1 || activeObject.id.indexOf("triangle") !== -1
 					|| activeObject.id.indexOf("rect") !== -1 || activeObject.id.indexOf("text") !== -1
 					|| activeObject.id.indexOf("line") !== -1){
@@ -1372,6 +1382,8 @@ angular.module('newApp')
 			  }else{
 					$scope.imageSelected = false;
 			  }
+
+			  
 		  }
 		}, 0);
 	  });
@@ -1843,13 +1855,13 @@ angular.module('newApp')
 		$scope.toggleGrid();
 		
 		if ( $scope.newMaterialChange.offline == 1 ) {
-				$scope.showPrintingLines = true;
-				$scope.togglePrintingLines();
+			$scope.showPrintingLines = true;
+			$scope.togglePrintingLines();
 		}
 		
         fabric.devicePixelRatio = 1;
 				
-		 if (returnImageData === false ) {
+		if (returnImageData === false ) {
 			$scope.factory.canvas.setDimensions(
 				{
 					width:  parseInt($scope.newMaterialChange.width), 
@@ -1857,61 +1869,58 @@ angular.module('newApp')
 				});
 
 			var objects =  $scope.factory.canvas.getObjects();
-			
-		 
-				
-				for (var i in objects) {
-					var scaleX = objects[i].scaleX;
-					var scaleY = objects[i].scaleY;
-					var left = objects[i].left;
-					var top = objects[i].top;
+	
+			for (var i in objects) {
+				var scaleX = objects[i].scaleX;
+				var scaleY = objects[i].scaleY;
+				var left = objects[i].left;
+				var top = objects[i].top;
 
-					var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
-					var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
-					var tempLeft = left * $scope.newMaterialChange.width_multiplier;
-					var tempTop = top * $scope.newMaterialChange.height_multiplier;
+				var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
+				var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
+				var tempLeft = left * $scope.newMaterialChange.width_multiplier;
+				var tempTop = top * $scope.newMaterialChange.height_multiplier;
 
-					objects[i].scaleX = tempScaleX;
-					objects[i].scaleY = tempScaleY;
-					objects[i].left = tempLeft;
-					objects[i].top = tempTop;
+				objects[i].scaleX = tempScaleX;
+				objects[i].scaleY = tempScaleY;
+				objects[i].left = tempLeft;
+				objects[i].top = tempTop;
 
-				//	objects[i].setCoords();
-				}
+			//	objects[i].setCoords();
+			}
 			
 		 } else {
-			 var ratio = parseInt($scope.newMaterialChange.width) / parseInt($scope.newMaterialChange.height);
+			
+			var ratio = parseInt($scope.newMaterialChange.width) / parseInt($scope.newMaterialChange.height);
 
-			 $scope.factory.canvas.setDimensions(
+			$scope.factory.canvas.setDimensions(
 				{
 					width:  parseInt(300), 
 					height: parseInt(300 / ratio)
 					
 				});
+
 			var objects =  $scope.factory.canvas.getObjects();
-			
-				
+			var scaleFactor = 0.9;
 
-				var scaleFactor = 0.9;
+			for (var i in objects) {
+				var scaleX = objects[i].scaleX;
+				var scaleY = objects[i].scaleY;
+				var left = objects[i].left;
+				var top = objects[i].top;
 
-				for (var i in objects) {
-					var scaleX = objects[i].scaleX;
-					var scaleY = objects[i].scaleY;
-					var left = objects[i].left;
-					var top = objects[i].top;
+				var tempScaleX = scaleX * scaleFactor;
+				var tempScaleY = scaleY * scaleFactor;
+				var tempLeft = left * scaleFactor;
+				var tempTop = top * scaleFactor;
 
-					var tempScaleX = scaleX * scaleFactor;
-					var tempScaleY = scaleY * scaleFactor;
-					var tempLeft = left * scaleFactor;
-					var tempTop = top * scaleFactor;
+				objects[i].scaleX = tempScaleX;
+				objects[i].scaleY = tempScaleY;
+				objects[i].left = tempLeft;
+				objects[i].top = tempTop;
 
-					objects[i].scaleX = tempScaleX;
-					objects[i].scaleY = tempScaleY;
-					objects[i].left = tempLeft;
-					objects[i].top = tempTop;
-
-				//	objects[i].setCoords();
-				}
+			//	objects[i].setCoords();
+			}
 			
 		 }
 		 
@@ -2002,6 +2011,103 @@ angular.module('newApp')
 			download(imgData, "Wizad image " + now + ".png");
 		}
 
+	 }
+
+
+	 $scope.createPNGForSharing = function() {
+
+		previous_showgrid = $scope.showGrid;
+		$scope.showGrid = true;
+		$scope.toggleGrid();
+		
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = true;
+			$scope.togglePrintingLines();
+		}
+		
+        fabric.devicePixelRatio = 1;
+				
+		$scope.factory.canvas.setDimensions(
+			{
+				width:  parseInt($scope.newMaterialChange.width), 
+				height: parseInt($scope.newMaterialChange.height)
+			});
+
+		var objects =  $scope.factory.canvas.getObjects();
+
+		for (var i in objects) {
+			var scaleX = objects[i].scaleX;
+			var scaleY = objects[i].scaleY;
+			var left = objects[i].left;
+			var top = objects[i].top;
+
+			var tempScaleX = scaleX * $scope.newMaterialChange.width_multiplier;
+			var tempScaleY = scaleY * $scope.newMaterialChange.height_multiplier;
+			var tempLeft = left * $scope.newMaterialChange.width_multiplier;
+			var tempTop = top * $scope.newMaterialChange.height_multiplier;
+
+			objects[i].scaleX = tempScaleX;
+			objects[i].scaleY = tempScaleY;
+			objects[i].left = tempLeft;
+			objects[i].top = tempTop;
+
+		}
+			
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.calcOffset();
+		
+		try
+		{
+			var imgData = $scope.factory.canvas.toDataURL({       format: 'png'   });
+		}
+		catch(err) {
+			
+			$scope.alertClass = "alert alert-danger";
+			$scope.alertShow = true;
+			$scope.message = "Error: al crear imagen"; 
+		}
+		
+		//AFTER PROCESS RETURN TO NORMAL STATE
+		$scope.factory.canvas.setDimensions(
+				{
+					width:  parseInt($scope.newMaterialChange.width_small), 
+					height: parseInt($scope.newMaterialChange.height_small)
+				});
+		
+		var objects =  $scope.factory.canvas.getObjects();	
+			
+		for (var i in objects) {
+			var scaleX = objects[i].scaleX;
+			var scaleY = objects[i].scaleY;
+			var left = objects[i].left;
+			var top = objects[i].top;
+
+			var tempScaleX = scaleX / $scope.newMaterialChange.width_multiplier;
+			var tempScaleY = scaleY / $scope.newMaterialChange.height_multiplier;
+			var tempLeft = left / $scope.newMaterialChange.width_multiplier;
+			var tempTop = top / $scope.newMaterialChange.height_multiplier;
+
+			objects[i].scaleX = tempScaleX;
+			objects[i].scaleY = tempScaleY;
+			objects[i].left = tempLeft;
+			objects[i].top = tempTop;
+
+		}
+
+		$scope.factory.canvas.renderAll();
+		$scope.factory.canvas.calcOffset();
+		
+		$scope.showGrid = !previous_showgrid;
+		$scope.toggleGrid();
+
+		if ( $scope.newMaterialChange.offline == 1 ) {
+			$scope.showPrintingLines = false;
+			$scope.togglePrintingLines();
+		}
+
+		return imgData;
+		
 	 }
 	  // $scope.changeFormColor = function(pal){
 			// var activeObject = $scope.factory.canvas.getActiveObject();
@@ -2174,9 +2280,14 @@ angular.module('newApp')
 		$('#canvas_board').on('mousewheel', function(e) {
 			
 			var delta = e.originalEvent.wheelDelta;
+			
             if (delta != 0) {
-                var pointer = $scope.factory.canvas.getPointer(e, true);
-                var point = new fabric.Point(pointer.x, pointer.y);
+				var pointer = $scope.factory.canvas.getPointer(e, true);
+				
+				if($scope.zoom_pointer != null)
+					pointer = $scope.zoom_pointer;
+
+				var point = new fabric.Point(pointer.x, pointer.y);
                 if (delta > 0) {
                     $scope.zoomIn(point);
                 } else if (delta < 0) {
@@ -2202,7 +2313,38 @@ angular.module('newApp')
                 $scope.factory.canvas.zoomToPoint(point, Math.pow(2, $scope.zoomLevel));
                 $scope.keepPositionInBounds($scope.factory.canvas);
             }
-        }
+		}
+		
+
+		$scope.zoom_in = function() {
+
+			var pointer = {x: 0, y: 0};
+			pointer.x = ($scope.canvasWidth / $scope.widthMultiplier ) / 2;
+			pointer.y = ($scope.canvasHeight / $scope.heightMultiplier ) / 2;
+
+			$scope.zoom_pointer = pointer;
+
+			var event = jQuery.Event( "mousewheel" );
+			event.originalEvent = {wheelDelta: 120};
+			$('#canvas_board').trigger(event);
+
+			$scope.zoom_pointer = null;
+		}
+
+		$scope.zoom_out = function() {
+
+			var pointer = {x: 0, y: 0};
+			pointer.x = ($scope.canvasWidth / $scope.widthMultiplier ) / 2;
+			pointer.y = ($scope.canvasHeight / $scope.heightMultiplier ) / 2;
+
+			$scope.zoom_pointer = pointer;
+			
+			var event = jQuery.Event( "mousewheel" );
+			event.originalEvent = {wheelDelta: -120};
+			$('#canvas_board').trigger(event);
+
+			$scope.zoom_pointer = null;
+		}
 		
 		$scope.clamp = function(value, min, max) {
             return Math.max(min, Math.min(value, max));
@@ -2825,12 +2967,14 @@ angular.module('newApp')
 					var params = {
 						idcompany_p : "",
 						idmaterial_p: "",
-						idcampaign_p: ""
+						idcampaign_p: "",
+						iduser_p: ""
 					}
 
 					params.idcompany_p = $scope.currentUser.id_company;
 					params.idmaterial_p = $scope.newMaterialChange.id_material ;
 					params.idcampaign_p	= $scope.CampaignSelected.id_campaign;
+					params.iduser_p	= $scope.currentUser.id_user;
 
 					generalService.GDesigns(params)
 					.then(function(data) {
@@ -3265,4 +3409,119 @@ angular.module('newApp')
 		$scope.removeColorFilters.push({id: $scope.imageSelectedObj.id, filter: filter});
 	}
 	
+	$scope.expand = function(category) {
+
+		$('.panel-collapse.collapse.in').removeClass("in");
+		$('#collapse_' + category).addClass("in");
+
+	}
+
+	$scope.postToFacebook = function() {
+
+		var image_data = '';
+		image_data = $scope.createPNGForSharing();
+		
+		var params = {
+			img_data: ""
+		}
+
+		params.img_data = image_data;
+
+		generalService.SaveImageToDisk(params)
+			.then(function(data) {
+
+				var img_name = data;
+
+				var img="https://empresas.wizad.mx/tmp/" + img_name;
+				var totalurl=encodeURIComponent(img);
+
+				window.open('http://www.facebook.com/sharer.php?u='+totalurl,'','width=500, height=500, scrollbars=yes, resizable=no');
+				
+			}, function(error){
+				
+				alert('Error al guardar imagen. Por favor intenta de nuevo');
+				console.log(error);
+				$scope.loading = false;
+			})	
+	}
+
+	$scope.sendByWhatsApp = function() {
+
+		var image_data = '';
+		image_data = $scope.createPNGForSharing();
+		
+		var params = {
+			img_data: ""
+		}
+
+		params.img_data = image_data;
+
+		generalService.SaveImageToDisk(params)
+			.then(function(data) {
+
+				var img_name = data;
+
+				var img="https://empresas.wizad.mx/tmp/" + img_name;
+				var totalurl=encodeURIComponent(img);
+
+				window.open('whatsapp://send?text=Te comparto la promoción mas reciente ' + totalurl,'','width=500, height=500, scrollbars=yes, resizable=no');
+				
+			}, function(error){
+				
+				alert('Error al guardar imagen. Por favor intenta de nuevo');
+				console.log(error);
+				$scope.loading = false;
+			})
+	}
+
+
+	$scope.shareByEmail = function() {
+
+		var image_data = '';
+		image_data = $scope.createPNGForSharing();
+		
+		var params = {
+			img_data: ""
+		}
+
+		params.img_data = image_data;
+
+		generalService.SaveImageToDisk(params)
+			.then(function(data) {
+
+				var img_name = data;
+				var img="https://empresas.wizad.mx/tmp/" + img_name;
+
+				var params = {
+					to_p: "",
+					link_p: "",
+					x: ""
+				}
+
+				params.to_p = $('#emailAddress').val();
+				params.link_p = img;
+				params.x = 'enviaEmailWizad';
+				
+				generalService.ShareByEmail(params)
+					.then(function(data) {
+
+						alert("Su diseño se ha enviado al correo electrónico indicado");
+
+					}, function(error) {
+
+						alert('Error al guardar imagen. Por favor intenta de nuevo');
+						console.log(error);
+						$scope.loading = false;
+
+					})
+
+				
+			}, function(error){
+				
+				alert('Error al guardar imagen. Por favor intenta de nuevo');
+				console.log(error);
+				$scope.loading = false;
+			})
+	}
+
   });

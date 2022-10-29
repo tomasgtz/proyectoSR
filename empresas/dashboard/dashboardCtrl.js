@@ -160,31 +160,13 @@ angular.module('newApp')
 			$scope.FreeUsers = data[3][0].FreeUsers;				
 		})
 			
-			
-		// $scope.textConfig = [
-							// { id: 1, name: 'John' }, 
-							// { id: 2, name: 'Smith' }, 
-							// { id: 3, name: 'Allen' }, 
-							// { id: 4, name: ' Johnson' }, 
-							// { id: 5, name: 'Harris' }, 
-							// { id: 6, name: ' Williams' }, 
-							// { id: 7, name: 'David' }
-							// ];
-		// $scope.paletteConfig = [
-							// { id: 1, color: '#735ea1' }, 
-							// { id: 2, color: '#3476a6' }, 
-							// { id: 3, color: '#e31647' }, 
-							// { id: 4, color: '#20ba1d' }
-							// ];
 		$scope.newTextsArray 	= [];
 		$scope.newPaletteArray 	= [];
 		$scope.goldCount 		= 0;
 		$scope.silverCount 		= 0;
 		$scope.bronzeCount		= 0;
 		$scope.platCount 		= 0;
-							
-		
-		
+
 		
 		$scope.newText = function(){
 			
