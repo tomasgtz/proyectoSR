@@ -3167,6 +3167,39 @@ angular.module('newApp').service('generalService', function($http,$q,$rootScope)
 			
 		},
 
+		CopyTemplate : function(params){
+			
+			var defered 		= $q.defer();
+			var promise 		= defered.promise;
+			
+			var idtemplate_p 				= params.idtemplate_p;	
+			
+			$http({
+			method: 'POST',
+			url: webServiceUrl + 'CopyTemplate',
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			transformRequest: function(obj) {
+				var str = [];
+				for(var p in obj)
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				return str.join("&");
+			},
+			data: { idtemplate_p : idtemplate_p }
+			})
+			.success(function(data) {
+				if(data[0] !== undefined){
+					
+				}
+				
+				defered.resolve(data);		
+			})
+			.error(function(data){
+				defered.reject(err)
+			})
+			return promise;
+			
+		},
+
 		DSlide : function(params){
 			
 			var defered 		= $q.defer();

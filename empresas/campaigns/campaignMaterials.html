@@ -19,17 +19,19 @@
 	
 <div class="wrapper" >
 	<div class="row panel" style="padding-top:5px;">
-		<div class="col-sm-6 form-group">
-			<div class="col-sm-3">
-				<label for="field-2" class="control-label">Selecciona material:</label>
-			</div>
+		<div class="col-sm-12 form-group">
 			<div class="col-sm-6" style="z-index: 0;">
+					<label for="field-2" class="control-label">Selecciona material:</label>
 					<select class="form-control" ng-change="materialChange(material)" id="selectmateriall" name="singleSelect" ng-model="material" style="width:200px;">
 						<option ng-repeat="material in materialArray" value="{{material.id_material}}">{{material.description}}</option>
-					</select><br>
+					</select>
+					<button ng-click="materialChange()" class="btn btn-embossed btn-warning m-r-20 mt-2" style="width:130px;">Seleccionar</button>
 			</div>
-			<div class="col-sm-2">
-					<button ng-click="materialChange()" class="btn btn-embossed btn-warning m-r-20" style="width:130px;">Seleccionar</button>
+			<div class="col-sm-6">
+				<div class="text-right">
+					<button data-toggle="modal" data-target="#modal-help" class="btn btn-sm btn-embossed btn-danger"><i class="fa fa-question"></i></button>
+				</div>
+				
 			</div>			
 		</div>
 	</div>
@@ -122,7 +124,7 @@
 									<button data-dismiss="modal" style="padding: 1px 1px 1px 1px; " ng-show="isObjectSelected" ng-click="deleteSelectedObject()" class="btn btn-xs btn-danger"><img title="Eliminar" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/delete_red32x32.png" ></button>
 								</li>
 								<li>
-									<button data-toggle="modal" data-target="#modal-removecolorsoptions" ng-click="setImageToEdit()" class="btn btn-xs btn-default" style="width:32px; height:32px; padding: 1px 1px 1px 1px; " ng-show="isObjectSelected"><img title="Quitar color" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/eraser32x32.png" ></button>
+									<button data-toggle="modal" data-target="#modal-removecolorsoptions" ng-click="setImageToEdit()" class="btn btn-xs btn-default" style="width:32px; height:32px; padding: 1px 1px 1px 1px; " ng-show="imageSelected"><img title="Quitar color" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/eraser32x32.png" ></button>
 								</li>
 
 								<li ng-show="share_design">
@@ -653,6 +655,66 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade modal-fullscreen" id="modal-help" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h2 class="c-primary m-b-30">Instrucciones</h2>
+								<div class="row">
+									<div class="col-sm-12">
+										<img title="Nuevo" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/new32x32.png"> Crear nuevo diseño/plantilla. El diseño actual se perderá si antes no se guardan los cambios.<br><br>
+										<img title="Abrir Plantilla" src="images/utils/{{icon_folder}}/openDB32x32.png" style="width:32px; height:32px"> Permite abrir una plantilla.<br><br>
+										<img title="Guardar Diseño" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/saveDB32x32.png"> Permite guardar una plantilla. Debe escribir un nombre. En caso de que ya exista, se sobreescribirá con lo que exista en pantalla.<br><br>
+										<img title="Exportar PDF/PNG" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/descargar32x32.png"> Permite exportar a formato PDF o PNG.<br><br>
+										<img title="Configurar lienzo" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/lienzo32x32.png" > Permite configurar las propiedades del lienzo.<br><br>
+										<img style="width:32px; height:32px" title="Galeria" src="images/utils/{{icon_folder}}/gallery32x32.png" > Permite agregar imágenes de la galería al diseño en pantalla.<br><br>
+										<img style="width:32px; height:32px" title="Agregar texto" src="images/utils/{{icon_folder}}/pencil32x32.png" > Permite agregar texto al diseño en pantalla.<br><br>
+										<ul style="margin-left: 10px;">
+
+											<li><img title="Fuente" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/font32x32.png" > Permite cambiar el tipo de fuente del texto</li>
+											<li><img title="Eliminar" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/delete_red32x32.png" > Permite eliminar el elemento de texto seleccionado</li>
+											
+										</ul><br>
+										
+										<img title="Lista de textos" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/textlist32x32.png" > Permite agregar frases precargadas al diseño en pantalla.<br><br>
+										<img style="width:32px; height:32px" title="Mostrar / Ocultar cuadricula" src="images/utils/{{icon_folder}}/grid32x32.png"> Permite mostrar u ocultar la cuadricula.<br><br>
+										<img style="width:32px; height:32px" title="Insertar forma" src="images/utils/{{icon_folder}}/shapes32x32.png" > Permite insertar una forma.<br><br>
+										<ul style="margin-left: 10px;">
+											<li><i style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);" class="fa fa-play fa-3x"></i> Permite agregar un triángulo.</li>
+											<li><i class="fa fa-circle fa-3x"></i> Permite agregar un círculo.</li>
+											<li><i class="fa fa-stop fa-3x"></i> Permite agregar un cuadrado.</li>
+											<li><i class="fa fa-minus fa-3x"></i> Permite agregar un rectángulo.</li>
+										</ul>
+										<img title="Recortar" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/crop32x32.png" >Opción Recortar. Permite recortar un elemento. Al usar esta opción aparecerá un área sobre el elemento seleccionado que contiene pequeños recuadros que permiten ajustar el recorte. Para hacerlo efectivo es necesario presionar la opcion Aplicar Recorte. Para poder usar esta opción es necesario tener una imagen o forma seleccionada.<br><br>
+										<img style="width:32px; height:32px" title="Aplicar recorte" src="images/utils/{{icon_folder}}/applycrop32x32.png" >Aplicar Recorte. Permite hacer efectivo el recorte establecido en la opcion Recortar.<br><br>
+										<img title="Configurar formato" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/color32x32.png" > Permite modificar el formato del elemento seleccionado, por ejemplo cambiar su color.<br><br>
+										<img title="Configurar formato" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/imgprops32x32.png" > Permite modificar propiedades de la imagen seleccionada.<br><br>
+										<img title="Quitar color" style="width:32px; height:32px" src="images/utils/{{icon_folder}}/eraser32x32.png" > Permite hacer transparente el color deseado de la imagen seleccionada.<br><br>
+										<span ng-show="share_design">
+											<img style="width:32px; height:32px" title="Compartir" src="images/utils/{{icon_folder}}/send32x32.png" ng-show="share_design"> Permite compartir el diseño.<br><br>
+											<ul style="margin-left: 10px;">
+												<li><i class="fa fa-facebook fa-3x"></i>Facebook</li>
+												<li><i class="fa fa-envelope-o fa-3x"></i>Email</li>
+												<li><i class="fa fa-whatsapp fa-3x"></i>Whatsapp</li>
+											</ul>
+											
+										</span>
+										<img style="width:32px; height:32px" title="RE DO" src="images/utils/{{icon_folder}}/zoomin32x32.png" > Permite realizar un acercamiento (Zoom in).<br><br>
+										<img style="width:32px; height:32px" title="UN DO" src="images/utils/{{icon_folder}}/zoomout32x32.png" > Permite alejar la vista (Zoom out).<br><br>
+										<img style="width:32px; height:32px" title="RE DO" src="images/utils/{{icon_folder}}/redo32x32.png" > Permite rehacer la última acción (Re do).<br><br>
+										<img style="width:32px; height:32px" title="UN DO" src="images/utils/{{icon_folder}}/undo32x32.png" > Permite deshacer la última acción (Un do).<br><br>
+									</div>
+								</div>
+								<button type="button" data-dismiss="modal" class="btn btn-default btn-block">Cerrar</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

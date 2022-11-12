@@ -1087,7 +1087,7 @@ address {
   border: none;
   font-size: 14px;
   font-weight: 400;
-  margin-bottom: 10px;
+  
   margin-right: 10px;
   padding: 7px 24px 8px;
   transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;

@@ -32,16 +32,26 @@
 							  <div class="thumb" data-toggle='modal' data-target="#myModal" ng-if="image.src != 'undefined'">
 								<a class="thumbnail" href="#campaign-materials" ng-click="getIndex(image)">
 								  <img class="img-responsive" ng-src="{{image.src}}" alt="">
-								  <div style="white-space: nowrap;">
-									<span class="text-content" style="font-size:0.9em; color:gray; " >CAMPAÑA: </span><span class="text-content" style="font-size:0.9em; ">{{image.caption2}}</span>
-								  </div>
-								  <div style="white-space: nowrap;">
-									<span class="text-content" style="font-size:0.9em; color:gray; white-space: nowrap;" >PLANTILLA: </span><span class="text-content" style="font-size:0.9em; ">{{image.caption}}</span>  
-								  </div>
-								  <div style="white-space: nowrap;">
-									<span class="text-content" style="font-size:0.9em; color:gray; white-space: nowrap;" >MATERIAL: </span><span class="text-content" style="font-size:0.9em; ">{{image.material_description}}</span>
-								  </div>
 								</a>
+								<div class="">
+									<div class="row">
+										<div class="col-sm-6">
+											<div style="white-space: nowrap;">
+												<span class="text-content" style="font-size:0.9em; color:gray; " >CAMPAÑA: </span><span class="text-content" style="font-size:0.9em; ">{{image.caption2}}</span>
+											</div>
+											<div style="white-space: nowrap;">
+												<span class="text-content" style="font-size:0.9em; color:gray; white-space: nowrap;" >PLANTILLA: </span><span class="text-content" style="font-size:0.9em; ">{{image.caption}}</span>  
+											</div>
+											<div style="white-space: nowrap;">
+												<span class="text-content" style="font-size:0.9em; color:gray; white-space: nowrap;" >MATERIAL: </span><span class="text-content" style="font-size:0.9em; ">{{image.material_description}}</span>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<button class="btn" ng-click="deleteTemplate({{image.id_template}})"><i class="fa fa-trash"></i></button>
+											<button class="btn" ng-click="copyTemplate({{image.id_template}})"><i class="fa fa-copy"></i></button>
+										</div>
+									</div>
+								</div>
 							  </div>
 							</div>
 						</div>

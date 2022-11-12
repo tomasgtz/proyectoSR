@@ -2978,7 +2978,6 @@ $app->post(
 $app->post(
 		
 		'/NewUser',function (Request $request, Response $response, array $args) {
-		
 			
 			$allPostVars = (array)$request->getParsedBody();
 
@@ -3006,9 +3005,9 @@ $app->post(
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$server_output = curl_exec ($ch);
 				curl_close ($ch);
-				$response = json_decode($server_output);
+				$responseCaptcha = json_decode($server_output);
 
-				if(!isset($response) || !isset($response->success) || $response->success === false) {
+				if(!isset($responseCaptcha) || !isset($responseCaptcha->success) || $responseCaptcha->success === false) {
 					$data[0]["returnMessage"] = "ERROR: NO CAPTCHA";
 					$response->getBody()->write( json_encode($data) ); 
 				        return $response;
@@ -4766,6 +4765,38 @@ $app->post(
 				
 					
 			}
+);
+
+$app->post(
+	'/CopyTemplate',function (Request $request, Response $response, array $args) {
+					
+			$allPostVars = (array)$request->getParsedBody();
+		
+			$idtemplate_p = $allPostVars['idtemplate_p'];
+			
+			global $dbms;
+			global $host; 
+			global $db;
+			global $user;
+			global $pass;
+			$dsn = "$dbms:host=$host;dbname=$db;charset=utf8";
+			
+			$cn=new PDO($dsn, $user, $pass);
+			$cn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+			
+			try
+			{					
+					$callBack  = $cn->query("CALL uspCopy_Template('$idtemplate_p')")->fetchAll(PDO::FETCH_ASSOC);
+					$response->getBody()->write( json_encode($callBack) );  
+					return $response;
+			}
+			
+			catch(Exception $e) {
+					echo $e->getMessage();
+			}			
+			
+				
+		}
 );
 
 $app->post(

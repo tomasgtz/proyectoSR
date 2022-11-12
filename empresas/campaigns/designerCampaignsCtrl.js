@@ -474,4 +474,32 @@ angular.module('newApp')
 			
 		})
 	
+	$scope.deleteTemplate = function(template_id) {
+		
+		let text = "Deseas borrar esta plantilla\nPresiona OK para confirmar";
+		if (confirm(text) == true) {
+			
+			generalService.DTemplate({idtemplate_p: template_id})
+			.then(function(data) {
+				$scope.images = [];
+
+				$scope.getThumbs();
+				$scope.getThumbsCount();
+			});
+
+		} 
+	}
+
+	$scope.copyTemplate = function(template_id) {
+
+		generalService.CopyTemplate({idtemplate_p: template_id})
+			.then(function(data) {
+				$scope.images = [];
+
+				$scope.getThumbs();
+				$scope.getThumbsCount();
+			});
+
+	}
+
   });
